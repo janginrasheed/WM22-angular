@@ -4,19 +4,19 @@
     <span class="navbar__left__title text--white">WM22</span>
   </div>
   <div class="navbar__right">
-    <button mat-button class="navbar__button">
+    <button mat-button class="navbar__button" (click)="navigateTo('home')">
       <span class="material-icons">home</span>
       <span>Startseite</span>
     </button>
-    <button mat-button class="navbar__button">
+    <button mat-button class="navbar__button" (click)="navigateTo('predict')">
       <span class="material-icons">checklist</span>
       <span>Vorhersagen</span>
     </button>
-    <button mat-button class="navbar__button">
+    <button mat-button class="navbar__button" (click)="navigateTo('login')">
       <span class="material-icons">login</span>
       <span>Login</span>
     </button>
-    <button mat-button class="navbar__button">
+    <button mat-button class="navbar__button" (click)="navigateTo('about')">
       <span class="material-icons">info</span>
     </button>
   </div>
