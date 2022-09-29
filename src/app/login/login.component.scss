@@ -1,0 +1,24 @@
+.example-full-width {
+  width: 100%;
+}
+
+.register__form {
+  display: flex;
+  flex-direction: column;
+  width: 30rem;
+  padding: 2rem;
+  margin: 5rem auto;
+}
+
+.register__form--name, .register__form--password, .register__form--buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.register__form--email, .register__form--buttons > * {
+  width: 100%;
+}
+
+.register__form--buttons {
+  margin-top: 3rem;
+}
