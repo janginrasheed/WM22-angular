@@ -52,7 +52,7 @@ export class DataService {
   }
 
   public getUserByEmail(email: String): Observable<User> {
-    return this.http.get<User>(this.dataApiUrl + "users/" + email).pipe(
+    return this.http.get<User>(this.dataApiUrl + "userbyemail/" + email).pipe(
       first(),
       // @ts-ignore
       retry(1),
@@ -70,6 +70,19 @@ export class DataService {
       retry(1),
       catchError(error => {
         console.error("Fehler beim Registrieren");
+        return throwError(error);
+      })
+    );
+  }
+
+  public getUser(user: User): Observable<User> {
+    return this.http.get<User>(this.dataApiUrl + "user/" + user.email + "/" + user.password).pipe(
+      first(),
+      // @ts-ignore
+      retry(1),
+      catchError(error => {
+        // this.handleError(error);
+        console.error("Fehler beim Laden des Users");
         return throwError(error);
       })
     );

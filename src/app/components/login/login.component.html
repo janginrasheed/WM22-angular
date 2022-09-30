@@ -25,17 +25,29 @@
         </form>
       </div>
     </mat-tab>
-    <mat-tab label="Neues Kontro erstellen">
+    <mat-tab label="Neues Konto erstellen">
       <div class="register">
         <form class="register__form">
           <div class="register__form--name">
             <mat-form-field class="example-full-width" appearance="fill">
               <mat-label>Vorname</mat-label>
-              <input matInput [(ngModel)]="user.firstName" name="firstName">
+              <input matInput [formControl]="fNameFormControl" [(ngModel)]="user.firstName" name="firstName">
+              <mat-error *ngIf="fNameFormControl.hasError('maxlength') && !fNameFormControl.hasError('required')">
+                Max. Länge 20 Zeichen
+              </mat-error>
+              <mat-error *ngIf="fNameFormControl.hasError('required')">
+                Pflichtfeld
+              </mat-error>
             </mat-form-field>
             <mat-form-field class="example-full-width" appearance="fill">
               <mat-label>Nachname</mat-label>
-              <input matInput [(ngModel)]="user.lastName" name="lastName">
+              <input matInput [formControl]="lNameFormControl" [(ngModel)]="user.lastName" name="lastName">
+              <mat-error *ngIf="lNameFormControl.hasError('maxlength') && !lNameFormControl.hasError('required')">
+                Max. Länge 20 Zeichen
+              </mat-error>
+              <mat-error *ngIf="lNameFormControl.hasError('required')">
+                Pflichtfeld
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="register__form--email">
@@ -88,7 +100,11 @@
           </div>
           <div class="register__form--buttons">
             <button mat-raised-button color="basic" type="reset">Zurücksetzen</button>
-            <button mat-raised-button color="primary" type="submit" (click)="registerClicked()">Registrieren
+            <button mat-raised-button color="primary" type="submit" (click)="registerClicked()"
+                    [disabled]="!fNameFormControl.valid
+                    || !lNameFormControl.valid || !emailFormControl.valid
+                    || !passwordFormControl.valid || !password2FormControl.valid">
+              Registrieren
             </button>
           </div>
         </form>

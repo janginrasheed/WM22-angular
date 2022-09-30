@@ -19,6 +19,7 @@ import {LoginComponent} from "./components/login/login.component";
 import {MatTabsModule} from "@angular/material/tabs";
 import {HttpClientModule} from "@angular/common/http";
 import { TestsComponent } from './components/tests/tests.component';
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { TestsComponent } from './components/tests/tests.component';
     MatInputModule,
     MatIconModule,
     MatDialogModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
