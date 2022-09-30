@@ -14,7 +14,7 @@
               <mat-label>Passwort</mat-label>
               <div class="password__input">
                 <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="user.password" name="password">
-                <mat-icon (click)="showPassword()">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-icon class="password__input__eye" (click)="showPassword()">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
               </div>
             </mat-form-field>
           </div>
@@ -70,7 +70,7 @@
                        [type]="hidePassword ? 'password' : 'text'"
                        [formControl]="passwordFormControl"
                        [(ngModel)]="user.password" name="password">
-                <mat-icon (click)="showPassword()">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-icon class="password__input__eye" (click)="showPassword()">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
               </div>
               <mat-hint align="end">{{password.value.length}} / 6</mat-hint>
               <mat-error *ngIf="passwordFormControl.hasError('required')">
@@ -87,7 +87,7 @@
                        [type]="hidePassword2 ? 'password' : 'text'"
                        [formControl]="password2FormControl"
                        [(ngModel)]="passwordV" name="password2">
-                <mat-icon (click)="showPassword2()">{{hidePassword2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-icon class="password__input__eye" (click)="showPassword2()">{{hidePassword2 ? 'visibility_off' : 'visibility'}}</mat-icon>
               </div>
               <mat-hint align="end">{{password2.value.length}} / 6</mat-hint>
               <mat-error *ngIf="password2FormControl.hasError('required')">

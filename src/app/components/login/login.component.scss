@@ -32,3 +32,9 @@
 .password__input {
   display: flex;
 }
+
+.password__input__eye {
+  position: absolute;
+  right: 0;
+  top: -8px
+}
