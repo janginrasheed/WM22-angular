@@ -9,7 +9,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatButtonModule} from "@angular/material/button";
 import {NewsComponent} from './components/shared/news/news.component';
 import {MatInputModule} from "@angular/material/input";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatIconModule} from "@angular/material/icon";
 import {MatDialogModule} from "@angular/material/dialog";
 import {BotDialogComponent} from './components/shared/bot-dialog/bot-dialog.component';
@@ -17,6 +17,8 @@ import {HomeComponent} from "./components/home/home.component";
 import {NavbarComponent} from "./components/navbar/navbar.component";
 import {LoginComponent} from "./components/login/login.component";
 import {MatTabsModule} from "@angular/material/tabs";
+import {HttpClientModule} from "@angular/common/http";
+import { TestsComponent } from './components/tests/tests.component';
 
 @NgModule({
   declarations: [
@@ -27,12 +29,15 @@ import {MatTabsModule} from "@angular/material/tabs";
     MatchComponent,
     NewsComponent,
     LoginComponent,
-    BotDialogComponent
+    BotDialogComponent,
+    TestsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     FormsModule,
     MatButtonModule,
     MatInputModule,

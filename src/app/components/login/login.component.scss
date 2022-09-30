@@ -1,7 +1,7 @@
 .register__login {
   width: 40rem;
   margin: 3rem auto auto;
-  box-shadow: rgb(0 0 0 / 8%) 0px 54px 55px, rgb(0 0 0 / 12%) 0px -12px 30px, rgb(0 0 0 / 12%) 0px 4px 6px, rgb(0 0 0 / 17%) 0px 12px 13px, rgb(0 0 0 / 9%) 0px -3px 5px;
+  box-shadow: 0 0 39px 7px rgba(0, 0, 0, 0.31);
   border-radius: 0.5rem;
 }
 
@@ -13,8 +13,7 @@
   display: flex;
   flex-direction: column;
   width: 30rem;
-  padding: 2rem;
-  margin: 5rem auto;
+  margin: 2rem auto;
 }
 
 .register__form--name, .register__form--password, .register__form--buttons {
@@ -28,4 +27,8 @@
 
 .register__form--buttons {
   margin-top: 3rem;
+}
+
+.password__input {
+  display: flex;
 }

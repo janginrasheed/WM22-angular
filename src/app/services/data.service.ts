@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {catchError, first, Observable, retry, throwError} from "rxjs";
 import {Team} from "../types/team";
 import {Match} from "../types/match";
+import {User} from "../types/user";
 
 @Injectable({
   providedIn: 'root'
@@ -49,4 +50,29 @@ export class DataService {
       })
     );
   }
+
+  public getUserByEmail(email: String): Observable<User> {
+    return this.http.get<User>(this.dataApiUrl + "users/" + email).pipe(
+      first(),
+      // @ts-ignore
+      retry(1),
+      catchError(error => {
+        // this.handleError(error);
+        console.error("Fehler beim Laden des Users");
+        return throwError(error);
+      })
+    );
+  }
+
+  public registerUser(user: User) {
+    return this.http.post<User>(this.dataApiUrl + "register", user).pipe(
+      first(),
+      retry(1),
+      catchError(error => {
+        console.error("Fehler beim Registrieren");
+        return throwError(error);
+      })
+    );
+  }
+
 }

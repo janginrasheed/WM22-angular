@@ -1,64 +1,94 @@
 <div class="register__login">
   <mat-tab-group dynamicHeight mat-align-tabs="center" animationDuration="0ms">
-    <mat-tab label="Login">
+    <mat-tab label="Anmelden">
       <div class="login">
         <form class="register__form">
           <div class="register__form--email">
             <mat-form-field class="example-full-width" appearance="fill">
               <mat-label>Email</mat-label>
-              <input matInput [(ngModel)]="user.email" name="email">
+              <input matInput type="email" [(ngModel)]="user.email" name="email">
             </mat-form-field>
           </div>
           <div class="register__form--password">
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Password</mat-label>
-              <input matInput [(ngModel)]="user.password" name="password">
+              <mat-label>Passwort</mat-label>
+              <div class="password__input">
+                <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="user.password" name="password">
+                <mat-icon (click)="showPassword()">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </div>
             </mat-form-field>
           </div>
           <div class="register__form--buttons">
-            <button mat-raised-button color="basic" class="register__form--submit" (click)="resetClicked()">Reset
-            </button>
-            <button mat-raised-button color="primary" class="register__form--submit" (click)="submitClicked()">Submit
-            </button>
+            <button mat-raised-button color="basic" type="reset">Zurücksetzen</button>
+            <button mat-raised-button color="primary" type="submit" (click)="loginClicked()">Anmelden</button>
           </div>
         </form>
       </div>
     </mat-tab>
-    <mat-tab label="Register">
+    <mat-tab label="Neues Kontro erstellen">
       <div class="register">
         <form class="register__form">
           <div class="register__form--name">
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>First name</mat-label>
+              <mat-label>Vorname</mat-label>
               <input matInput [(ngModel)]="user.firstName" name="firstName">
             </mat-form-field>
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Last name</mat-label>
+              <mat-label>Nachname</mat-label>
               <input matInput [(ngModel)]="user.lastName" name="lastName">
             </mat-form-field>
           </div>
           <div class="register__form--email">
             <mat-form-field class="example-full-width" appearance="fill">
               <mat-label>Email</mat-label>
-              <input matInput [(ngModel)]="user.email" name="email">
+              <input matInput [formControl]="emailFormControl" [(ngModel)]="user.email" name="email">
+              <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                Bitte geben Sie eine gültige E-Mail Adresse ein
+              </mat-error>
+              <mat-error *ngIf="emailFormControl.hasError('required')">
+                Pflichtfeld
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="register__form--password">
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Password</mat-label>
-              <input matInput #password minlength="8" [(ngModel)]="user.password" name="password">
-              <mat-hint align="end">{{password.value.length}} / 8</mat-hint>
+              <mat-label>Passwort</mat-label>
+              <div class="password__input">
+                <input matInput #password minlength="6"
+                       [type]="hidePassword ? 'password' : 'text'"
+                       [formControl]="passwordFormControl"
+                       [(ngModel)]="user.password" name="password">
+                <mat-icon (click)="showPassword()">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </div>
+              <mat-hint align="end">{{password.value.length}} / 6</mat-hint>
+              <mat-error *ngIf="passwordFormControl.hasError('required')">
+                Pflichtfeld
+              </mat-error>
+              <mat-error *ngIf="passwordFormControl.hasError('minlength')">
+                Min. 6 Zeichen
+              </mat-error>
             </mat-form-field>
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Password wiederholen</mat-label>
-              <input matInput #password2 minlength="8" [(ngModel)]="passwordV" name="passwordV">
-              <mat-hint align="end">{{password2.value.length}} / 8</mat-hint>
+              <mat-label>Passwort wiederholen</mat-label>
+              <div class="password__input">
+                <input matInput #password2 minlength="6"
+                       [type]="hidePassword2 ? 'password' : 'text'"
+                       [formControl]="password2FormControl"
+                       [(ngModel)]="passwordV" name="password2">
+                <mat-icon (click)="showPassword2()">{{hidePassword2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </div>
+              <mat-hint align="end">{{password2.value.length}} / 6</mat-hint>
+              <mat-error *ngIf="password2FormControl.hasError('required')">
+                Pflichtfeld
+              </mat-error>
+              <mat-error *ngIf="password2FormControl.hasError('minlength')">
+                Min. 6 Zeichen
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="register__form--buttons">
-            <button mat-raised-button color="basic" class="register__form--submit" (click)="resetClicked()">Reset
-            </button>
-            <button mat-raised-button color="primary" class="register__form--submit" (click)="submitClicked()">Submit
+            <button mat-raised-button color="basic" type="reset">Zurücksetzen</button>
+            <button mat-raised-button color="primary" type="submit" (click)="registerClicked()">Registrieren
             </button>
           </div>
         </form>
