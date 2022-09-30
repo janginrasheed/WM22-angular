@@ -1,5 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 
+$color1: #56042c;
+$color2: #1077C3;
+$color2: #49BCE3;
+$color2: #FEC310;
+
 html, body {
   height: 100%;
 }
@@ -12,3 +17,8 @@ body {
 .snackbar {
   margin-top: 5rem !important;
 }
+
+.mat-raised-button.mat-primary {
+  background-color: $color1;
+}
+
