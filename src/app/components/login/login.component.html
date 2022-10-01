@@ -6,21 +6,32 @@
           <div class="register__form--email">
             <mat-form-field class="example-full-width" appearance="fill">
               <mat-label>Email</mat-label>
-              <input matInput type="email" [(ngModel)]="user.email" name="email">
+              <input matInput [formControl]="emailFormControl" type="email" [(ngModel)]="user.email" name="email">
+              <mat-error *ngIf="emailFormControl.hasError('required')">
+                Pflichtfeld
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="register__form--password">
             <mat-form-field class="example-full-width" appearance="fill">
               <mat-label>Passwort</mat-label>
               <div class="password__input">
-                <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="user.password" name="password">
-                <mat-icon class="password__input__eye" (click)="showPassword()">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <input matInput [formControl]="passwordFormControl" [type]="hidePassword ? 'password' : 'text'"
+                       [(ngModel)]="user.password" name="password">
+                <mat-icon class="password__input__eye"
+                          (click)="showPassword()">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
               </div>
+              <mat-error *ngIf="passwordFormControl.hasError('required')">
+                Pflichtfeld
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="register__form--buttons">
             <button mat-raised-button color="basic" type="reset">Zurücksetzen</button>
-            <button mat-raised-button color="primary" type="submit" (click)="loginClicked()">Anmelden</button>
+            <button mat-raised-button color="primary" type="submit"
+                    [disabled]="!emailFormControl.valid || !passwordFormControl.valid"
+                    (click)="loginClicked()">Anmelden
+            </button>
           </div>
         </form>
       </div>
@@ -70,7 +81,8 @@
                        [type]="hidePassword ? 'password' : 'text'"
                        [formControl]="passwordFormControl"
                        [(ngModel)]="user.password" name="password">
-                <mat-icon class="password__input__eye" (click)="showPassword()">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-icon class="password__input__eye"
+                          (click)="showPassword()">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
               </div>
               <mat-hint align="end">{{password.value.length}} / 6</mat-hint>
               <mat-error *ngIf="passwordFormControl.hasError('required')">
@@ -87,7 +99,8 @@
                        [type]="hidePassword2 ? 'password' : 'text'"
                        [formControl]="password2FormControl"
                        [(ngModel)]="passwordV" name="password2">
-                <mat-icon class="password__input__eye" (click)="showPassword2()">{{hidePassword2 ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-icon class="password__input__eye"
+                          (click)="showPassword2()">{{hidePassword2 ? 'visibility_off' : 'visibility'}}</mat-icon>
               </div>
               <mat-hint align="end">{{password2.value.length}} / 6</mat-hint>
               <mat-error *ngIf="password2FormControl.hasError('required')">

@@ -3,6 +3,8 @@ import {User} from "../../types/user";
 import {DataService} from "../../services/data.service";
 import {FormControl, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {Router} from "@angular/router";
+import {ParamsService} from "../../services/params.service";
 
 @Component({
   selector: 'app-login',
@@ -22,7 +24,9 @@ export class LoginComponent implements OnInit {
   password2FormControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
 
   constructor(private dataService: DataService,
-              private snackBar: MatSnackBar) {
+              private paramsService: ParamsService,
+              private snackBar: MatSnackBar,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -49,8 +53,11 @@ export class LoginComponent implements OnInit {
     this.dataService.getUser(this.user).subscribe(user => {
       if (user != null) {
         console.log(user.firstName + " " + user.lastName);
+        this.paramsService.user = user;
+        this.navigateTo("home");
       } else {
         console.log("Email oder Passwort falsch");
+        this.openSnackBar("Email oder Passwort falsch");
       }
     })
   }
@@ -76,6 +83,10 @@ export class LoginComponent implements OnInit {
         this.passwordV = "";
       }
     });
+  }
+
+  public navigateTo(url: string): void {
+    this.router.navigate([url]);
   }
 
 }
