@@ -5,6 +5,7 @@ import {FormControl, Validators} from "@angular/forms";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {ParamsService} from "../../services/params.service";
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import {ParamsService} from "../../services/params.service";
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
+  message: string;
   public user: User = {email: "", password: ""};
   public passwordV: string = "";
   hidePassword = true;
@@ -26,10 +27,12 @@ export class LoginComponent implements OnInit {
   constructor(private dataService: DataService,
               private paramsService: ParamsService,
               private snackBar: MatSnackBar,
-              private router: Router) {
+              private router: Router,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
+    this.authService.logout();
   }
 
   openSnackBar(message: string) {
@@ -52,8 +55,14 @@ export class LoginComponent implements OnInit {
   loginClicked(): void {
     this.dataService.getUser(this.user).subscribe(user => {
       if (user != null) {
-        console.log(user.firstName + " " + user.lastName);
-        this.paramsService.user = user;
+        console.log("Login successful " + user.firstName + " " + user.lastName);
+        localStorage.setItem('isLoggedIn', "true");
+        if (typeof this.emailFormControl.value === "string") {
+          localStorage.setItem('token', this.emailFormControl.value);
+        }
+        localStorage.setItem('firstName', <string>user.firstName);
+        localStorage.setItem('lastName', <string>user.lastName);
+
         this.navigateTo("home");
       } else {
         console.log("Email oder Passwort falsch");
@@ -85,7 +94,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  public navigateTo(url: string): void {
+  navigateTo(url: string): void {
     this.router.navigate([url]);
   }
 

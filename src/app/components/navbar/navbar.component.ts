@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
+import {AuthService} from "../../services/auth.service";
+import {User} from "../../types/user";
 
 @Component({
   selector: 'app-navbar',
@@ -7,14 +9,38 @@ import {Router} from "@angular/router";
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+  isLoggedIn: boolean;
+  user: User = {email: "", firstName: "", lastName: "", password: ""};
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+              private authService: AuthService) {
+  }
 
   ngOnInit(): void {
+
   }
 
   public navigateTo(url: string): void {
-      this.router.navigate([url]);
+    this.router.navigate([url]);
+  }
+
+  logout() {
+    console.log('logout');
+    this.authService.logout();
+    this.router.navigate(['/home']);
+  }
+
+  checkIsLoggedIn(): boolean {
+    if (localStorage.getItem('isLoggedIn') == "true") {
+      // @ts-ignore
+      this.user.firstName = localStorage.getItem('firstName');
+      // @ts-ignore
+      this.user.lastName = localStorage.getItem('lastName');
+      return true;
+
+    } else {
+      return false;
+    }
   }
 
 }

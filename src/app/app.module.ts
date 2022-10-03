@@ -20,6 +20,9 @@ import {MatTabsModule} from "@angular/material/tabs";
 import {HttpClientModule} from "@angular/common/http";
 import { TestsComponent } from './components/tests/tests.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {AuthGuard} from "./guards/auth.guard";
+import { PredictComponent } from './components/predict/predict.component';
+import {MatMenuModule} from "@angular/material/menu";
 
 @NgModule({
   declarations: [
@@ -31,7 +34,8 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     NewsComponent,
     LoginComponent,
     BotDialogComponent,
-    TestsComponent
+    TestsComponent,
+    PredictComponent
   ],
   imports: [
     BrowserModule,
@@ -45,9 +49,10 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MatIconModule,
     MatDialogModule,
     MatTabsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatMenuModule
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {

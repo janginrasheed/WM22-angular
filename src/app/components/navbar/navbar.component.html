@@ -12,14 +12,18 @@
       <span class="material-icons">checklist</span>
       <span>Vorhersagen</span>
     </button>
-    <button mat-button class="navbar__button" (click)="navigateTo('login')">
+    <button mat-button class="navbar__button" (click)="navigateTo('login')" *ngIf="!checkIsLoggedIn()">
       <span class="material-icons">login</span>
       <span>Login</span>
     </button>
-    <button mat-button class="navbar__button">
-      <span class="material-icons">login</span>
-      <span>Profile</span>
+    <button mat-button [matMenuTriggerFor]="menu" class="navbar__button" *ngIf="checkIsLoggedIn()">
+      <span class="material-icons">account_circle</span>
+      {{user.firstName}} {{user.lastName}}
     </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>Kontoeinstellungen</button>
+      <button mat-menu-item (click)="logout()">Abmelden</button>
+    </mat-menu>
     <button mat-button class="navbar__button" (click)="navigateTo('about')">
       <span class="material-icons">info</span>
     </button>

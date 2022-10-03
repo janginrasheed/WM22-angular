@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {BotDialogComponent} from "../shared/bot-dialog/bot-dialog.component";
-import {ParamsService} from "../../services/params.service";
 import {User} from "../../types/user";
+import {Router} from "@angular/router";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-home',
@@ -13,13 +14,11 @@ export class HomeComponent implements OnInit {
   user: User;
 
   constructor(public dialog: MatDialog,
-              private paramsService: ParamsService) {
+              private router: Router,
+              private authService: AuthService) {
   }
 
-  ngOnInit(): void {
-    if (this.paramsService.user != null) {
-      this.user = this.paramsService.user;
-    }
+  ngOnInit() {
   }
 
   openDialog() {
