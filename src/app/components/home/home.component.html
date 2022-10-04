@@ -1,4 +1,29 @@
 <button mat-icon-button (click)="openDialog()" class="bot__dialog">
   <mat-icon class="bot__dialog__icon">chat</mat-icon>
 </button>
-<h1>WM22</h1>
+<!--
+<div class="matches-rounds__container">
+  <div class="section__title">{{'matches' | translate}}</div>
+  <div class="select-rounds__container">
+    <mat-form-field appearance="fill">
+      <mat-label>{{'selectStage' | translate}}</mat-label>
+      <mat-select [(value)]="selectedStageId">
+        <mat-option *ngFor="let stage of stagesEnum" [value]="stage.">
+          <div class="select-rounds__single-option">
+            {{round.stage}} <span
+            *ngIf="round.roundId < 7">{{round.round}}{{'counter' | translate}} {{'matchday' | translate}}</span>
+            {{round.homeAway | titlecase}}
+          </div>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div *ngFor="let match of roundMatches">
+    <app-match [match]="match"
+               [seasonDetails]="seasonDetails"
+               [inputNotActive]="inputNotActive"
+               (updatedMatchEmitter)="updateMatchScore($event)">
+    </app-match>
+  </div>
+</div>
+-->

@@ -2,8 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {BotDialogComponent} from "../shared/bot-dialog/bot-dialog.component";
 import {User} from "../../types/user";
-import {Router} from "@angular/router";
-import {AuthService} from "../../services/auth.service";
+import {ViewportScroller} from "@angular/common";
+import {TranslateService} from "@ngx-translate/core";
+import {Match} from "../../types/match";
+import {Stage} from "../../enums/stage";
 
 @Component({
   selector: 'app-home',
@@ -12,10 +14,16 @@ import {AuthService} from "../../services/auth.service";
 })
 export class HomeComponent implements OnInit {
   user: User;
+  stagesEnum: Stage;
+  stageMatches: Match[];
+  selectedStageId: number;
+
 
   constructor(public dialog: MatDialog,
-              private router: Router,
-              private authService: AuthService) {
+              private scroll: ViewportScroller,
+              public translate: TranslateService) {
+    translate.addLangs(['en', 'de']);
+    translate.setDefaultLang('de');
   }
 
   ngOnInit() {
@@ -23,6 +31,10 @@ export class HomeComponent implements OnInit {
 
   openDialog() {
     this.dialog.open(BotDialogComponent);
+  }
+
+  switchLang(lang: string) {
+    this.translate.use(lang);
   }
 
 }

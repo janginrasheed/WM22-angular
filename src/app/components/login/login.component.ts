@@ -85,11 +85,11 @@ export class LoginComponent implements OnInit {
         this.dataService.registerUser(this.user).subscribe(response => {
           console.log(response);
         });
-        this.user.firstName = "";
-        this.user.lastName = "";
-        this.user.email = "";
-        this.user.password = "";
-        this.passwordV = "";
+        // this.user.firstName = "";
+        // this.user.lastName = "";
+        // this.user.email = "";
+        // this.user.password = "";
+        // this.passwordV = "";
       }
     });
   }

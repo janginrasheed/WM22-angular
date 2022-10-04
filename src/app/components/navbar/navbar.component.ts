@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../types/user";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-navbar',
@@ -13,7 +14,10 @@ export class NavbarComponent implements OnInit {
   user: User = {email: "", firstName: "", lastName: "", password: ""};
 
   constructor(private router: Router,
-              private authService: AuthService) {
+              private authService: AuthService,
+              public translate: TranslateService) {
+    translate.addLangs(['en', 'de']);
+    translate.setDefaultLang('de');
   }
 
   ngOnInit(): void {
@@ -41,6 +45,10 @@ export class NavbarComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  switchLang(lang: string) {
+    this.translate.use(lang);
   }
 
 }

@@ -17,12 +17,14 @@ import {HomeComponent} from "./components/home/home.component";
 import {NavbarComponent} from "./components/navbar/navbar.component";
 import {LoginComponent} from "./components/login/login.component";
 import {MatTabsModule} from "@angular/material/tabs";
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { TestsComponent } from './components/tests/tests.component';
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {AuthGuard} from "./guards/auth.guard";
 import { PredictComponent } from './components/predict/predict.component';
 import {MatMenuModule} from "@angular/material/menu";
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 
 @NgModule({
   declarations: [
@@ -50,10 +52,21 @@ import {MatMenuModule} from "@angular/material/menu";
     MatDialogModule,
     MatTabsModule,
     MatSnackBarModule,
-    MatMenuModule
+    MatMenuModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient]
+      }
+    })
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {
+}
+
+export function httpTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http);
 }
