@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {ResultsEntity} from "../../../types/news";
 
 @Component({
   selector: 'app-news',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./news.component.scss']
 })
 export class NewsComponent implements OnInit {
+
+  @Input()
+  public newsItem: ResultsEntity;
 
   constructor() { }
 

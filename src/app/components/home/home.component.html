@@ -1,29 +1,44 @@
 <button mat-icon-button (click)="openDialog()" class="bot__dialog">
   <mat-icon class="bot__dialog__icon">chat</mat-icon>
 </button>
+<!-- -->
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<div class="home__container" *ngIf="!isLoading">
+  <div class="sections__nav">
+    <a href="#news_section">News</a>
+    <a href="#kostages_section">Knock out Stages</a>
+    <a href="#groups_section">Groups</a>
+    <a href="#matches_section">Matches</a>
+  </div>
+  <div class="groups__container" id="groups_section">
+    Groups
+  </div>
+  <div class="knock-out-stages__container" id="kostages_section">
+    Knock out Stages
+  </div>
+  <div class="matches__container" id="matches_section">
+    <div class="select-rounds__container">
+      <mat-form-field appearance="fill">
+        <mat-label>{{'selectStage' | translate}}</mat-label>
+        <mat-select [(value)]="selectedStageId">
+          <mat-option *ngFor="let stage of stages" [value]="stage.id">
+            {{stage.stage | titlecase}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div *ngFor="let match of stageMatches">
+      <app-match [match]="match">
+      </app-match>
+    </div>
+  </div>
 <!--
-<div class="matches-rounds__container">
-  <div class="section__title">{{'matches' | translate}}</div>
-  <div class="select-rounds__container">
-    <mat-form-field appearance="fill">
-      <mat-label>{{'selectStage' | translate}}</mat-label>
-      <mat-select [(value)]="selectedStageId">
-        <mat-option *ngFor="let stage of stagesEnum" [value]="stage.">
-          <div class="select-rounds__single-option">
-            {{round.stage}} <span
-            *ngIf="round.roundId < 7">{{round.round}}{{'counter' | translate}} {{'matchday' | translate}}</span>
-            {{round.homeAway | titlecase}}
-          </div>
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <div class="news__container" id="news_section">
+    <ng-container *ngIf="newsList && !newsErrorText">
+      <div *ngFor="let newsItem of newsList.results">
+        <app-news [newsItem]="newsItem"></app-news>
+      </div>
+    </ng-container>
   </div>
-  <div *ngFor="let match of roundMatches">
-    <app-match [match]="match"
-               [seasonDetails]="seasonDetails"
-               [inputNotActive]="inputNotActive"
-               (updatedMatchEmitter)="updateMatchScore($event)">
-    </app-match>
-  </div>
-</div>
 -->
+</div>

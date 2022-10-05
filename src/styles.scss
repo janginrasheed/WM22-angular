@@ -1,9 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
-$color1: #56042c;
-$color2: #1077C3;
-$color2: #49BCE3;
-$color2: #FEC310;
+:root {
+  --color-1: #56042c;
+  --color-2: #1077C3;
+  --color-3: #49BCE3;
+  --color-4: #FEC310;
+}
+
 
 html, body {
   height: 100%;
@@ -15,9 +18,9 @@ body {
 }
 
 .snackbar {
-  margin-top: 4rem !important;
+  margin-top: 2rem !important;
 }
 
 .mat-raised-button.mat-primary {
-  background-color: $color1;
+  background-color: var(--color-1);
 }

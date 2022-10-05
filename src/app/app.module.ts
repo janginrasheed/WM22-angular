@@ -25,6 +25,9 @@ import { PredictComponent } from './components/predict/predict.component';
 import {MatMenuModule} from "@angular/material/menu";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import {MatSelectModule} from "@angular/material/select";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatDividerModule} from "@angular/material/divider";
 
 @NgModule({
   declarations: [
@@ -46,6 +49,13 @@ import {TranslateHttpLoader} from "@ngx-translate/http-loader";
     BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpTranslateLoader,
+        deps: [HttpClient]
+      }
+    }),
     MatButtonModule,
     MatInputModule,
     MatIconModule,
@@ -53,13 +63,9 @@ import {TranslateHttpLoader} from "@ngx-translate/http-loader";
     MatTabsModule,
     MatSnackBarModule,
     MatMenuModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: httpTranslateLoader,
-        deps: [HttpClient]
-      }
-    })
+    MatSelectModule,
+    MatDividerModule,
+    MatProgressBarModule
   ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]

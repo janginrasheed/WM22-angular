@@ -4,24 +4,19 @@ import {catchError, first, Observable, retry, throwError} from "rxjs";
 import {Team} from "../types/team";
 import {Match} from "../types/match";
 import {User} from "../types/user";
+import {Stage} from "../types/stage";
+import {News} from "../types/news";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  private _dataApiUrl = 'http://localhost:8081/';
-  // private _dataApiUrl = 'https://wm22.azurewebsites.net/';
+  // dataApiUrl = 'http://localhost:8081/';
+  dataApiUrl = 'https://wm22.herokuapp.com/';
 
-  // private _newsApiUrl = 'https://newsdata.io/api/1/news?apikey=pub_107858411e9fea4c6d3e422f5cfd83713a8a7&q=champions%20league&language=' + this.newLanguage + '&category=sports';
-
-  get dataApiUrl(): string {
-    return this._dataApiUrl;
-  }
-
-  set dataApiUrl(value: string) {
-    this._dataApiUrl = value;
-  }
+  newsApiUrl = 'https://newsdata.io/api/1/news?apikey=pub_107858411e9fea4c6d3e422f5cfd83713a8a7&q=fifa%20world%20cup&language=en';
+  jsonSrc = 'assets/newsApiTest.json';
 
   constructor(private http: HttpClient) {
   }
@@ -53,7 +48,7 @@ export class DataService {
   }
 
   public getUserByEmail(email: String): Observable<User> {
-    return this.http.get<User>(this.dataApiUrl + "userbyemail/" + email).pipe(
+    return this.http.get<User>(this.dataApiUrl + "userByEmail/" + email).pipe(
       first(),
       // @ts-ignore
       retry(1),
@@ -87,6 +82,33 @@ export class DataService {
         return throwError(error);
       })
     );
+  }
+
+  public getStages(): Observable<Stage[]> {
+    return this.http.get<Stage[]>(this.dataApiUrl + "stages").pipe(
+      first(),
+      retry(1),
+      catchError(error => {
+        console.error("Fehler beim Laden der Runden");
+        return throwError(error);
+      })
+    );
+  }
+
+  public getNews(): Observable<News> {
+    return this.http.get<News>(this.newsApiUrl).pipe(
+      first(),
+      retry(1),
+      catchError((error) => {
+        // this.handleError(error);
+        console.error('Fehler beim Laden der aktuellen Nachrichten');
+        return throwError(error);
+      })
+    );
+  }
+
+  getTestNews(): Observable<any> {
+    return this.http.get(this.jsonSrc);
   }
 
 }
