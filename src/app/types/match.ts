@@ -2,10 +2,10 @@ export interface Match {
   id: number;
   stageId: number;
   firstTeamId: number;
-  firstTeamGoals: number;
-  firstTeamPenaltiesGoals: number;
+  firstTeamGoals: string;
+  firstTeamPenaltiesGoals: string;
   secondTeamId: number;
-  secondTeamGoals: number;
-  secondTeamPenaltiesGoals: number;
+  secondTeamGoals: string;
+  secondTeamPenaltiesGoals: string;
   date: Date;
 }

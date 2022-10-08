@@ -1,0 +1,86 @@
+.group-table {
+  margin: 1rem 0;
+  background-color: white;
+
+  &__header {
+    color: #fff;
+    margin: 0 0 -2rem 1rem;
+  }
+
+  &__logo {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__club-name {
+    width: 10rem;
+    margin-right: 0.5rem;
+  }
+
+  &__club__data, &__club-name, &__header {
+    font-size: 0.8rem;
+  }
+
+}
+
+table {
+  border-top: 2rem var(--color-1) solid;
+  width: 30rem;
+}
+
+tr {
+  height: 2.3rem !important;
+}
+
+// Padding beim Logo weniger machen
+th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+  padding-left: 0.5rem !important;
+}
+
+// Padding beim Punkte weniger machen
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+  padding-right: 0 !important;
+}
+
+.mat-cell {
+  width: 10rem;
+}
+
+@media screen and (max-width: 600px) {
+  table {
+    width: 25rem;
+  }
+
+  // Padding beim Punkte weniger machen
+  th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+    padding-right: 0.3rem !important;
+  }
+}
+
+table.mat-table {
+  border-radius: 0.5rem;
+  background-color:transparent!important;
+}
+
+@media screen and (max-width: 450px) {
+  table {
+    width: 23rem;
+  }
+
+  th.mat-header-cell:nth-child(7)
+  , th.mat-header-cell:nth-child(8)
+  , td.mat-cell:nth-child(7)
+  , td.mat-cell:nth-child(8) {
+    display: none;
+  }
+
+  .group-table__club-name {
+    width: 9rem;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  table {
+    width: 19rem;
+  }
+}

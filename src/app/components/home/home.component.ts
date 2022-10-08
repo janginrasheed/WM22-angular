@@ -9,6 +9,8 @@ import {Stage} from "../../types/stage";
 import {DataService} from "../../services/data.service";
 import {News} from "../../types/news";
 import {forkJoin} from "rxjs";
+import {TeamTable} from "../../types/team-table";
+import {GroupDetails} from "../../types/group-details";
 
 @Component({
   selector: 'app-home',
@@ -16,15 +18,19 @@ import {forkJoin} from "rxjs";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  newsErrorText: string;
+  errorText: string;
+  isLoading = true;
+  groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
+  private _selectedStageId: number;
   user: User;
   stages: Stage[];
   matches: Match[];
   stageMatches: Match[] = [];
-  private _selectedStageId: number;
-  isLoading = true;
   newsList: News;
-  newsErrorText: string;
-  errorText: string;
+  teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
+  groupsDetails: GroupDetails[];
 
   get selectedStageId(): number {
     return this._selectedStageId;
@@ -51,21 +57,27 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.getData();
+    this.initTeamsGroupsData();
+
   }
 
   getData() {
     const stages = this.dataService.getStages();
     const matches = this.dataService.getAllMatches();
+    const groupsDetails = this.dataService.getGroupsDetails();
     // const news = this.dataService.getNews(); // Real News
     const news = this.dataService.getTestNews(); // Old News for Test
-    forkJoin([stages, matches, news]).subscribe(result => {
+    forkJoin([stages, matches, groupsDetails, news]).subscribe(result => {
         this.stages = result[0];
         this.matches = result[1];
-        this.newsList = result[2];
+        this.groupsDetails = result[2];
+        this.newsList = result[3];
         this.isLoading = false;
         this.newsErrorText = "";
         this.errorText = "";
         this.trimNewsDescription();
+        this.initTeamsGroupsData();
+        this.fillClubsData();
       }, error => {
         this.isLoading = false;
         if (this.newsList == null) {
@@ -79,7 +91,7 @@ export class HomeComponent implements OnInit {
 
   }
 
-  public trimNewsDescription(): void {
+  trimNewsDescription(): void {
     this.newsList.results?.forEach(newsItem => {
       if (newsItem.description) {
         if (newsItem.description.length > 150) {
@@ -96,5 +108,103 @@ export class HomeComponent implements OnInit {
   switchLang(lang: string) {
     this.translate.use(lang);
   }
+
+  initTeamsGroupsData() {
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 4; j++) {
+        this.teamsGroupsData[i][j] = {
+          id: 0,
+          flag: '',
+          name: '',
+          played: 0,
+          won: 0,
+          drawn: 0,
+          lost: 0,
+          goalsFor: 0,
+          goalsAgainst: 0,
+          goalDifference: 0,
+          points: 0
+        };
+      }
+    }
+  }
+
+  fillClubsData(): void {
+    if (!this.isLoading) {
+
+      //Schleift durch jede Gruppe
+      this.groupsDetails.forEach((group, i) => {
+
+        //Schleift durch jeden Verein in der Gruppe
+        group.groupTeams.forEach((team, j) => {
+          this.teamsGroupsData[i][j].id = team.id;
+          this.teamsGroupsData[i][j].flag = team.flag;
+          this.teamsGroupsData[i][j].name = team.name;
+        });
+        if (this.matches) {
+          this.teamsGroupsData[i].forEach(team => {
+              team.played = 0;
+              team.won = 0;
+              team.drawn = 0;
+              team.lost = 0;
+              team.goalsFor = 0;
+              team.goalsAgainst = 0;
+              team.goalDifference = 0;
+              team.points = 0;
+              this.matches.forEach(match => {
+                if (match.firstTeamGoals != ''
+                  && match.firstTeamGoals != null
+                  && match.secondTeamGoals != ''
+                  && match.secondTeamGoals != null
+                  && match.stageId < 7
+                ) {
+
+                  //Rechnet die Daten nur wenn Spielergebnisse eingetragen sind und das Spiel in Gruppenphase ist.
+                  if (team.id == match.firstTeamId) {
+                    team.played += 1;
+                    team.goalsFor += +match.firstTeamGoals;
+                    team.goalsAgainst += +match.secondTeamGoals;
+                    if (match.firstTeamGoals > match.secondTeamGoals) {
+                      team.won += 1;
+                      team.points += 3;
+                    } else if (match.firstTeamGoals == match.secondTeamGoals) {
+                      team.drawn += 1;
+                      team.points += 1;
+                    } else if (match.firstTeamGoals < match.secondTeamGoals) {
+                      team.lost += 1;
+                    }
+                  } else if (team.id == match.secondTeamId) {
+                    team.played += 1;
+                    team.goalsFor += +match.secondTeamGoals;
+                    team.goalsAgainst += +match.firstTeamGoals;
+                    if (match.secondTeamGoals > match.firstTeamGoals) {
+                      team.won += 1;
+                      team.points += 3;
+                    } else if (match.secondTeamGoals == match.firstTeamGoals) {
+                      team.drawn += 1;
+                      team.points += 1;
+                    } else if (match.secondTeamGoals < match.firstTeamGoals) {
+                      team.lost += 1;
+                    }
+                  }
+                  let index = this.teamsGroupsData[i].indexOf(team);
+                  this.teamsGroupsData[i][index].played = team.played;
+                  this.teamsGroupsData[i][index].won = team.won;
+                  this.teamsGroupsData[i][index].drawn = team.drawn;
+                  this.teamsGroupsData[i][index].lost = team.lost;
+                  this.teamsGroupsData[i][index].goalsFor = team.goalsFor;
+                  this.teamsGroupsData[i][index].goalsAgainst = team.goalsAgainst;
+                  this.teamsGroupsData[i][index].goalDifference = team.goalsFor - team.goalsAgainst;
+                  this.teamsGroupsData[i][index].points = team.points;
+                }
+              });
+            }
+          );
+        }
+      });
+    }
+    // this.sortTable();
+  }
+
 
 }

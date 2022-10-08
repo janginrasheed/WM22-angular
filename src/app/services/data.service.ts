@@ -6,6 +6,7 @@ import {Match} from "../types/match";
 import {User} from "../types/user";
 import {Stage} from "../types/stage";
 import {News} from "../types/news";
+import {GroupDetails} from "../types/group-details";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class DataService {
   dataApiUrl = 'https://wm22.azurewebsites.net/';
 
   newsApiUrl = 'https://newsdata.io/api/1/news?apikey=pub_107858411e9fea4c6d3e422f5cfd83713a8a7&q=fifa%20world%20cup&language=en';
-  jsonSrc = 'assets/newsApiTest.json';
+  newsTest = 'assets/newsApiTest.json';
 
   constructor(private http: HttpClient) {
   }
@@ -108,8 +109,20 @@ export class DataService {
     );
   }
 
+  public getGroupsDetails(): Observable<GroupDetails[]> {
+    return this.http.get<GroupDetails[]>(this.dataApiUrl + "teamsGroups").pipe(
+      first(),
+      retry(1),
+      catchError((error) => {
+        // this.handleError(error);
+        console.error('Fehler beim Laden der Gruppendaten');
+        return throwError(error);
+      })
+    );
+  }
+
   getTestNews(): Observable<any> {
-    return this.http.get(this.jsonSrc);
+    return this.http.get(this.newsTest);
   }
 
 }

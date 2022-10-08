@@ -1,12 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
 :root {
-  --color-1: #56042c;
+  --color-1: #56042C;
   --color-2: #1077C3;
   --color-3: #49BCE3;
   --color-4: #FEC310;
+  --border-color: hsla(0, 39%, 26%, 0.16);
 }
-
 
 html, body {
   height: 100%;
@@ -23,4 +23,11 @@ body {
 
 .mat-raised-button.mat-primary {
   background-color: var(--color-1);
+}
+
+.club__logo--small {
+  height: 1.4rem;
+  margin-right: .3rem;
+  border: solid 1px var(--border-color);
+  border-radius: 0.3rem;
 }

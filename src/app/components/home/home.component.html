@@ -4,14 +4,19 @@
 <!-- -->
 <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
 <div class="home__container" *ngIf="!isLoading">
-  <div class="sections__nav">
-    <a href="#news_section">News</a>
-    <a href="#kostages_section">Knock out Stages</a>
-    <a href="#groups_section">Groups</a>
-    <a href="#matches_section">Matches</a>
-  </div>
+  <!--
+    <div class="sections__nav">
+      <a href="#news_section">News</a>
+      <a href="#kostages_section">Knock out Stages</a>
+      <a href="#groups_section">Groups</a>
+      <a href="#matches_section">Matches</a>
+    </div>
+  -->
   <div class="groups__container" id="groups_section">
-    Groups
+    <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
+      <app-group-table [teamsGroupData]="teamsGroupData" [group]="groups[i]">
+      </app-group-table>
+    </div>
   </div>
   <div class="knock-out-stages__container" id="kostages_section">
     Knock out Stages
@@ -32,7 +37,6 @@
       </app-match>
     </div>
   </div>
-<!--
   <div class="news__container" id="news_section">
     <ng-container *ngIf="newsList && !newsErrorText">
       <div *ngFor="let newsItem of newsList.results">
@@ -40,5 +44,4 @@
       </div>
     </ng-container>
   </div>
--->
 </div>

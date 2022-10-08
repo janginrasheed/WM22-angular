@@ -28,6 +28,7 @@ import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {MatSelectModule} from "@angular/material/select";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatDividerModule} from "@angular/material/divider";
+import {MatTableModule} from "@angular/material/table";
 
 @NgModule({
   declarations: [
@@ -42,31 +43,32 @@ import {MatDividerModule} from "@angular/material/divider";
     TestsComponent,
     PredictComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    FormsModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: httpTranslateLoader,
-        deps: [HttpClient]
-      }
-    }),
-    MatButtonModule,
-    MatInputModule,
-    MatIconModule,
-    MatDialogModule,
-    MatTabsModule,
-    MatSnackBarModule,
-    MatMenuModule,
-    MatSelectModule,
-    MatDividerModule,
-    MatProgressBarModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        FormsModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: httpTranslateLoader,
+                deps: [HttpClient]
+            }
+        }),
+        MatButtonModule,
+        MatInputModule,
+        MatIconModule,
+        MatDialogModule,
+        MatTabsModule,
+        MatSnackBarModule,
+        MatMenuModule,
+        MatSelectModule,
+        MatDividerModule,
+        MatProgressBarModule,
+        MatTableModule
+    ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
