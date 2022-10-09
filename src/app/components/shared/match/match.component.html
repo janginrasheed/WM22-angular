@@ -1,1 +1,53 @@
-Match Id {{match.id}}
+<div class="match__container">
+  <div>
+    <div *ngIf="!matchDetails.stage.includes('Group stage')">
+      {{matchDetails.stage}}
+    </div>
+    <div *ngIf="matchDetails.stage.includes('Group stage')">
+      {{'group' | translate}}: {{matchDetails.group}}
+    </div>
+  </div>
+  <div class="club__name">{{matchDetails.fistTeam.name}}</div>
+  <img src="{{matchDetails.fistTeam.flag}}" alt="" class="club__logo--small">
+  <div>
+    {{matchDetails.fistTeam.goals}}
+  </div>
+  X
+  <div>
+    {{matchDetails.secondTeam.goals}}
+  </div>
+  <img src="{{matchDetails.secondTeam.flag}}" alt="" class="club__logo--small">
+  <div class="club__name">{{matchDetails.secondTeam.name}}</div>
+  <div class="match__container--buttons">
+    {{matchDetails.date | date: "dd.MM.yyyy"}}
+  </div>
+</div>
+<!-- Mobile -->
+<div class="match__container--mobile">
+  <div class="cell match__container--round--date">
+    <div *ngIf="!matchDetails.stage.includes('Group stage')">
+      {{matchDetails.stage}}
+    </div>
+    <div *ngIf="matchDetails.stage.includes('Group stage')">
+      {{"group" | translate}}: {{matchDetails.group}}
+    </div>
+  </div>
+  <div class="cell match__container--buttons">
+    <div class="match-date">{{matchDetails.date | date: "dd.MM.yyyy"}}</div>
+  </div>
+  <div class="cell">
+    <img src="{{matchDetails.fistTeam.flag}}" alt="" class="club__logo--small">
+    <div class="club__name">{{matchDetails.fistTeam.name}}</div>
+  </div>
+  <div class="cell">
+    {{matchDetails.fistTeam.goals}}
+  </div>
+  <div class="cell">:</div>
+  <div class="cell">
+    {{matchDetails.secondTeam.goals}}
+  </div>
+  <div class="cell">
+    <img src="{{matchDetails.secondTeam.flag}}" alt="" class="club__logo--small">
+    <div class="club__name">{{matchDetails.secondTeam.name}}</div>
+  </div>
+</div>

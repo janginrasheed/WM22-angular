@@ -1,0 +1,120 @@
+.match__container {
+  display: grid;
+  grid-template-columns: 5rem 7rem 3rem 2rem 1rem 2rem 3rem 7rem 5rem; //34rem
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  font-size: 1.2rem;
+  font-family: var(--font--weight--bold);
+  background-color: white;
+  border-radius: 0.5rem;
+  border: 1px solid #00000026;
+  padding: 0 0.8rem;
+  height: 5rem;
+}
+
+.club__logo--small {
+  height: 2rem;
+  margin: 0 .3rem;
+}
+
+.match-score__input {
+  width: 2rem;
+
+  &__text {
+    text-align: center;
+    color: black;
+    font-family: var(--font--weight--light);
+  }
+}
+
+.match-details__buttons {
+  margin-left: 0.2rem;
+  min-width: 0.8rem !important;
+  padding: 0 0.2rem !important;
+}
+
+.club__name {
+  text-align: center;
+}
+
+.match__container--mobile {
+  display: none;
+}
+
+.match-round-date {
+  display: flex;
+}
+
+.match__container--buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+@media screen and (max-width: 600px) {
+  .match__container {
+    display: none;
+  }
+
+  .match__container--mobile {
+    display: grid;
+    grid-template-columns: 7rem 1.5rem 0.3rem 1.5rem 7rem;
+    grid-template-rows: 2.5rem 6rem;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    font-family: var(--font--weight--bold);
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #00000026;
+    margin: 1rem;
+    background-color: white;
+  }
+
+  .cell {
+    text-align: center;
+    margin: 0 1rem;
+  }
+
+  .match__container--round--date {
+    grid-row: 1;
+    grid-column: 1/5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid #00000026;
+    & * {
+      margin-top: 0.3rem;
+    }
+  }
+
+  .match__container--buttons {
+    grid-column: 5/6;
+    width: 100%;
+    height: 100%;
+    border-bottom: 1px solid #00000026;
+  }
+
+
+  .match-date {
+    margin-left: 0.5rem;
+  }
+
+  .match-details__buttons {
+    width: 3rem;
+    height: 1.7rem;
+    margin-left: 0.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .material-icons {
+    font-size: 1rem;
+  }
+
+}

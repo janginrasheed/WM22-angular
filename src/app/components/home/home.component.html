@@ -33,7 +33,7 @@
       </mat-form-field>
     </div>
     <div *ngFor="let match of stageMatches">
-      <app-match [match]="match">
+      <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails">
       </app-match>
     </div>
   </div>

@@ -78,6 +78,7 @@ export class HomeComponent implements OnInit {
         this.trimNewsDescription();
         this.initTeamsGroupsData();
         this.fillClubsData();
+        this.selectedStageId = 1;
       }, error => {
         this.isLoading = false;
         if (this.newsList == null) {
@@ -94,8 +95,8 @@ export class HomeComponent implements OnInit {
   trimNewsDescription(): void {
     this.newsList.results?.forEach(newsItem => {
       if (newsItem.description) {
-        if (newsItem.description.length > 150) {
-          newsItem.description = newsItem.description.substring(0, 150) + "...";
+        if (newsItem.description.length > 100) {
+          newsItem.description = newsItem.description.substring(0, 100) + "...";
         }
       }
     })
