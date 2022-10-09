@@ -14,7 +14,7 @@ import {AuthService} from '../../services/auth.service';
 })
 export class LoginComponent implements OnInit {
   message: string;
-  public user: User = {email: "", password: ""};
+  public user: User = {email: "", password: "", roleId: 3};
   public passwordV: string = "";
   hidePassword = true;
   hidePassword2 = true;

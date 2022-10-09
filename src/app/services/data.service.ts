@@ -13,9 +13,9 @@ import {GroupDetails} from "../types/group-details";
 })
 export class DataService {
 
-  // dataApiUrl = 'http://localhost:8081/';
+  dataApiUrl = 'http://localhost:8081/';
   // dataApiUrl = 'https://wm22.herokuapp.com/';
-  dataApiUrl = 'https://wm22.azurewebsites.net/';
+  // dataApiUrl = 'https://wm22.azurewebsites.net/';
 
   newsApiUrl = 'https://newsdata.io/api/1/news?apikey=pub_107858411e9fea4c6d3e422f5cfd83713a8a7&q=fifa%20world%20cup&language=en';
   newsTest = 'assets/newsApiTest.json';

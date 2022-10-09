@@ -5,13 +5,13 @@
       <ng-container matColumnDef="{{displayedColumn}}">
         <th mat-header-cell *matHeaderCellDef>{{displayedColumnsText[i]}}</th>
         <td mat-cell *matCellDef="let team">
-          <div class="group-table__logo" *ngIf="displayedColumn == 'flag'">
-            <img src="{{team.flag}}" alt="" class="club__logo--small">
+          <div class="group-table__flag" *ngIf="displayedColumn == 'flag'">
+            <img src="{{team.flag}}" alt="" class="team__flag--small">
           </div>
-          <div class="group-table__club-name" *ngIf="displayedColumn == 'name'">
+          <div class="group-table__team-name" *ngIf="displayedColumn == 'name'">
             {{team.name}}
           </div>
-          <div class="group-table__club__data" *ngIf="displayedColumn != 'flag' && displayedColumn != 'name'">
+          <div class="group-table__team__data" *ngIf="displayedColumn != 'flag' && displayedColumn != 'name'">
             {{team[displayedColumn]}}
           </div>
         </td>

@@ -1,26 +1,25 @@
 .group-table {
   margin: 1rem 0;
   background-color: white;
+}
 
-  &__header {
-    color: #fff;
-    margin: 0 0 -2rem 1rem;
-  }
+.group-table__team__data, .group-table__team-name, .group-table__header {
+  font-size: 0.8rem;
+}
 
-  &__logo {
-    display: flex;
-    justify-content: center;
-  }
+.group-table__team-name {
+  width: 10rem;
+  margin-right: 0.5rem;
+}
 
-  &__club-name {
-    width: 10rem;
-    margin-right: 0.5rem;
-  }
+.group-table__header {
+  color: #fff;
+  margin: 0 0 -2rem 1rem;
+}
 
-  &__club__data, &__club-name, &__header {
-    font-size: 0.8rem;
-  }
-
+.group-table__flag {
+  display: flex;
+  justify-content: center;
 }
 
 table {
@@ -32,7 +31,7 @@ tr {
   height: 2.3rem !important;
 }
 
-// Padding beim Logo weniger machen
+// Padding beim Flagge weniger machen
 th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
   padding-left: 0.5rem !important;
 }
@@ -59,7 +58,7 @@ th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:la
 
 table.mat-table {
   border-radius: 0.5rem;
-  background-color:transparent!important;
+  background-color: transparent !important;
 }
 
 @media screen and (max-width: 450px) {
@@ -67,14 +66,11 @@ table.mat-table {
     width: 23rem;
   }
 
-  th.mat-header-cell:nth-child(7)
-  , th.mat-header-cell:nth-child(8)
-  , td.mat-cell:nth-child(7)
-  , td.mat-cell:nth-child(8) {
+  th.mat-header-cell:nth-child(7), th.mat-header-cell:nth-child(8), td.mat-cell:nth-child(7), td.mat-cell:nth-child(8) {
     display: none;
   }
 
-  .group-table__club-name {
+  .group-table__team-name {
     width: 9rem;
   }
 }
