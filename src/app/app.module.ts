@@ -29,6 +29,7 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatTableModule} from "@angular/material/table";
+import { AdminComponent } from './components/admin/admin.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import {MatTableModule} from "@angular/material/table";
     LoginComponent,
     BotDialogComponent,
     TestsComponent,
-    PredictComponent
+    PredictComponent,
+    AdminComponent
   ],
     imports: [
         BrowserModule,

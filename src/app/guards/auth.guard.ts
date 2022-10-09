@@ -11,7 +11,11 @@ export class AuthGuard implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-
+    /*
+    if (this.isLoggedIn() && this.isAdmin()) {
+      this.router.navigate(['/admin']);
+    } else
+    */
     if (this.isLoggedIn()) {
       return true;
     }
@@ -22,13 +26,13 @@ export class AuthGuard implements CanActivate {
   }
 
   public isLoggedIn(): boolean {
-    let status = false;
-    if (localStorage.getItem('isLoggedIn') == "true") {
-      status = true;
-    } else {
-      status = false;
-    }
-    return status;
+    return localStorage.getItem('isLoggedIn') == "true";
+  }
+
+  public isAdmin(): boolean {
+    console.log(localStorage.getItem('roleId'));
+    // @ts-ignore
+    return localStorage.getItem('roleId') < 2;
   }
 
 }

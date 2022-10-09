@@ -62,6 +62,8 @@ export class LoginComponent implements OnInit {
         }
         localStorage.setItem('firstName', <string>user.firstName);
         localStorage.setItem('lastName', <string>user.lastName);
+        // @ts-ignore
+        localStorage.setItem('roleId', user.roleId);
 
         this.navigateTo("home");
       } else {

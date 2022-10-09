@@ -5,6 +5,7 @@ import {HomeComponent} from "./components/home/home.component";
 import {TestsComponent} from "./components/tests/tests.component";
 import {AuthGuard} from "./guards/auth.guard";
 import {PredictComponent} from "./components/predict/predict.component";
+import {AdminComponent} from "./components/admin/admin.component";
 
 const routes: Routes = [
   {
@@ -22,7 +23,11 @@ const routes: Routes = [
   },
   {
     path: 'test',
-    component: TestsComponent,
+    component: TestsComponent
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
     canActivate: [AuthGuard]
   },
   {
