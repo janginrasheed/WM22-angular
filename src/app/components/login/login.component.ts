@@ -56,6 +56,7 @@ export class LoginComponent implements OnInit {
     this.dataService.getUser(this.user).subscribe(user => {
       if (user != null) {
         console.log("Login successful " + user.firstName + " " + user.lastName);
+        console.log("RoleId " + user.roleId);
         localStorage.setItem('isLoggedIn', "true");
         if (typeof this.emailFormControl.value === "string") {
           localStorage.setItem('token', this.emailFormControl.value);
@@ -64,7 +65,6 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('lastName', <string>user.lastName);
         // @ts-ignore
         localStorage.setItem('roleId', user.roleId);
-
         this.navigateTo("home");
       } else {
         console.log("Email oder Passwort falsch");
