@@ -26,8 +26,16 @@ export class HomeComponent implements OnInit {
   private _selectedStageId: number;
   user: User;
   stages: Stage[];
+
   matches: Match[];
-  stageMatches: Match[] = [];
+  selectedStageMatches: Match[] = [];
+  groupsMatches: Match[] = [];
+  roundOf16Matches: Match[] = [];
+  quarterFinalsMatches: Match[] = [];
+  semiFinalsMatches: Match[] = [];
+  thirdPlaceMatch: Match;
+  finalMatch: Match;
+
   newsList: News;
   teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
   groupsDetails: GroupDetails[];
@@ -37,12 +45,34 @@ export class HomeComponent implements OnInit {
   }
 
   set selectedStageId(value: number) {
-    this.stageMatches = [];
-    this.matches.forEach(match => {
-      if (match.stageId == value) {
-        this.stageMatches.push(match);
+    this.selectedStageMatches = [];
+
+    switch (value) {
+      case 1: {
+        this.selectedStageMatches = this.groupsMatches;
+        break;
       }
-    });
+      case 2: {
+        this.selectedStageMatches = this.roundOf16Matches;
+        break;
+      }
+      case 3: {
+        this.selectedStageMatches = this.quarterFinalsMatches;
+        break;
+      }
+      case 4: {
+        this.selectedStageMatches = this.semiFinalsMatches;
+        break;
+      }
+      case 5: {
+        this.selectedStageMatches.push(this.thirdPlaceMatch);
+        break;
+      }
+      case 6: {
+        this.selectedStageMatches.push(this.finalMatch);
+        break;
+      }
+    }
 
     this._selectedStageId = value;
   }
@@ -58,7 +88,6 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.getData();
     this.initTeamsGroupsData();
-
   }
 
   getData() {
@@ -78,7 +107,9 @@ export class HomeComponent implements OnInit {
         this.trimNewsDescription();
         this.initTeamsGroupsData();
         this.fillClubsData();
+        this.fillStagesMatches();
         this.selectedStageId = 1;
+        console.log(this.groupsDetails);
       }, error => {
         this.isLoading = false;
         if (this.newsList == null) {
@@ -207,5 +238,35 @@ export class HomeComponent implements OnInit {
     // this.sortTable();
   }
 
+  fillStagesMatches(): void {
+    this.matches.forEach(match => {
+      switch (match.stageId) {
+        case 1: {
+          this.groupsMatches.push(match);
+          break;
+        }
+        case 2: {
+          this.roundOf16Matches.push(match);
+          break;
+        }
+        case 3: {
+          this.quarterFinalsMatches.push(match);
+          break;
+        }
+        case 4: {
+          this.semiFinalsMatches.push(match);
+          break;
+        }
+        case 5: {
+          this.thirdPlaceMatch = match;
+          break;
+        }
+        case 6: {
+          this.finalMatch = match;
+          break;
+        }
+      }
+    });
+  }
 
 }
