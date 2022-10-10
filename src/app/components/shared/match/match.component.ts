@@ -20,6 +20,9 @@ export class MatchComponent implements OnInit {
   @Input()
   stages: Stage[];
 
+  @Input()
+  small: boolean;
+
   matchDetails: MatchDetails = {
     fistTeam: {
       name: "",

@@ -42,3 +42,18 @@
   justify-content: center;
 
 }
+
+.knock-out-stages__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //flex-direction: column;
+
+}
+
+.k-o-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

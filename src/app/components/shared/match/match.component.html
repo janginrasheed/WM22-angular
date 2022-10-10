@@ -1,4 +1,4 @@
-<div class="match__container">
+<div class="match__container" *ngIf="!small">
   <div>
     <div *ngIf="!matchDetails.stage.includes('Group stage')">
       {{matchDetails.stage}}
@@ -7,7 +7,7 @@
       {{'group' | translate}}: {{matchDetails.group}}
     </div>
   </div>
-  <div class="club__name">{{matchDetails.fistTeam.name}}</div>
+  <div class="team__name">{{matchDetails.fistTeam.name}}</div>
   <img src="{{matchDetails.fistTeam.flag}}" alt="" class="team__flag--small">
   <div>
     {{matchDetails.fistTeam.goals}}
@@ -17,37 +17,39 @@
     {{matchDetails.secondTeam.goals}}
   </div>
   <img src="{{matchDetails.secondTeam.flag}}" alt="" class="team__flag--small">
-  <div class="club__name">{{matchDetails.secondTeam.name}}</div>
-  <div class="match__container--buttons">
+  <div class="team__name">{{matchDetails.secondTeam.name}}</div>
+  <div class="match__container__small__date">
     {{matchDetails.date | date: "dd.MM.yyyy"}}
   </div>
 </div>
-<!-- Mobile -->
-<div class="match__container--mobile">
-  <div class="cell match__container--round--date">
+<!-- Small -->
+<div class="match__container__small" *ngIf="small">
+  <div class="cell match__container__small__header">
     <div *ngIf="!matchDetails.stage.includes('Group stage')">
-      {{matchDetails.stage}}
+      {{match.id}} / {{matchDetails.stage}}
     </div>
     <div *ngIf="matchDetails.stage.includes('Group stage')">
       {{"group" | translate}}: {{matchDetails.group}}
     </div>
+    <div class="match__container__small__date">
+      <div class="match-date">{{matchDetails.date | date: "dd.MM.yyyy"}}</div>
+    </div>
   </div>
-  <div class="cell match__container--buttons">
-    <div class="match-date">{{matchDetails.date | date: "dd.MM.yyyy"}}</div>
-  </div>
-  <div class="cell">
-    <img src="{{matchDetails.fistTeam.flag}}" alt="" class="team__flag--small">
-    <div class="club__name">{{matchDetails.fistTeam.name}}</div>
-  </div>
-  <div class="cell">
-    {{matchDetails.fistTeam.goals}}
-  </div>
-  <div class="cell">:</div>
-  <div class="cell">
-    {{matchDetails.secondTeam.goals}}
-  </div>
-  <div class="cell">
-    <img src="{{matchDetails.secondTeam.flag}}" alt="" class="team__flag--small">
-    <div class="club__name">{{matchDetails.secondTeam.name}}</div>
+  <div class="match__container__small__main">
+    <div class="match__container__small_flag__name">
+      <img src="{{matchDetails.fistTeam.flag}}" alt="" class="team__flag--small">
+      <div class="team__name">{{matchDetails.fistTeam.name}}blabla</div>
+    </div>
+    <div class="cell">
+      {{matchDetails.fistTeam.goals}}
+    </div>
+    <div class="cell">:</div>
+    <div class="cell">
+      {{matchDetails.secondTeam.goals}}
+    </div>
+    <div class="match__container__small_flag__name">
+      <img src="{{matchDetails.secondTeam.flag}}" alt="" class="team__flag--small">
+      <div class="team__name">{{matchDetails.secondTeam.name}}blabla</div>
+    </div>
   </div>
 </div>
