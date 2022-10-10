@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {BotDialogComponent} from "../shared/bot-dialog/bot-dialog.component";
 import {User} from "../../types/user";
-import {ViewportScroller} from "@angular/common";
+import {Time, ViewportScroller} from "@angular/common";
 import {TranslateService} from "@ngx-translate/core";
 import {Match} from "../../types/match";
 import {Stage} from "../../types/stage";
@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
         this.stageMatches.push(match);
       }
     });
-
+    this.stageMatches.sort((a, b) => this.sortByDate(a.date) - this.sortByDate(b.date));
     this._selectedStageId = value;
   }
 
@@ -207,5 +207,11 @@ export class HomeComponent implements OnInit {
     // this.sortTable();
   }
 
+  sortTable(): void {
+  }
+
+  sortByDate(dateToConvert: Date): number {
+    return new Date(dateToConvert).getTime();
+  }
 
 }
