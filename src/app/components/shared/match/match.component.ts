@@ -105,4 +105,10 @@ export class MatchComponent implements OnInit {
     this.isDisabled = false;
   }
 
+  public deleteResult(): void {
+    this.match.firstTeamGoals = "";
+    this.match.secondTeamGoals = "";
+    this.updatedMatchEmitter.emit(this.match);
+  }
+
 }

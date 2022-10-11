@@ -188,9 +188,8 @@ export class HomeComponent implements OnInit {
                   && match.firstTeamGoals != null
                   && match.secondTeamGoals != ''
                   && match.secondTeamGoals != null
-                  && match.stageId < 7
+                  && match.stageId == 1
                 ) {
-
                   //Rechnet die Daten nur wenn Spielergebnisse eingetragen sind und das Spiel in Gruppenphase ist.
                   if (team.id == match.firstTeamId) {
                     team.played += 1;

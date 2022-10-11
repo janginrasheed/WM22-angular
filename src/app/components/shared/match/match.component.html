@@ -12,6 +12,12 @@
         (click)="editClicked()">
   <span class="material-icons">edit</span>
 </button>
+<button mat-stroked-button color="primary"
+        class="match-details__buttons"
+        *ngIf="isAdmin"
+        (click)="deleteResult()">
+  <span class="material-icons">delete</span>
+</button>
 <div class="match__container" *ngIf="!small">
   <div>
     <div *ngIf="!matchDetails.stage.includes('Group stage')">
