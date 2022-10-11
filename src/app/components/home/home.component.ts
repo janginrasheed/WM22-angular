@@ -269,4 +269,8 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  public updateMatchScore(updatedMatch: Match): void {
+    this.dataService.updateMatchByMatchId(updatedMatch).subscribe();
+  }
+
 }

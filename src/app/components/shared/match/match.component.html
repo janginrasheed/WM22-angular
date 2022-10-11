@@ -1,3 +1,17 @@
+<button mat-stroked-button color="primary"
+        class="match-details__buttons"
+        *ngIf="isAdmin"
+        [disabled]="isDisabled"
+        (click)="saveClicked()">
+  <span class="material-icons">save</span>
+</button>
+<button mat-stroked-button color="primary"
+        class="match-details__buttons"
+        *ngIf="isAdmin"
+        [disabled]="!isDisabled"
+        (click)="editClicked()">
+  <span class="material-icons">edit</span>
+</button>
 <div class="match__container" *ngIf="!small">
   <div>
     <div *ngIf="!matchDetails.stage.includes('Group stage')">
@@ -9,13 +23,23 @@
   </div>
   <div class="team__name">{{matchDetails.fistTeam.name}}</div>
   <img src="{{matchDetails.fistTeam.flag}}" alt="" class="team__flag--small">
-  <div>
-    {{matchDetails.fistTeam.goals}}
-  </div>
+  <form>
+    <mat-form-field class="match-score__input">
+      <input matInput [(ngModel)]="matchDetails.fistTeam.goals"
+             [ngModelOptions]="{standalone: true}"
+             [disabled]="isDisabled"
+             class="match-score__input__text">
+    </mat-form-field>
+  </form>
   X
-  <div>
-    {{matchDetails.secondTeam.goals}}
-  </div>
+  <form>
+    <mat-form-field class="match-score__input">
+      <input matInput [(ngModel)]="matchDetails.secondTeam.goals"
+             [ngModelOptions]="{standalone: true}"
+             [disabled]="isDisabled"
+             class="match-score__input__text">
+    </mat-form-field>
+  </form>
   <img src="{{matchDetails.secondTeam.flag}}" alt="" class="team__flag--small">
   <div class="team__name">{{matchDetails.secondTeam.name}}</div>
   <div class="match__container__small__date">

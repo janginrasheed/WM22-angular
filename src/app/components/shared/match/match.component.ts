@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Match} from "../../../types/match";
 import {GroupDetails} from "../../../types/group-details";
 import {Stage} from "../../../types/stage";
@@ -22,6 +22,12 @@ export class MatchComponent implements OnInit {
 
   @Input()
   small: boolean;
+
+  @Output()
+  public updatedMatchEmitter: EventEmitter<Match> = new EventEmitter<Match>();
+
+  isDisabled = true;
+  isAdmin = false;
 
   matchDetails: MatchDetails = {
     fistTeam: {
@@ -47,6 +53,11 @@ export class MatchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // @ts-ignore
+    if (localStorage.getItem("roleId") == 1) {
+      this.isAdmin = true;
+    }
+
     this.groupsDetails.forEach(value => {
       value.groupTeams.forEach(value1 => {
         if (value1.id == this.match.firstTeamId) {
@@ -81,6 +92,17 @@ export class MatchComponent implements OnInit {
       }
     });
 
+  }
+
+  public saveClicked(): void {
+    this.match.firstTeamGoals = this.matchDetails.fistTeam.goals;
+    this.match.secondTeamGoals = this.matchDetails.secondTeam.goals;
+    this.updatedMatchEmitter.emit(this.match);
+    this.isDisabled = true;
+  }
+
+  public editClicked(): void {
+    this.isDisabled = false;
   }
 
 }

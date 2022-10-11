@@ -58,17 +58,15 @@
       </mat-form-field>
     </div>
     <div *ngFor="let match of selectedStageMatches">
-      <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="false">
+      <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="false" (updatedMatchEmitter)="updateMatchScore($event)">
       </app-match>
     </div>
   </div>
-  <!--
-    <div class="news__container" id="news_section">
-      <ng-container *ngIf="newsList && !newsErrorText">
-        <div *ngFor="let newsItem of newsList.results">
-          <app-news [newsItem]="newsItem"></app-news>
-        </div>
-      </ng-container>
-    </div>
-  -->
+  <div class="news__container" id="news_section">
+    <ng-container *ngIf="newsList && !newsErrorText">
+      <div *ngFor="let newsItem of newsList.results">
+        <app-news [newsItem]="newsItem"></app-news>
+      </div>
+    </ng-container>
+  </div>
 </div>
