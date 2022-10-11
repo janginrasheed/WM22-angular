@@ -39,7 +39,6 @@ export class HomeComponent implements OnInit {
   groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   private _selectedStageId: number;
   dummyTeamData: TeamTable;
-
   breakEqualPoints: any = {
     ATeamId: 0,
     ATeamPoints: 0,
@@ -48,6 +47,7 @@ export class HomeComponent implements OnInit {
     BTeamPoints: 0,
     BTeamGoals: 0
   };
+  groupStagesDone = false;
 
   get selectedStageId(): number {
     return this._selectedStageId;
@@ -119,6 +119,7 @@ export class HomeComponent implements OnInit {
         this.fillClubsData();
         this.fillStagesMatches();
         this.selectedStageId = 1;
+        this.fillRoundOf16();
         console.log(this.groupsDetails);
       }, error => {
         this.isLoading = false;
@@ -289,7 +290,7 @@ export class HomeComponent implements OnInit {
 
     this.teamsGroupsData.forEach(teamsData => {
       //Nach Punkte sortieren
-      teamsData.sort(function(a, b) {
+      teamsData.sort(function (a, b) {
         let keyA = a.points, keyB = b.points;
         if (keyA > keyB) {
           return -1;
@@ -352,4 +353,41 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  fillRoundOf16(): void {
+    // Prüfen, ob alle Spiele in der Gruppenphase gespielt worden.
+    if (this.matches[44].firstTeamGoals != null
+      && this.matches[45].firstTeamGoals != null
+      && this.matches[46].firstTeamGoals != null
+      && this.matches[47].firstTeamGoals != null
+    ) {
+      this.groupStagesDone = true;
+    } else {
+      // return;
+    }
+
+    this.matches[48].firstTeamId = this.teamsGroupsData[0][0].id;
+    this.matches[48].secondTeamId = this.teamsGroupsData[1][1].id;
+
+    this.matches[49].firstTeamId = this.teamsGroupsData[2][0].id;
+    this.matches[49].secondTeamId = this.teamsGroupsData[3][1].id;
+
+    this.matches[50].firstTeamId = this.teamsGroupsData[1][0].id;
+    this.matches[50].secondTeamId = this.teamsGroupsData[0][1].id;
+
+    this.matches[51].firstTeamId = this.teamsGroupsData[3][0].id;
+    this.matches[51].secondTeamId = this.teamsGroupsData[2][1].id;
+
+    this.matches[52].firstTeamId = this.teamsGroupsData[4][0].id;
+    this.matches[52].secondTeamId = this.teamsGroupsData[5][1].id;
+
+    this.matches[53].firstTeamId = this.teamsGroupsData[6][0].id;
+    this.matches[53].secondTeamId = this.teamsGroupsData[7][1].id;
+
+    this.matches[54].firstTeamId = this.teamsGroupsData[5][0].id;
+    this.matches[54].secondTeamId = this.teamsGroupsData[4][1].id;
+
+    this.matches[55].firstTeamId = this.teamsGroupsData[7][0].id;
+    this.matches[55].secondTeamId = this.teamsGroupsData[6][1].id;
+
+  }
 }
