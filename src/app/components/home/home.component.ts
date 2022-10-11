@@ -11,6 +11,7 @@ import {News} from "../../types/news";
 import {forkJoin} from "rxjs";
 import {TeamTable} from "../../types/team-table";
 import {GroupDetails} from "../../types/group-details";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -18,14 +19,6 @@ import {GroupDetails} from "../../types/group-details";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  newsErrorText: string;
-  errorText: string;
-  isLoading = true;
-  groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-
-  private _selectedStageId: number;
-  user: User;
-  stages: Stage[];
 
   matches: Match[];
   selectedStageMatches: Match[] = [];
@@ -35,10 +28,26 @@ export class HomeComponent implements OnInit {
   semiFinalsMatches: Match[] = [];
   thirdPlaceMatch: Match;
   finalMatch: Match;
-
+  user: User;
+  stages: Stage[];
   newsList: News;
   teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
   groupsDetails: GroupDetails[];
+  newsErrorText: string;
+  errorText: string;
+  isLoading = true;
+  groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+  private _selectedStageId: number;
+  dummyTeamData: TeamTable;
+
+  breakEqualPoints: any = {
+    ATeamId: 0,
+    ATeamPoints: 0,
+    ATeamGoals: 0,
+    BTeamId: 0,
+    BTeamPoints: 0,
+    BTeamGoals: 0
+  };
 
   get selectedStageId(): number {
     return this._selectedStageId;
@@ -80,6 +89,7 @@ export class HomeComponent implements OnInit {
   constructor(private dataService: DataService,
               public dialog: MatDialog,
               private scroll: ViewportScroller,
+              private router: Router,
               public translate: TranslateService) {
     translate.addLangs(['en', 'de']);
     translate.setDefaultLang('de');
@@ -234,7 +244,7 @@ export class HomeComponent implements OnInit {
         }
       });
     }
-    // this.sortTable();
+    this.sortTable();
   }
 
   fillStagesMatches(): void {
@@ -268,8 +278,78 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  public updateMatchScore(updatedMatch: Match): void {
+  updateMatchScore(updatedMatch: Match): void {
     this.dataService.updateMatchByMatchId(updatedMatch).subscribe();
+    this.router.navigate(['/home']);
+    window.location.reload();
+  }
+
+  sortTable(): void {
+    this.breakEqualPoints.AClubId = 0;
+
+    this.teamsGroupsData.forEach(teamsData => {
+      //Nach Punkte sortieren
+      teamsData.sort(function(a, b) {
+        let keyA = a.points, keyB = b.points;
+        if (keyA > keyB) {
+          return -1;
+        }
+        if (keyA < keyB) {
+          return 1;
+        }
+        return 0;
+      });
+
+      for (let i = 0; i < teamsData.length - 1; i++) {
+        if (teamsData[i].points == teamsData[i + 1].points) {
+          this.breakEqualPoints.AClubId = teamsData[i].id;
+          this.breakEqualPoints.BTeamId = teamsData[i + 1].id;
+          this.breakEqualPoints.AClubPoints = 0;
+          this.breakEqualPoints.AClubGoals = 0;
+          this.breakEqualPoints.BTeamPoints = 0;
+          this.breakEqualPoints.BTeamGoals = 0;
+          this.matches.forEach(match => {
+            if (match.stageId < 7) {
+              if (match.firstTeamId == this.breakEqualPoints.AClubId
+                && match.secondTeamId == this.breakEqualPoints.BTeamId) {
+                this.breakEqualPoints.AClubGoals += +match.firstTeamGoals;
+                this.breakEqualPoints.BTeamGoals += +match.secondTeamGoals;
+                if (match.firstTeamGoals > match.secondTeamGoals) {
+                  this.breakEqualPoints.AClubPoints += 3;
+                } else if (match.firstTeamGoals < match.secondTeamGoals) {
+                  this.breakEqualPoints.BTeamPoints += 3;
+                }
+              } else if (match.secondTeamId == this.breakEqualPoints.AClubId
+                && match.firstTeamId == this.breakEqualPoints.BTeamId) {
+                this.breakEqualPoints.AClubGoals += +match.secondTeamGoals;
+                this.breakEqualPoints.BTeamGoals += +match.firstTeamGoals;
+                if (match.firstTeamGoals > match.secondTeamGoals) {
+                  this.breakEqualPoints.BTeamPoints += 3;
+                } else if (match.firstTeamGoals < match.secondTeamGoals) {
+                  this.breakEqualPoints.AClubPoints += 3;
+                }
+              }
+            }
+          });
+
+          if (this.breakEqualPoints.AClubGoals == this.breakEqualPoints.BTeamGoals) {
+            //Nach Tordifferenz in der Gruppe sortieren
+            if (teamsData[i].goalDifference < teamsData[i + 1].goalDifference) {
+              this.dummyTeamData = teamsData[i];
+              teamsData[i] = teamsData[i + 1];
+              teamsData[i + 1] = this.dummyTeamData;
+            } else if (teamsData[i].goalDifference == teamsData[i + 1].goalDifference) {
+              //Nach Tore sortieren
+              if (teamsData[i].goalsFor < teamsData[i + 1].goalsFor) {
+                this.dummyTeamData = teamsData[i];
+                teamsData[i] = teamsData[i + 1];
+                teamsData[i + 1] = this.dummyTeamData;
+              }
+            }
+          }
+        }
+      }
+    });
   }
 
 }
