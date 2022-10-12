@@ -13,11 +13,6 @@
   height: 5rem;
 }
 
-.team__flag--small {
-  height: 2rem;
-  margin: 0 .3rem;
-}
-
 .team__name {
   text-align: center;
   vertical-align: center;
@@ -70,9 +65,4 @@
 .match-score__input {
   width: 1rem;
   text-align: center;
-}
-
-.team__flag--small.team__flag--small {
-  margin: 0;
-  height: 1.2rem;
 }
