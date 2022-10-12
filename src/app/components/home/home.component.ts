@@ -11,6 +11,7 @@ import {News} from "../../types/news";
 import {forkJoin} from "rxjs";
 import {TeamTable} from "../../types/team-table";
 import {GroupDetails} from "../../types/group-details";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -18,38 +19,88 @@ import {GroupDetails} from "../../types/group-details";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+
+  matchToUpdate: Match = {
+    id: 0,
+    firstTeamId: 0,
+    firstTeamGoals: '',
+    firstTeamPenaltiesGoals: '',
+    secondTeamId: 0,
+    secondTeamGoals: '',
+    secondTeamPenaltiesGoals: '',
+    stageId: 0,
+    date: new Date()
+  };
+
+  matches: Match[];
+  selectedStageMatches: Match[] = [];
+  groupsMatches: Match[] = [];
+  roundOf16Matches: Match[] = [];
+  quarterFinalsMatches: Match[] = [];
+  semiFinalsMatches: Match[] = [];
+  thirdPlaceMatch: Match;
+  finalMatch: Match;
+  user: User;
+  stages: Stage[];
+  newsList: News;
+  teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
+  groupsDetails: GroupDetails[];
   newsErrorText: string;
   errorText: string;
   isLoading = true;
   groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-
   private _selectedStageId: number;
-  user: User;
-  stages: Stage[];
-  matches: Match[];
-  stageMatches: Match[] = [];
-  newsList: News;
-  teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
-  groupsDetails: GroupDetails[];
+  dummyTeamData: TeamTable;
+  breakEqualPoints: any = {
+    ATeamId: 0,
+    ATeamPoints: 0,
+    ATeamGoals: 0,
+    BTeamId: 0,
+    BTeamPoints: 0,
+    BTeamGoals: 0
+  };
 
   get selectedStageId(): number {
     return this._selectedStageId;
   }
 
   set selectedStageId(value: number) {
-    this.stageMatches = [];
-    this.matches.forEach(match => {
-      if (match.stageId == value) {
-        this.stageMatches.push(match);
+    this.selectedStageMatches = [];
+
+    switch (value) {
+      case 1: {
+        this.selectedStageMatches = this.groupsMatches;
+        break;
       }
-    });
-    this.stageMatches.sort((a, b) => this.sortByDate(a.date) - this.sortByDate(b.date));
+      case 2: {
+        this.selectedStageMatches = this.roundOf16Matches;
+        break;
+      }
+      case 3: {
+        this.selectedStageMatches = this.quarterFinalsMatches;
+        break;
+      }
+      case 4: {
+        this.selectedStageMatches = this.semiFinalsMatches;
+        break;
+      }
+      case 5: {
+        this.selectedStageMatches.push(this.thirdPlaceMatch);
+        break;
+      }
+      case 6: {
+        this.selectedStageMatches.push(this.finalMatch);
+        break;
+      }
+    }
+
     this._selectedStageId = value;
   }
 
   constructor(private dataService: DataService,
               public dialog: MatDialog,
               private scroll: ViewportScroller,
+              private router: Router,
               public translate: TranslateService) {
     translate.addLangs(['en', 'de']);
     translate.setDefaultLang('de');
@@ -58,7 +109,6 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.getData();
     this.initTeamsGroupsData();
-
   }
 
   getData() {
@@ -78,7 +128,14 @@ export class HomeComponent implements OnInit {
         this.trimNewsDescription();
         this.initTeamsGroupsData();
         this.fillClubsData();
+        this.fillStagesMatches();
         this.selectedStageId = 1;
+        this.fillRoundOf16();
+        this.fillQuarterFinals();
+        this.fillSemiFinals();
+        this.fillThirdPlace();
+        this.fillFinal();
+        console.log(this.groupsDetails);
       }, error => {
         this.isLoading = false;
         if (this.newsList == null) {
@@ -157,10 +214,9 @@ export class HomeComponent implements OnInit {
                   && match.firstTeamGoals != null
                   && match.secondTeamGoals != ''
                   && match.secondTeamGoals != null
-                  && match.stageId < 7
+                  && match.stageId == 1
                 ) {
-
-                  //Rechnet die Daten nur wenn Spielergebnisse eingetragen sind und das Spiel in Gruppenphase ist.
+                  //Rechnet die Daten nur, wenn Spielergebnisse eingetragen sind und das Spiel in Gruppenphase ist.
                   if (team.id == match.firstTeamId) {
                     team.played += 1;
                     team.goalsFor += +match.firstTeamGoals;
@@ -204,14 +260,323 @@ export class HomeComponent implements OnInit {
         }
       });
     }
-    // this.sortTable();
+    this.sortTable();
+  }
+
+  fillStagesMatches(): void {
+    this.matches.forEach(match => {
+      switch (match.stageId) {
+        case 1: {
+          this.groupsMatches.push(match);
+          break;
+        }
+        case 2: {
+          this.roundOf16Matches.push(match);
+          break;
+        }
+        case 3: {
+          this.quarterFinalsMatches.push(match);
+          break;
+        }
+        case 4: {
+          this.semiFinalsMatches.push(match);
+          break;
+        }
+        case 5: {
+          this.thirdPlaceMatch = match;
+          break;
+        }
+        case 6: {
+          this.finalMatch = match;
+          break;
+        }
+      }
+    });
+  }
+
+  updateMatchResult(updatedMatch: Match): void {
+    this.dataService.updateMatchResult(updatedMatch).subscribe();
+    this.router.navigate(['/home']);
+    window.location.reload();
   }
 
   sortTable(): void {
+    this.breakEqualPoints.AClubId = 0;
+
+    this.teamsGroupsData.forEach(teamsData => {
+      //Nach Punkte sortieren
+      teamsData.sort(function (a, b) {
+        let keyA = a.points, keyB = b.points;
+        if (keyA > keyB) {
+          return -1;
+        }
+        if (keyA < keyB) {
+          return 1;
+        }
+        return 0;
+      });
+
+      for (let i = 0; i < teamsData.length - 1; i++) {
+        if (teamsData[i].points == teamsData[i + 1].points) {
+          this.breakEqualPoints.AClubId = teamsData[i].id;
+          this.breakEqualPoints.BTeamId = teamsData[i + 1].id;
+          this.breakEqualPoints.AClubPoints = 0;
+          this.breakEqualPoints.AClubGoals = 0;
+          this.breakEqualPoints.BTeamPoints = 0;
+          this.breakEqualPoints.BTeamGoals = 0;
+          this.matches.forEach(match => {
+            if (match.stageId < 7) {
+              if (match.firstTeamId == this.breakEqualPoints.AClubId
+                && match.secondTeamId == this.breakEqualPoints.BTeamId) {
+                this.breakEqualPoints.AClubGoals += +match.firstTeamGoals;
+                this.breakEqualPoints.BTeamGoals += +match.secondTeamGoals;
+                if (match.firstTeamGoals > match.secondTeamGoals) {
+                  this.breakEqualPoints.AClubPoints += 3;
+                } else if (match.firstTeamGoals < match.secondTeamGoals) {
+                  this.breakEqualPoints.BTeamPoints += 3;
+                }
+              } else if (match.secondTeamId == this.breakEqualPoints.AClubId
+                && match.firstTeamId == this.breakEqualPoints.BTeamId) {
+                this.breakEqualPoints.AClubGoals += +match.secondTeamGoals;
+                this.breakEqualPoints.BTeamGoals += +match.firstTeamGoals;
+                if (match.firstTeamGoals > match.secondTeamGoals) {
+                  this.breakEqualPoints.BTeamPoints += 3;
+                } else if (match.firstTeamGoals < match.secondTeamGoals) {
+                  this.breakEqualPoints.AClubPoints += 3;
+                }
+              }
+            }
+          });
+
+          if (this.breakEqualPoints.AClubGoals == this.breakEqualPoints.BTeamGoals) {
+            //Nach Tordifferenz in der Gruppe sortieren
+            if (teamsData[i].goalDifference < teamsData[i + 1].goalDifference) {
+              this.dummyTeamData = teamsData[i];
+              teamsData[i] = teamsData[i + 1];
+              teamsData[i + 1] = this.dummyTeamData;
+            } else if (teamsData[i].goalDifference == teamsData[i + 1].goalDifference) {
+              //Nach Tore sortieren
+              if (teamsData[i].goalsFor < teamsData[i + 1].goalsFor) {
+                this.dummyTeamData = teamsData[i];
+                teamsData[i] = teamsData[i + 1];
+                teamsData[i + 1] = this.dummyTeamData;
+              }
+            }
+          }
+        }
+      }
+    });
   }
 
-  sortByDate(dateToConvert: Date): number {
-    return new Date(dateToConvert).getTime();
+  fillRoundOf16(): void {
+    // Prüfen, ob alle Spiele in der Gruppenphase gespielt worden.
+    // und ob Achtelfinale-Spiele schon vorher eingetragen sind
+    if (this.matches[44].firstTeamGoals == null
+      && this.matches[45].firstTeamGoals == null
+      && this.matches[46].firstTeamGoals == null
+      && this.matches[47].firstTeamGoals == null
+      && this.matches[55].firstTeamId != null
+      && this.matches[55].firstTeamId != null) {
+      // return;
+    }
+
+    /* TODO
+     let j = 0;
+     for (let i = 48; i <= 53; i++) {
+       this.matchToUpdate.id = this.matches[i].id;
+       this.matchToUpdate.stageId = this.matches[i].stageId;
+       this.matchToUpdate.date = this.matches[i].date;
+
+       this.matchToUpdate.firstTeamId = this.teamsGroupsData[j][0].id;
+       this.matchToUpdate.secondTeamId = this.teamsGroupsData[j + 1][1].id;
+       this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+
+       this.matchToUpdate.id = this.matches[i + 2].id;
+       this.matchToUpdate.stageId = this.matches[i + 2].stageId;
+       this.matchToUpdate.date = this.matches[i + 2].date;
+       this.matchToUpdate.firstTeamId = this.teamsGroupsData[j + 1][0].id;
+       this.matchToUpdate.secondTeamId = this.teamsGroupsData[j][1].id;
+       this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+
+       j += 2;
+       if (i == 50) {
+         i += 2;
+       }
+     }
+     */
+
+    this.matchToUpdate = this.matches[48];
+    this.matchToUpdate.firstTeamId = this.teamsGroupsData[0][0].id;
+    this.matchToUpdate.secondTeamId = this.teamsGroupsData[1][1].id;
+    this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+
+    this.matchToUpdate = this.matches[49];
+    this.matchToUpdate.firstTeamId = this.teamsGroupsData[2][0].id;
+    this.matchToUpdate.secondTeamId = this.teamsGroupsData[3][1].id;
+    this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+
+    this.matchToUpdate = this.matches[50];
+    this.matchToUpdate.firstTeamId = this.teamsGroupsData[1][0].id;
+    this.matchToUpdate.secondTeamId = this.teamsGroupsData[0][1].id;
+    this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+
+    this.matchToUpdate = this.matches[51];
+    this.matchToUpdate.firstTeamId = this.teamsGroupsData[3][0].id;
+    this.matchToUpdate.secondTeamId = this.teamsGroupsData[2][1].id;
+    this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+
+    this.matchToUpdate = this.matches[52];
+    this.matchToUpdate.firstTeamId = this.teamsGroupsData[4][0].id;
+    this.matchToUpdate.secondTeamId = this.teamsGroupsData[5][1].id;
+    this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+
+    this.matchToUpdate = this.matches[53];
+    this.matchToUpdate.firstTeamId = this.teamsGroupsData[6][0].id;
+    this.matchToUpdate.secondTeamId = this.teamsGroupsData[7][1].id;
+    this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+
+    this.matchToUpdate = this.matches[54];
+    this.matchToUpdate.firstTeamId = this.teamsGroupsData[5][0].id;
+    this.matchToUpdate.secondTeamId = this.teamsGroupsData[4][1].id;
+    this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+
+    this.matchToUpdate = this.matches[55];
+    this.matchToUpdate.firstTeamId = this.teamsGroupsData[7][0].id;
+    this.matchToUpdate.secondTeamId = this.teamsGroupsData[6][1].id;
+    this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+
+  }
+
+  fillQuarterFinals() {
+    // Prüfen, ob Achtelfinale gespielt wurde
+    if (this.matches[48].firstTeamId == null || this.matches[48].secondTeamId == null) {
+      // return;
+    }
+
+    // Prüfen, ob diese Spiele schon eingetragen sind
+    if (this.matches[59].firstTeamId != null && this.matches[59].secondTeamId != null) {
+      // return;
+    }
+
+    let j = 56;
+    for (let i = 48; i <= 55; i++) {
+      this.matchToUpdate = this.matches[j];
+      this.fillMatches(i);
+      i++;
+      j += 2;
+      if (j >= 60) {
+        j = 57;
+      }
+    }
+  }
+
+  fillSemiFinals() {
+    // Prüfen, ob Viertelfinale gespielt wurde
+    if (this.matches[56].firstTeamId == null || this.matches[56].secondTeamId == null) {
+      // return;
+    }
+
+    // Prüfen, ob Halbfinale gespielt wurde
+    if (this.matches[61].firstTeamId != null && this.matches[61].secondTeamId != null) {
+      // return;
+    }
+
+    let j = 60;
+    for (let i = 56; i <= 59; i++) {
+      this.matchToUpdate = this.matches[j];
+      this.fillMatches(i);
+      i++;
+      j++;
+    }
+  }
+
+  fillThirdPlace() {
+
+    if (this.matches[60].firstTeamId == null && this.matches[60].secondTeamId == null) {
+      // return;
+    }
+
+    if (this.matches[62].firstTeamId != null && this.matches[62].secondTeamId != null) {
+      // return;
+    }
+
+    // Third place
+    this.matchToUpdate = this.matches[62];
+    this.matchToUpdate.firstTeamId = this.matches[60].secondTeamId;
+    this.matchToUpdate.secondTeamId = this.matches[61].secondTeamId;
+
+    /*
+        if (this.matches[60].firstTeamGoals > this.matches[60].secondTeamGoals) {
+          this.matchToUpdate.firstTeamId = this.matches[60].secondTeamId;
+        } else if (this.matches[60].firstTeamGoals < this.matches[60].secondTeamGoals) {
+          this.matchToUpdate.firstTeamId = this.matches[60].firstTeamId;
+        } else {
+          if (this.matches[60].firstTeamPenaltiesGoals > this.matches[60].secondTeamPenaltiesGoals) {
+            this.matchToUpdate.firstTeamId = this.matches[60].secondTeamId;
+          } else if (this.matches[60].firstTeamPenaltiesGoals < this.matches[60].secondTeamPenaltiesGoals) {
+            this.matchToUpdate.firstTeamId = this.matches[48].firstTeamId;
+          }
+        }
+
+        if (this.matches[61].firstTeamGoals > this.matches[61].secondTeamGoals) {
+          this.matchToUpdate.secondTeamId = this.matches[61].secondTeamId;
+        } else if (this.matches[61].firstTeamGoals < this.matches[61].secondTeamGoals) {
+          this.matchToUpdate.secondTeamId = this.matches[61].firstTeamId;
+        } else {
+          if (this.matches[61].firstTeamPenaltiesGoals > this.matches[61].secondTeamPenaltiesGoals) {
+            this.matchToUpdate.secondTeamId = this.matches[61].secondTeamId;
+          } else if (this.matches[61].firstTeamPenaltiesGoals < this.matches[61].secondTeamPenaltiesGoals) {
+            this.matchToUpdate.secondTeamId = this.matches[61].firstTeamId;
+          }
+        }
+    */
+    this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+
+  }
+
+  fillFinal() {
+    if (this.matches[60].firstTeamId == null && this.matches[60].secondTeamId == null) {
+      // return;
+    }
+
+    if (this.matches[63].firstTeamId != null && this.matches[63].secondTeamId != null) {
+      // return;
+    }
+
+    this.matchToUpdate = this.matches[63];
+    this.fillMatches(60);
+
+  }
+
+  fillMatches(i: number) {
+    this.matchToUpdate.firstTeamId = this.matches[i].firstTeamId;
+    this.matchToUpdate.secondTeamId = this.matches[i + 1].firstTeamId;
+    /*
+        if (this.matches[i].firstTeamGoals > this.matches[i].secondTeamGoals) {
+          this.matchToUpdate.firstTeamId = this.matches[i].firstTeamId;
+        } else if (this.matches[i].firstTeamGoals < this.matches[i].secondTeamGoals) {
+          this.matchToUpdate.firstTeamId = this.matches[i].secondTeamId;
+        } else {
+          if (this.matches[i].firstTeamPenaltiesGoals > this.matches[i].secondTeamPenaltiesGoals) {
+            this.matchToUpdate.firstTeamId = this.matches[i].firstTeamId;
+          } else if (this.matches[i].firstTeamPenaltiesGoals < this.matches[i].secondTeamPenaltiesGoals) {
+            this.matchToUpdate.firstTeamId = this.matches[i].secondTeamId;
+          }
+        }
+
+        if (this.matches[i + 1].firstTeamGoals > this.matches[i + 1].secondTeamGoals) {
+          this.matchToUpdate.secondTeamId = this.matches[i + 1].firstTeamId;
+        } else if (this.matches[i + 1].firstTeamGoals < this.matches[i + 1].secondTeamGoals) {
+          this.matchToUpdate.secondTeamId = this.matches[i + 1].secondTeamId;
+        } else {
+          if (this.matches[i + 1].firstTeamPenaltiesGoals > this.matches[i + 1].secondTeamPenaltiesGoals) {
+            this.matchToUpdate.secondTeamId = this.matches[i + 1].firstTeamId;
+          } else if (this.matches[i + 1].firstTeamPenaltiesGoals < this.matches[i + 1].secondTeamPenaltiesGoals) {
+            this.matchToUpdate.secondTeamId = this.matches[i + 1].secondTeamId;
+          }
+        }
+    */
+    this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
   }
 
 }

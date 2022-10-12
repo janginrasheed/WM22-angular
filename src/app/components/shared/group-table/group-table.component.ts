@@ -23,7 +23,6 @@ export class GroupTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource(this.teamsGroupData);
-    console.log(this.teamsGroupData);
   }
 
 }
