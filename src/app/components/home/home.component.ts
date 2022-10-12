@@ -94,6 +94,7 @@ export class HomeComponent implements OnInit {
       }
     }
 
+    this.selectedStageMatches.sort((a, b) => this.sortByDate(a.date) - this.sortByDate(b.date));
     this._selectedStageId = value;
   }
 
@@ -577,6 +578,10 @@ export class HomeComponent implements OnInit {
         }
     */
     this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+  }
+
+  sortByDate(dateToConvert: Date): number {
+    return new Date(dateToConvert).getTime();
   }
 
 }
