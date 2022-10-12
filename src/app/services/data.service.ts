@@ -121,8 +121,8 @@ export class DataService {
     );
   }
 
-  public updateMatchByMatchId(updatedMatch: Match): Observable<Match> {
-    return this.http.put<Match>(this.dataApiUrl + `matches/updateMatch/${updatedMatch.id}`, updatedMatch).pipe(
+  public updateMatchResult(updatedMatch: Match): Observable<Match> {
+    return this.http.put<Match>(this.dataApiUrl + `matches/updateMatchResult/${updatedMatch.id}`, updatedMatch).pipe(
       first(),
       retry(1),
       catchError(error => {
@@ -132,6 +132,19 @@ export class DataService {
       })
     );
   }
+
+  public updateMatchTeams(updatedMatch: Match): Observable<Match> {
+    return this.http.put<Match>(this.dataApiUrl + `matches/updateMatchTeams/${updatedMatch.id}`, updatedMatch).pipe(
+      first(),
+      retry(1),
+      catchError(error => {
+        // this.handleError(error);
+        console.error("Fehler beim Speichern des Spielergebnisses");
+        return throwError(error);
+      })
+    );
+  }
+
 
   getTestNews(): Observable<any> {
     return this.http.get(this.newsTest);
