@@ -67,6 +67,7 @@ export class HomeComponent implements OnInit {
   set selectedStageId(value: number) {
     this.selectedStageMatches = [];
 
+    // selectedStageMatches zuweisen anhand von der selektierten Phase
     switch (value) {
       case 1: {
         this.selectedStageMatches = this.groupsMatches;
@@ -94,6 +95,7 @@ export class HomeComponent implements OnInit {
       }
     }
 
+    // Spiele nach Datum sortieren
     this.selectedStageMatches.sort((a, b) => this.sortByDate(a.date) - this.sortByDate(b.date));
     this._selectedStageId = value;
   }
@@ -108,7 +110,10 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Daten von Service holen
     this.getData();
+
+    // Die Variable zum Speichern von Gruppen-Daten initialisieren
     this.initTeamsGroupsData();
   }
 
@@ -129,6 +134,7 @@ export class HomeComponent implements OnInit {
         this.trimNewsDescription();
         this.initTeamsGroupsData();
         this.fillClubsData();
+        this.sortTable();
         this.fillStagesMatches();
         this.selectedStageId = 1;
         this.fillRoundOf16();
@@ -261,7 +267,6 @@ export class HomeComponent implements OnInit {
         }
       });
     }
-    this.sortTable();
   }
 
   fillStagesMatches(): void {
@@ -297,8 +302,12 @@ export class HomeComponent implements OnInit {
 
   updateMatchResult(updatedMatch: Match): void {
     this.dataService.updateMatchResult(updatedMatch).subscribe();
-    this.router.navigate(['/home']);
-    // window.location.reload();
+    this.matches.forEach(match => {
+      if (match.id == updatedMatch.id) {
+        this.matches[match.id - 1] = updatedMatch;
+        this.fillClubsData();
+      }
+    });
   }
 
   sortTable(): void {

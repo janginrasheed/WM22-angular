@@ -58,7 +58,8 @@
       </mat-form-field>
     </div>
     <div *ngFor="let match of selectedStageMatches">
-      <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="false" (updatedMatchEmitter)="updateMatchResult($event)">
+      <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="false"
+                 (updatedMatchEmitter)="updateMatchResult($event)">
       </app-match>
     </div>
   </div>

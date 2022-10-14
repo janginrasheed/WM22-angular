@@ -19,10 +19,19 @@ export class GroupTableComponent implements OnInit {
   @Input()
   teamsGroupData: TeamTable[];
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource(this.teamsGroupData);
   }
 
+  ngOnChanges() {
+    this.dataSource = new MatTableDataSource(this.teamsGroupData);
+  }
+
+  getDataSource(): boolean {
+    this.dataSource = new MatTableDataSource(this.teamsGroupData);
+    return true;
+  }
 }

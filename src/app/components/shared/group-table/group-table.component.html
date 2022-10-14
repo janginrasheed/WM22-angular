@@ -1,4 +1,4 @@
-<div class="group-table">
+<div class="group-table" *ngIf="getDataSource()">
   <h1 class="group-table__header">{{'group' | translate}}: {{group}}</h1>
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container *ngFor="let displayedColumn of displayedColumns; let i = index">
