@@ -22,6 +22,13 @@
   display: flex;
 }
 
+.material-icons {
+  font-size: 1rem;
+}
+.mat-input-element:disabled {
+  color: black;
+}
+// Small
 .match__container__small {
   display: flex;
   flex-direction: column;
@@ -33,33 +40,25 @@
   border: 1px solid #00000026;
   margin: 0.5rem;
   background-color: white;
-  padding: 0.5rem;
   width: 10rem;
-}
-
-.material-icons {
-  font-size: 1rem;
-}
-
-.match__container__small__main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .match__container__small__header {
   display: flex;
   justify-content: center;
   border-bottom: 1px solid #00000026;
-  margin-top: 0.3rem;
   width: 100%;
   gap: 1rem;
+  margin-top: 0.3rem;
 }
 
-.match__container__small_flag__name {
+.match__container__small__main {
   display: flex;
-  margin-right: 0.5rem;
+  justify-content: center;
   align-items: center;
+  margin: 0.5rem 0;
+  width: 100%;
+  gap: 0.5rem;
 }
 
 .match-score__input {

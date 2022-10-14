@@ -298,7 +298,7 @@ export class HomeComponent implements OnInit {
   updateMatchResult(updatedMatch: Match): void {
     this.dataService.updateMatchResult(updatedMatch).subscribe();
     this.router.navigate(['/home']);
-    window.location.reload();
+    // window.location.reload();
   }
 
   sortTable(): void {
@@ -378,7 +378,7 @@ export class HomeComponent implements OnInit {
       && this.matches[47].firstTeamGoals == null
       && this.matches[55].firstTeamId != null
       && this.matches[55].firstTeamId != null) {
-      // return;
+      return;
     }
 
     /* TODO
@@ -451,12 +451,12 @@ export class HomeComponent implements OnInit {
   fillQuarterFinals() {
     // Prüfen, ob Achtelfinale gespielt wurde
     if (this.matches[48].firstTeamId == null || this.matches[48].secondTeamId == null) {
-      // return;
+      return;
     }
 
     // Prüfen, ob diese Spiele schon eingetragen sind
     if (this.matches[59].firstTeamId != null && this.matches[59].secondTeamId != null) {
-      // return;
+      return;
     }
 
     let j = 56;
@@ -474,12 +474,12 @@ export class HomeComponent implements OnInit {
   fillSemiFinals() {
     // Prüfen, ob Viertelfinale gespielt wurde
     if (this.matches[56].firstTeamId == null || this.matches[56].secondTeamId == null) {
-      // return;
+      return;
     }
 
     // Prüfen, ob Halbfinale gespielt wurde
     if (this.matches[61].firstTeamId != null && this.matches[61].secondTeamId != null) {
-      // return;
+      return;
     }
 
     let j = 60;
@@ -494,11 +494,11 @@ export class HomeComponent implements OnInit {
   fillThirdPlace() {
 
     if (this.matches[60].firstTeamId == null && this.matches[60].secondTeamId == null) {
-      // return;
+      return;
     }
 
     if (this.matches[62].firstTeamId != null && this.matches[62].secondTeamId != null) {
-      // return;
+      return;
     }
 
     // Third place
@@ -537,11 +537,11 @@ export class HomeComponent implements OnInit {
 
   fillFinal() {
     if (this.matches[60].firstTeamId == null && this.matches[60].secondTeamId == null) {
-      // return;
+      return;
     }
 
     if (this.matches[63].firstTeamId != null && this.matches[63].secondTeamId != null) {
-      // return;
+      return;
     }
 
     this.matchToUpdate = this.matches[63];
@@ -550,9 +550,9 @@ export class HomeComponent implements OnInit {
   }
 
   fillMatches(i: number) {
-    this.matchToUpdate.firstTeamId = this.matches[i].firstTeamId;
-    this.matchToUpdate.secondTeamId = this.matches[i + 1].firstTeamId;
-    /*
+    // this.matchToUpdate.firstTeamId = this.matches[i].firstTeamId;
+    // this.matchToUpdate.secondTeamId = this.matches[i + 1].firstTeamId;
+    // /*
         if (this.matches[i].firstTeamGoals > this.matches[i].secondTeamGoals) {
           this.matchToUpdate.firstTeamId = this.matches[i].firstTeamId;
         } else if (this.matches[i].firstTeamGoals < this.matches[i].secondTeamGoals) {
@@ -576,7 +576,7 @@ export class HomeComponent implements OnInit {
             this.matchToUpdate.secondTeamId = this.matches[i + 1].secondTeamId;
           }
         }
-    */
+    // */
     this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
   }
 
