@@ -370,18 +370,18 @@ export class HomeComponent implements OnInit {
   }
 
   fillRoundOf16(): void {
-    // Prüfen, ob alle Spiele in der Gruppenphase gespielt worden.
+    // Prüfen, ob alle Spiele in der Gruppenphase gespielt wurden.
     // und ob Achtelfinale-Spiele schon vorher eingetragen sind
-    if (this.matches[44].firstTeamGoals == null
-      && this.matches[45].firstTeamGoals == null
-      && this.matches[46].firstTeamGoals == null
-      && this.matches[47].firstTeamGoals == null
-      && this.matches[55].firstTeamId != null
-      && this.matches[55].firstTeamId != null) {
+    if ((this.matches[44].firstTeamGoals == null
+        || this.matches[45].firstTeamGoals == null
+        || this.matches[46].firstTeamGoals == null
+        || this.matches[47].firstTeamGoals == null)
+      || (this.matches[55].firstTeamId != 0
+        && this.matches[55].firstTeamId != 0)) {
       return;
     }
 
-    /* TODO
+    /*
      let j = 0;
      for (let i = 48; i <= 53; i++) {
        this.matchToUpdate.id = this.matches[i].id;
@@ -450,21 +450,30 @@ export class HomeComponent implements OnInit {
 
   fillQuarterFinals() {
     // Prüfen, ob Achtelfinale gespielt wurde
-    if (this.matches[48].firstTeamId == null || this.matches[48].secondTeamId == null) {
+    // ODER
+    // Prüfen, ob Viertelfinale-Spiele schon eingetragen sind
+    if ((this.matches[48].firstTeamId == 0
+        && this.matches[48].secondTeamId == 0
+        && this.matches[49].firstTeamId == 0
+        && this.matches[49].secondTeamId == 0)
+      || (this.matches[58].firstTeamId != 0
+        && this.matches[58].secondTeamId != 0
+        && this.matches[59].secondTeamId != 0
+        && this.matches[59].secondTeamId != 0)
+    ) {
       return;
     }
 
-    // Prüfen, ob diese Spiele schon eingetragen sind
-    if (this.matches[59].firstTeamId != null && this.matches[59].secondTeamId != null) {
-      return;
-    }
-
-    let j = 56;
+    let j = 56; // Erstes Spiel-ID in Viertelfinale
+    // Schleift durch die Spiele von Achtelfinale
     for (let i = 48; i <= 55; i++) {
       this.matchToUpdate = this.matches[j];
-      this.fillMatches(i);
-      i++;
-      j += 2;
+      //Prüfe, ob dieses Spiel schon eingetragen ist.
+      if (this.matchToUpdate.firstTeamId == 0 || this.matchToUpdate.secondTeamId == 0) {
+        this.fillMatches(i);
+      }
+      i++; // weil Verein "1" spiele gegen Verein "3" daher muss um 2 erhöht werden.
+      j += 2; // zurück zu Verein 2 und 4
       if (j >= 60) {
         j = 57;
       }
@@ -473,19 +482,21 @@ export class HomeComponent implements OnInit {
 
   fillSemiFinals() {
     // Prüfen, ob Viertelfinale gespielt wurde
-    if (this.matches[56].firstTeamId == null || this.matches[56].secondTeamId == null) {
-      return;
-    }
-
+    // ODER
     // Prüfen, ob Halbfinale gespielt wurde
-    if (this.matches[61].firstTeamId != null && this.matches[61].secondTeamId != null) {
+    if ((this.matches[56].firstTeamId == null
+        && this.matches[56].secondTeamId == null)
+      || (this.matches[61].firstTeamId != null
+        && this.matches[61].secondTeamId != null)) {
       return;
     }
 
     let j = 60;
     for (let i = 56; i <= 59; i++) {
       this.matchToUpdate = this.matches[j];
-      this.fillMatches(i);
+      if (this.matchToUpdate.firstTeamId != null || this.matchToUpdate.secondTeamId != null) {
+        this.fillMatches(i);
+      }
       i++;
       j++;
     }
@@ -493,14 +504,16 @@ export class HomeComponent implements OnInit {
 
   fillThirdPlace() {
 
-    if (this.matches[60].firstTeamId == null && this.matches[60].secondTeamId == null) {
+    // Prüfe, ob Halbfinale-Spiele gespielt wurden
+    // ODER
+    // Prüfe, ob diese Spiele schon eingetragen sind.
+    if ((this.matches[60].firstTeamId == null
+        && this.matches[60].secondTeamId == null)
+      || (this.matches[62].firstTeamId != null && this.matches[62].secondTeamId != null)) {
       return;
     }
 
-    if (this.matches[62].firstTeamId != null && this.matches[62].secondTeamId != null) {
-      return;
-    }
-
+//TODO hier weiter machen
     // Third place
     this.matchToUpdate = this.matches[62];
     this.matchToUpdate.firstTeamId = this.matches[60].secondTeamId;
@@ -553,31 +566,33 @@ export class HomeComponent implements OnInit {
     // this.matchToUpdate.firstTeamId = this.matches[i].firstTeamId;
     // this.matchToUpdate.secondTeamId = this.matches[i + 1].firstTeamId;
     // /*
-        if (this.matches[i].firstTeamGoals > this.matches[i].secondTeamGoals) {
-          this.matchToUpdate.firstTeamId = this.matches[i].firstTeamId;
-        } else if (this.matches[i].firstTeamGoals < this.matches[i].secondTeamGoals) {
-          this.matchToUpdate.firstTeamId = this.matches[i].secondTeamId;
-        } else {
-          if (this.matches[i].firstTeamPenaltiesGoals > this.matches[i].secondTeamPenaltiesGoals) {
-            this.matchToUpdate.firstTeamId = this.matches[i].firstTeamId;
-          } else if (this.matches[i].firstTeamPenaltiesGoals < this.matches[i].secondTeamPenaltiesGoals) {
-            this.matchToUpdate.firstTeamId = this.matches[i].secondTeamId;
-          }
-        }
+    if (this.matches[i].firstTeamGoals > this.matches[i].secondTeamGoals) {
+      this.matchToUpdate.firstTeamId = this.matches[i].firstTeamId;
+    } else if (this.matches[i].firstTeamGoals < this.matches[i].secondTeamGoals) {
+      this.matchToUpdate.firstTeamId = this.matches[i].secondTeamId;
+    } else {
+      if (this.matches[i].firstTeamPenaltiesGoals > this.matches[i].secondTeamPenaltiesGoals) {
+        this.matchToUpdate.firstTeamId = this.matches[i].firstTeamId;
+      } else if (this.matches[i].firstTeamPenaltiesGoals < this.matches[i].secondTeamPenaltiesGoals) {
+        this.matchToUpdate.firstTeamId = this.matches[i].secondTeamId;
+      }
+    }
 
-        if (this.matches[i + 1].firstTeamGoals > this.matches[i + 1].secondTeamGoals) {
-          this.matchToUpdate.secondTeamId = this.matches[i + 1].firstTeamId;
-        } else if (this.matches[i + 1].firstTeamGoals < this.matches[i + 1].secondTeamGoals) {
-          this.matchToUpdate.secondTeamId = this.matches[i + 1].secondTeamId;
-        } else {
-          if (this.matches[i + 1].firstTeamPenaltiesGoals > this.matches[i + 1].secondTeamPenaltiesGoals) {
-            this.matchToUpdate.secondTeamId = this.matches[i + 1].firstTeamId;
-          } else if (this.matches[i + 1].firstTeamPenaltiesGoals < this.matches[i + 1].secondTeamPenaltiesGoals) {
-            this.matchToUpdate.secondTeamId = this.matches[i + 1].secondTeamId;
-          }
-        }
+    if (this.matches[i + 1].firstTeamGoals > this.matches[i + 1].secondTeamGoals) {
+      this.matchToUpdate.secondTeamId = this.matches[i + 1].firstTeamId;
+    } else if (this.matches[i + 1].firstTeamGoals < this.matches[i + 1].secondTeamGoals) {
+      this.matchToUpdate.secondTeamId = this.matches[i + 1].secondTeamId;
+    } else {
+      if (this.matches[i + 1].firstTeamPenaltiesGoals > this.matches[i + 1].secondTeamPenaltiesGoals) {
+        this.matchToUpdate.secondTeamId = this.matches[i + 1].firstTeamId;
+      } else if (this.matches[i + 1].firstTeamPenaltiesGoals < this.matches[i + 1].secondTeamPenaltiesGoals) {
+        this.matchToUpdate.secondTeamId = this.matches[i + 1].secondTeamId;
+      }
+    }
     // */
-    this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+    if (this.matchToUpdate.firstTeamId != null || this.matchToUpdate.secondTeamId != null) {
+      this.dataService.updateMatchTeams(this.matchToUpdate).subscribe();
+    }
   }
 
   sortByDate(dateToConvert: Date): number {

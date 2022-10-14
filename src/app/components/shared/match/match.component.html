@@ -26,11 +26,11 @@
         {{matchDetails.stage}}
       </div>
       <div *ngIf="matchDetails.stage.includes('Group stage')">
-        {{'group' | translate}}: {{matchDetails.group}}
+        {{match.id}} {{'group' | translate}}: {{matchDetails.group}}
       </div>
     </div>
     <div class="team__name">{{matchDetails.fistTeam.name}}</div>
-    <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small">
+    <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small" *ngIf="matchDetails.fistTeam.name.length > 0">
     <form>
       <mat-form-field class="match-score__input">
         <input matInput [(ngModel)]="matchDetails.fistTeam.goals"
@@ -48,7 +48,7 @@
                class="match-score__input__text">
       </mat-form-field>
     </form>
-    <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small">
+    <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small" *ngIf="matchDetails.fistTeam.name.length > 0">
     <div class="team__name">{{matchDetails.secondTeam.name}}</div>
     <div class="match__container__small__date">
       {{matchDetails.date | date: "dd.MM.yyyy"}}
@@ -69,17 +69,17 @@
   <div class="match__container__small__main">
     <!--    <div class="match__container__small_flag__name">-->
     <!--      <div class="team__name">{{matchDetails.fistTeam.name}}</div>-->
-    <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small">
+    <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small" *ngIf="matchDetails.fistTeam.name.length > 0">
     <!--    </div>-->
     <div class="cell">
-      {{matchDetails.fistTeam.goals}}0
+      {{matchDetails.fistTeam.goals}}
     </div>
     <div class="cell">:</div>
     <div class="cell">
-      {{matchDetails.secondTeam.goals}}0
+      {{matchDetails.secondTeam.goals}}
     </div>
     <!--    <div class="match__container__small_flag__name">-->
-    <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small">
+    <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small" *ngIf="matchDetails.fistTeam.name.length > 0">
     <!--      <div class="team__name">{{matchDetails.secondTeam.name}}</div>-->
     <!--    </div>-->
   </div>
