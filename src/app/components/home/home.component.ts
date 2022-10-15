@@ -51,13 +51,16 @@ export class HomeComponent implements OnInit {
   groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   private _selectedStageId: number;
   dummyTeamData: TeamTable;
+  // Da werden die Daten von den Vereinen gespeichert, die die gleichen Punkte, Tore, Tordifferenz haben
   breakEqualPoints: any = {
     ATeamId: 0,
     ATeamPoints: 0,
     ATeamGoals: 0,
+    ATeamGoalsAgainst: 0,
     BTeamId: 0,
     BTeamPoints: 0,
-    BTeamGoals: 0
+    BTeamGoals: 0,
+    BTeamGoalsAgainst: 0
   };
 
   get selectedStageId(): number {
@@ -133,7 +136,7 @@ export class HomeComponent implements OnInit {
         this.errorText = "";
         this.trimNewsDescription();
         this.initTeamsGroupsData();
-        this.fillClubsData();
+        this.fillTeamsData();
         this.sortTable();
         this.fillStagesMatches();
         this.selectedStageId = 1;
@@ -194,7 +197,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  fillClubsData(): void {
+  fillTeamsData(): void {
     if (!this.isLoading) {
 
       //Schleift durch jede Gruppe
@@ -305,16 +308,23 @@ export class HomeComponent implements OnInit {
     this.matches.forEach(match => {
       if (match.id == updatedMatch.id) {
         this.matches[match.id - 1] = updatedMatch;
-        this.fillClubsData();
+        this.fillTeamsData();
+        this.sortTable();
       }
     });
   }
 
+  /**
+   * a) greatest number of points obtained in all group matches;
+   * b) goal difference in all group matches;
+   * c) greatest number of goals scored in all group matches
+   * wenn 2 Vereine die gleiche Punkte haben: die 3 Kriterien wiederholen aber nur zwischen die beide Vereine
+   */
   sortTable(): void {
-    this.breakEqualPoints.AClubId = 0;
+    this.breakEqualPoints.ATeamId = 0; // TODO delete?
 
     this.teamsGroupsData.forEach(teamsData => {
-      //Nach Punkte sortieren
+      // a) Nach Punkte sortieren
       teamsData.sort(function (a, b) {
         let keyA = a.points, keyB = b.points;
         if (keyA > keyB) {
@@ -327,54 +337,69 @@ export class HomeComponent implements OnInit {
       });
 
       for (let i = 0; i < teamsData.length - 1; i++) {
+        //Nur nach nächsten Kriterien sortieren, wenn die Vereine die gleichen Punkte haben
         if (teamsData[i].points == teamsData[i + 1].points) {
-          this.breakEqualPoints.AClubId = teamsData[i].id;
-          this.breakEqualPoints.BTeamId = teamsData[i + 1].id;
-          this.breakEqualPoints.AClubPoints = 0;
-          this.breakEqualPoints.AClubGoals = 0;
-          this.breakEqualPoints.BTeamPoints = 0;
-          this.breakEqualPoints.BTeamGoals = 0;
-          this.matches.forEach(match => {
-            if (match.stageId < 7) {
-              if (match.firstTeamId == this.breakEqualPoints.AClubId
-                && match.secondTeamId == this.breakEqualPoints.BTeamId) {
-                this.breakEqualPoints.AClubGoals += +match.firstTeamGoals;
-                this.breakEqualPoints.BTeamGoals += +match.secondTeamGoals;
-                if (match.firstTeamGoals > match.secondTeamGoals) {
-                  this.breakEqualPoints.AClubPoints += 3;
-                } else if (match.firstTeamGoals < match.secondTeamGoals) {
-                  this.breakEqualPoints.BTeamPoints += 3;
-                }
-              } else if (match.secondTeamId == this.breakEqualPoints.AClubId
-                && match.firstTeamId == this.breakEqualPoints.BTeamId) {
-                this.breakEqualPoints.AClubGoals += +match.secondTeamGoals;
-                this.breakEqualPoints.BTeamGoals += +match.firstTeamGoals;
-                if (match.firstTeamGoals > match.secondTeamGoals) {
-                  this.breakEqualPoints.BTeamPoints += 3;
-                } else if (match.firstTeamGoals < match.secondTeamGoals) {
-                  this.breakEqualPoints.AClubPoints += 3;
-                }
-              }
-            }
-          });
-
-          if (this.breakEqualPoints.AClubGoals == this.breakEqualPoints.BTeamGoals) {
-            //Nach Tordifferenz in der Gruppe sortieren
-            if (teamsData[i].goalDifference < teamsData[i + 1].goalDifference) {
+          // b) Nach Tordifferenz in der Gruppe sortieren
+          if (teamsData[i].goalDifference < teamsData[i + 1].goalDifference) {
+            this.dummyTeamData = teamsData[i];
+            teamsData[i] = teamsData[i + 1];
+            teamsData[i + 1] = this.dummyTeamData;
+          } else if (teamsData[i].goalDifference == teamsData[i + 1].goalDifference) {
+            // c) Nach erzielten Tore sortieren
+            if (teamsData[i].goalsFor < teamsData[i + 1].goalsFor) {
               this.dummyTeamData = teamsData[i];
               teamsData[i] = teamsData[i + 1];
               teamsData[i + 1] = this.dummyTeamData;
-            } else if (teamsData[i].goalDifference == teamsData[i + 1].goalDifference) {
-              //Nach Tore sortieren
-              if (teamsData[i].goalsFor < teamsData[i + 1].goalsFor) {
-                this.dummyTeamData = teamsData[i];
-                teamsData[i] = teamsData[i + 1];
-                teamsData[i + 1] = this.dummyTeamData;
-              }
+            } else if (teamsData[i].goalsFor == teamsData[i + 1].goalsFor) {
+              this.breakEqualPoints.ATeamId = teamsData[i].id;
+              this.breakEqualPoints.ATeamPoints = 0;
+              this.breakEqualPoints.ATeamGoals = 0;
+              this.breakEqualPoints.ATeamGoalsAgainst = 0;
+              this.breakEqualPoints.BTeamId = teamsData[i + 1].id
+              this.breakEqualPoints.BTeamPoints = 0
+              this.breakEqualPoints.BTeamGoals = 0;
+              this.breakEqualPoints.BTeamGoalsAgainst = 0;
+
+              this.matches.forEach(match => {
+                // Nur die Spiele in Gruppenphase berücksichtigen
+                if (match.stageId == 1) {
+                  // Nur gegeneinander Spiele berücksichtigen
+                  if ((match.firstTeamId == this.breakEqualPoints.ATeamId
+                      && match.secondTeamId == this.breakEqualPoints.BTeamId)
+                    || (match.secondTeamId == this.breakEqualPoints.ATeamId
+                      && match.firstTeamId == this.breakEqualPoints.BTeamId)) {
+                    this.breakEqualPoints.ATeamId = match.firstTeamId;
+                    this.breakEqualPoints.ATeamGoals = match.firstTeamGoals;
+                    this.breakEqualPoints.ATeamGoalsAgainst = match.secondTeamGoals;
+
+                    this.breakEqualPoints.BTeamId = match.secondTeamId;
+                    this.breakEqualPoints.BTeamGoals = match.secondTeamGoals;
+                    this.breakEqualPoints.BTeamGoalsAgainst = match.firstTeamGoals;
+
+                    let ATeamGoalsDifference = this.breakEqualPoints.ATeamGoals - this.breakEqualPoints.ATeamGoalsAgainst;
+                    let BTeamGoalsDifference = this.breakEqualPoints.BTeamGoals - this.breakEqualPoints.BTeamGoalsAgainst;
+
+                    if (this.breakEqualPoints.ATeamGoals > this.breakEqualPoints.BTeamGoals) {
+                      this.breakEqualPoints.ATeamPoints = 3;
+                    } else if (this.breakEqualPoints.ATeamGoals < this.breakEqualPoints.BTeamGoals) {
+                      this.breakEqualPoints.BTeamPoints = 3;
+                    }
+
+                    // d) Punkte in gegeneinander Spiele berücksichtigen
+                    if (this.breakEqualPoints.ATeamPoints < this.breakEqualPoints.BTeamPoints) {
+                      this.dummyTeamData = teamsData[i];
+                      teamsData[i] = teamsData[i + 1];
+                      teamsData[i + 1] = this.dummyTeamData;
+                    }
+                  }
+                }
+              });
+
             }
           }
         }
       }
+
     });
   }
 
