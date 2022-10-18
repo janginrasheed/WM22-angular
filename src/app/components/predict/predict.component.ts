@@ -4,6 +4,7 @@ import {forkJoin} from "rxjs";
 import {DataService} from "../../services/data.service";
 import {Stage} from "../../types/stage";
 import {GroupDetails} from "../../types/group-details";
+import {Match} from "../../types/match";
 
 @Component({
   selector: 'app-predict',
@@ -12,10 +13,17 @@ import {GroupDetails} from "../../types/group-details";
 })
 export class PredictComponent implements OnInit {
   teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
+  selectedTeamsGroups: TeamTable[][] = [[], [], [], [], [], [], [], []];
+  selectedTeamsSingleGroup: TeamTable[] = [];
   groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   isLoading = true;
   stages: Stage[];
   groupsDetails: GroupDetails[];
+  roundOf16Matches: Match[] = [];
+  quarterFinalsMatches: Match[] = [];
+  semiFinalsMatches: Match[] = [];
+  thirdPlaceMatch: Match;
+  finalMatch: Match;
 
   constructor(private dataService: DataService) {
   }
@@ -53,6 +61,23 @@ export class PredictComponent implements OnInit {
           goalDifference: 0,
           points: 0
         };
+        /*
+        if (j < 2) {
+          this.selectedTeams[i][j] = {
+            id: 0,
+            flag: '',
+            name: '',
+            played: 0,
+            won: 0,
+            drawn: 0,
+            lost: 0,
+            goalsFor: 0,
+            goalsAgainst: 0,
+            goalDifference: 0,
+            points: 0
+          };
+        }
+        */
       }
     }
   }
@@ -69,6 +94,13 @@ export class PredictComponent implements OnInit {
         this.teamsGroupsData[i][j].name = team.name;
       });
     });
+  }
+
+  receiveSelectedTeamsGroups(teamsTable: Set<TeamTable>) {
+    this.selectedTeamsSingleGroup = Array.from(teamsTable);
+    //TODO hier weiter machen gruppen Namen bekommen
+    this.selectedTeamsGroups.push(this.selectedTeamsSingleGroup);
+    console.log(this.selectedTeamsGroups);
   }
 
 }

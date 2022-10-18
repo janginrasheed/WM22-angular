@@ -1,6 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {TeamTable} from "../../../types/team-table";
+import {Match} from "../../../types/match";
 
 @Component({
   selector: 'app-group-table-predict',
@@ -24,6 +25,12 @@ export class GroupTablePredictComponent implements OnInit {
 
   @Input()
   teamsGroupData: TeamTable[];
+
+  @Output()
+  public sendSelectedTeams: EventEmitter<Set<TeamTable>> = new EventEmitter<Set<TeamTable>>();
+
+  @Output()
+  public sendGroupName: EventEmitter<String> = new EventEmitter<String>();
 
   constructor() {
   }
@@ -49,8 +56,11 @@ export class GroupTablePredictComponent implements OnInit {
       this.selectedTeams.add(row);
       this.teamRanks[i].rank = i + 1;
       this.teamRanks[i].name = row.name;
+      if (this.selectedTeams.size == 2) {
+        this.sendSelectedTeams.emit(this.selectedTeams);
+        this.sendGroupName.emit(this.group);
+      }
     }
-
   }
 
   clearSelection() {

@@ -1,6 +1,38 @@
 <div class="groups__container" id="groups_section">
   <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
-    <app-group-table-predict [teamsGroupData]="teamsGroupData" [group]="groups[i]">
+    <app-group-table-predict [teamsGroupData]="teamsGroupData" [group]="groups[i]"
+                             (sendSelectedTeams)="receiveSelectedTeamsGroups($event)">
     </app-group-table-predict>
   </div>
 </div>
+<!--
+<div class="knock-out-stages__container" id="k-o-stages_section">
+  <div class="k-o-stage">
+    <div class="k-o-stage__match" *ngFor="let match of roundOf16Matches">
+      <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true"></app-match>
+    </div>
+  </div>
+  <div class="k-o-stage">
+    <div *ngFor="let match of quarterFinalsMatches">
+      <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true"></app-match>
+    </div>
+  </div>
+  <div class="k-o-stage">
+    <div *ngFor="let match of semiFinalsMatches">
+      <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true"></app-match>
+    </div>
+  </div>
+  <div class="k-o-stage">
+    <div>
+      <app-match [match]="thirdPlaceMatch" [stages]="stages" [groupsDetails]="groupsDetails"
+                 [small]="true"></app-match>
+    </div>
+  </div>
+  <div class="k-o-stage">
+    <div>
+      <app-match [match]="finalMatch" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true">
+      </app-match>
+    </div>
+  </div>
+</div>
+-->
