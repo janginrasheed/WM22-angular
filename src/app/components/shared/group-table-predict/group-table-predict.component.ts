@@ -10,9 +10,14 @@ import {TeamTable} from "../../../types/team-table";
 export class GroupTablePredictComponent implements OnInit {
 
   dataSource: MatTableDataSource<any>;
-  displayedColumns: string[] = ['flag', 'name', 'played', 'won', 'drawn', 'lost', 'goalsFor', 'goalsAgainst', 'goalDifference', 'points'];
-  displayedColumnsText: string[] = ['', 'Team', 'Sp.', 'S', 'U', 'N', 'T', 'GT', 'TD', 'P'];
+  displayedColumns: string[] = ['flag', 'name', 'rank'];
   selectedTeams = new Set<TeamTable>();
+  teamRanks: any = [
+    {rank: 0, name: ""},
+    {rank: 0, name: ""},
+    {rank: 0, name: ""},
+    {rank: 0, name: ""}
+  ];
 
   @Input()
   group: string;
@@ -34,5 +39,25 @@ export class GroupTablePredictComponent implements OnInit {
   getDataSource(): boolean {
     this.dataSource = new MatTableDataSource(this.teamsGroupData);
     return true;
+  }
+
+  teamClicked(row: TeamTable): void {
+    let i;
+    this.selectedTeams.size == 1 ? i = 1 : i = 0;
+
+    if (this.selectedTeams.size < 2 && !this.selectedTeams.has(row)) {
+      this.selectedTeams.add(row);
+      this.teamRanks[i].rank = i + 1;
+      this.teamRanks[i].name = row.name;
+    }
+
+  }
+
+  clearSelection() {
+    this.selectedTeams.clear();
+    this.teamRanks.forEach((teamRank: { rank: number; name: string; }) => {
+      teamRank.rank = 0;
+      teamRank.name = "";
+    });
   }
 }

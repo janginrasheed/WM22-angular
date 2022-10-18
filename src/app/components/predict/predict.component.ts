@@ -33,7 +33,6 @@ export class PredictComponent implements OnInit {
         this.isLoading = false;
         this.initTeamsGroupsData();
         this.fillTeamsData();
-        console.log("Prediction*** ", this.groupsDetails);
       }
     );
   }
