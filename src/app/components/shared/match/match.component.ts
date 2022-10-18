@@ -58,39 +58,39 @@ export class MatchComponent implements OnInit {
       this.isAdmin = true;
     }
 
-      this.groupsDetails.forEach(value => {
-        value.groupTeams.forEach(value1 => {
-          if (value1.id == this.match.firstTeamId) {
-            this.matchDetails.fistTeam.name = value1.name;
-            this.matchDetails.fistTeam.id = value1.id;
-            this.matchDetails.fistTeam.flag = value1.flag;
+    this.groupsDetails.forEach(value => {
+      value.groupTeams.forEach(value1 => {
+        if (value1.id == this.match.firstTeamId) {
+          this.matchDetails.fistTeam.name = value1.name;
+          this.matchDetails.fistTeam.id = value1.id;
+          this.matchDetails.fistTeam.flag = value1.flag;
 
-          } else if (value1.id == this.match.secondTeamId) {
-            this.matchDetails.secondTeam.name = value1.name;
-            this.matchDetails.secondTeam.id = value1.id;
-            this.matchDetails.secondTeam.flag = value1.flag;
-          }
-
-        });
-      });
-
-      this.groupsDetails.forEach(group => {
-        group.groupTeams.forEach(club => {
-          if (club.name == this.matchDetails.fistTeam.name || club.name == this.matchDetails.secondTeam.name) {
-            this.matchDetails.group = club.groupName;
-          }
-        })
-      });
-
-      this.matchDetails.fistTeam.goals = this.match.firstTeamGoals;
-      this.matchDetails.secondTeam.goals = this.match.secondTeamGoals;
-      this.matchDetails.date = this.match.date;
-
-      this.stages.forEach(stage => {
-        if (this.match.stageId == stage.id) {
-          this.matchDetails.stage = stage.stage;
+        } else if (value1.id == this.match.secondTeamId) {
+          this.matchDetails.secondTeam.name = value1.name;
+          this.matchDetails.secondTeam.id = value1.id;
+          this.matchDetails.secondTeam.flag = value1.flag;
         }
+
       });
+    });
+
+    this.groupsDetails.forEach(group => {
+      group.groupTeams.forEach(club => {
+        if (club.name == this.matchDetails.fistTeam.name || club.name == this.matchDetails.secondTeam.name) {
+          this.matchDetails.group = club.groupName;
+        }
+      })
+    });
+
+    this.matchDetails.fistTeam.goals = this.match.firstTeamGoals;
+    this.matchDetails.secondTeam.goals = this.match.secondTeamGoals;
+    this.matchDetails.date = this.match.date;
+
+    this.stages.forEach(stage => {
+      if (this.match.stageId == stage.id) {
+        this.matchDetails.stage = stage.stage;
+      }
+    });
 
   }
 

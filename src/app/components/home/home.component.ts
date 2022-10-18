@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {BotDialogComponent} from "../shared/bot-dialog/bot-dialog.component";
 import {User} from "../../types/user";
-import {Time, ViewportScroller} from "@angular/common";
+import {ViewportScroller} from "@angular/common";
 import {TranslateService} from "@ngx-translate/core";
 import {Match} from "../../types/match";
 import {Stage} from "../../types/stage";
@@ -31,7 +31,6 @@ export class HomeComponent implements OnInit {
     stageId: 0,
     date: new Date()
   };
-
   matches: Match[];
   selectedStageMatches: Match[] = [];
   groupsMatches: Match[] = [];
@@ -300,11 +299,6 @@ export class HomeComponent implements OnInit {
 
   updateMatchResult(updatedMatch: Match): void {
     this.dataService.updateMatchResult(updatedMatch).subscribe();
-    this.matches.forEach(match => {
-      if (match.id == updatedMatch.id) {
-        this.matches[match.id - 1] = updatedMatch;
-      }
-    });
     this.fillTeamsData();
     this.sortTable();
     this.fillRoundOf16();

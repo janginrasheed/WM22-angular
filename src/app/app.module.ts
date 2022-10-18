@@ -30,6 +30,7 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatTableModule} from "@angular/material/table";
 import { AdminComponent } from './components/admin/admin.component';
+import { GroupTablePredictComponent } from './components/shared/group-table-predict/group-table-predict.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { AdminComponent } from './components/admin/admin.component';
     BotDialogComponent,
     TestsComponent,
     PredictComponent,
-    AdminComponent
+    AdminComponent,
+    GroupTablePredictComponent
   ],
     imports: [
         BrowserModule,

@@ -1,1 +1,6 @@
-<p>predict works!</p>
+<div class="groups__container" id="groups_section">
+  <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
+    <app-group-table-predict [teamsGroupData]="teamsGroupData" [group]="groups[i]">
+    </app-group-table-predict>
+  </div>
+</div>
