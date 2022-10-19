@@ -57,8 +57,8 @@ export class GroupTablePredictComponent implements OnInit {
       this.teamRanks[i].rank = i + 1;
       this.teamRanks[i].name = row.name;
       if (this.selectedTeams.size == 2) {
-        this.sendSelectedTeams.emit(this.selectedTeams);
         this.sendGroupName.emit(this.group);
+        this.sendSelectedTeams.emit(this.selectedTeams);
       }
     }
   }

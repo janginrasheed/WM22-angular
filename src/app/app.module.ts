@@ -31,6 +31,7 @@ import {MatDividerModule} from "@angular/material/divider";
 import {MatTableModule} from "@angular/material/table";
 import { AdminComponent } from './components/admin/admin.component';
 import { GroupTablePredictComponent } from './components/shared/group-table-predict/group-table-predict.component';
+import { MatchPredictComponent } from './components/shared/match-predict/match-predict.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { GroupTablePredictComponent } from './components/shared/group-table-pred
     TestsComponent,
     PredictComponent,
     AdminComponent,
-    GroupTablePredictComponent
+    GroupTablePredictComponent,
+    MatchPredictComponent
   ],
     imports: [
         BrowserModule,
