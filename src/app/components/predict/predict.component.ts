@@ -133,11 +133,17 @@ export class PredictComponent implements OnInit {
     });
 
     if (!matchIsAvailable) {
-      this.selectedWinnerRoundOf16.push({teamId, teamName, matchId});
+      if (this.selectedWinnerRoundOf16[0].teamId == 0) {
+        this.selectedWinnerRoundOf16[0].teamId = teamId;
+        this.selectedWinnerRoundOf16[0].teamName = teamName;
+        this.selectedWinnerRoundOf16[0].matchId = matchId;
+      } else {
+        this.selectedWinnerRoundOf16.push({teamId, teamName, matchId});
+      }
     }
 
-    this.selectedWinnerRoundOf16.shift();
     console.log(this.selectedWinnerRoundOf16);
+
     this.fillQuarterFinals();
   }
 
@@ -202,11 +208,12 @@ export class PredictComponent implements OnInit {
         stage: this.stage
       });
     } else if (matchNumber > 56 && matchNumber < 60) {
+      //TODO vorhandene Spiele nicht wieder hinzufügen
       this.quarterFinalsMatches.push({
-        aId: this.selectedWinnerRoundOf16[0].teamId,
-        aName: this.selectedWinnerRoundOf16[0].teamName,
-        bId: this.selectedWinnerRoundOf16[1].teamId,
-        bName: this.selectedWinnerRoundOf16[1].teamName,
+        aId: this.selectedWinnerRoundOf16[valueA].teamId,
+        aName: this.selectedWinnerRoundOf16[valueA].teamName,
+        bId: this.selectedWinnerRoundOf16[valueB].teamId,
+        bName: this.selectedWinnerRoundOf16[valueB].teamName,
         id: matchNumber,
         stage: this.stage
       });
