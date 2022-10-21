@@ -3,13 +3,17 @@
     {{match.id}} / {{match.stage}}
   </div>
   <div class="match__container__small__main">
-    <div class="match__container__small_flag__name" (click)="teamClicked(match.aId, match.aName)">
+    <div class="match__container__small_flag__name"
+         [ngClass]="selected1 ? 'team-selected' : 'not-selected'"
+         (click)="teamClicked(match.aId, match.aName, 'A')">
       <img src="/assets/flags/{{match.aName}}.png" alt="" class="team__flag--small"
            *ngIf="match.aName.length > 0">
       <div class="team__name">{{match.aName}}</div>
     </div>
     <div class="cell">:</div>
-    <div class="match__container__small_flag__name" (click)="teamClicked(match.bId, match.bName)">
+    <div class="match__container__small_flag__name"
+         [ngClass]="selected2 ? 'team-selected' : 'not-selected'"
+         (click)="teamClicked(match.bId, match.bName, 'B')">
       <img src="/assets/flags/{{match.bName}}.png" alt="" class="team__flag--small"
            *ngIf="match.bName.length > 0">
       <div class="team__name">{{match.bName}}</div>

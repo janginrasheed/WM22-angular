@@ -140,11 +140,11 @@ export class PredictComponent implements OnInit {
       } else {
         this.selectedWinnerRoundOf16.push({teamId, teamName, matchId});
       }
+      this.fillQuarterFinals();
     }
 
     console.log(this.selectedWinnerRoundOf16);
 
-    this.fillQuarterFinals();
   }
 
   receiveGroup(group: String) {
@@ -179,10 +179,11 @@ export class PredictComponent implements OnInit {
   }
 
   fillQuarterFinals() {
+    this.quarterFinalsMatches = [];
     this.stage = "Quarter-finals"
-    let j = 57; // Erste Spiel-ID in Viertelfinale
+    let j = 57; // Erste Spiel-ID in Viertelfinale TODO MatchNumber soll nach MatchId von TeamA ausgewählt werden
     // schleift durch die Spiele von Achtelfinale
-    for (let i = 0; i < 8; i += 2) {
+    for (let i = 0; i < 7; i += 2) {
       if (this.selectedWinnerRoundOf16.length > 1) {
         if (this.selectedWinnerRoundOf16[i] != null
           && this.selectedWinnerRoundOf16[i + 1] != null) {
@@ -207,8 +208,7 @@ export class PredictComponent implements OnInit {
         id: matchNumber,
         stage: this.stage
       });
-    } else if (matchNumber > 56 && matchNumber < 60) {
-      //TODO vorhandene Spiele nicht wieder hinzufügen
+    } else if (matchNumber > 56 && matchNumber <= 60) {
       this.quarterFinalsMatches.push({
         aId: this.selectedWinnerRoundOf16[valueA].teamId,
         aName: this.selectedWinnerRoundOf16[valueA].teamName,

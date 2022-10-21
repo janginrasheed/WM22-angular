@@ -315,7 +315,7 @@ export class HomeComponent implements OnInit {
    * wenn 2 Vereine die gleiche Punkte haben: die 3 Kriterien wiederholen aber nur zwischen die beide Vereine
    */
   sortTable(): void {
-    this.breakEqualPoints.ATeamId = 0; // TODO delete?
+    this.breakEqualPoints.ATeamId = 0;
 
     // Wird 3 Mal durch geführt damit die Sortierung auch bei 4 Vereine die, die gleichen Punkteanzahl funktionieren.
     for (let k = 0; k < 3; k++) {

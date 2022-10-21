@@ -25,3 +25,11 @@
   margin: 2rem;
   border-radius: 0.5rem;
 }
+
+.k-o-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //flex-direction: column;
+  flex-wrap: wrap;
+}
