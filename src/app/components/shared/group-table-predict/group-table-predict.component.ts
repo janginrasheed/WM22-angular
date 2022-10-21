@@ -70,4 +70,5 @@ export class GroupTablePredictComponent implements OnInit {
       teamRank.name = "";
     });
   }
+
 }

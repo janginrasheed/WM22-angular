@@ -1,8 +1,11 @@
 <div class="groups__predict__info-groups">
-  <div class="predict__groups__info">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda beatae commodi culpa doloremque ex explicabo
-    facilis id, in ipsum minima nihil optio perspiciatis qui quod sed sequi unde voluptates voluptatum!
-  </div>
+  <!--
+    <div class="predict__groups__info">
+      How it works: <br>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda beatae commodi culpa doloremque ex explicabo
+      facilis id, in ipsum minima nihil optio perspiciatis qui quod sed sequi unde voluptates voluptatum!
+    </div>
+    -->
   <div class="groups__container">
     <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
       <app-group-table-predict [teamsGroupData]="teamsGroupData" [group]="groups[i]"
@@ -16,13 +19,14 @@
   <!--  <div class="k-o-stage" *ngIf="roundOf16Matches != null">-->
   <div class="k-o-stage">
     <div class="k-o-stage__match" *ngFor="let match of roundOf16Matches">
-      <app-match-predict [match]="match"></app-match-predict>
+      <app-match-predict [match]="match" (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
     </div>
   </div>
   <!--
+
   <div class="k-o-stage">
     <div *ngFor="let match of quarterFinalsMatches">
-      <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true"></app-match>
+      <app-match-predict [match]="match"></app-match-predict>
     </div>
   </div>
   <div class="k-o-stage">

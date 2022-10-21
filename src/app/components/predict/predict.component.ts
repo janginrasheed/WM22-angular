@@ -4,7 +4,6 @@ import {forkJoin} from "rxjs";
 import {DataService} from "../../services/data.service";
 import {Stage} from "../../types/stage";
 import {GroupDetails} from "../../types/group-details";
-import {Match} from "../../types/match";
 import {MatchPredict} from "../../types/match-predict";
 
 @Component({
@@ -16,69 +15,27 @@ export class PredictComponent implements OnInit {
   teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
   selectedTeamsGroups: TeamTable[][] = [[], [], [], [], [], [], [], []];
   selectedTeamsSingleGroup: TeamTable[] = [];
+  selectedWinnerRoundOf16: { teamId: number, teamName: string, matchId: number }[] = [{
+    teamId: 0,
+    teamName: "",
+    matchId: 0
+  }];
   groupOfSelectedTeams: String;
   groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   isLoading = true;
   stages: Stage[];
+  stage: string;
   groupsDetails: GroupDetails[];
-  /*
-  roundOf16Matches: any[] = [
-    {firstTeamId: 0, secondTeamId: 0},
-    {firstTeamId: 0, secondTeamId: 0},
-    {firstTeamId: 0, secondTeamId: 0},
-    {firstTeamId: 0, secondTeamId: 0},
-    {firstTeamId: 0, secondTeamId: 0},
-    {firstTeamId: 0, secondTeamId: 0},
-    {firstTeamId: 0, secondTeamId: 0},
-    {firstTeamId: 0, secondTeamId: 0},
-  ];
-  */
-  tempMatch: MatchPredict = {
-    id: 0,
-    aId: 0,
-    aName: "",
-    bId: 0,
-    bName: "",
-    stage: ""
-  };
-
   roundOf16Matches: MatchPredict[] = [];
-  // roundOf16Matches = new Set<MatchPredict>();
-
-  quarterFinalsMatches: Match[] = [];
-  semiFinalsMatches: Match[] = [];
-  thirdPlaceMatch: Match;
-  finalMatch: Match;
+  quarterFinalsMatches: MatchPredict[] = [];
+  semiFinalMatches: MatchPredict[] = [];
+  thirdPlaceMatch: MatchPredict[] = [];
+  finalMatch: MatchPredict[] = [];
 
   constructor(private dataService: DataService) {
   }
 
   ngOnInit(): void {
-    /*
-        this.tempMatch.id = 49;
-        this.roundOf16Matches.push(this.tempMatch);
-
-        this.tempMatch.id = 50;
-        this.roundOf16Matches.push(this.tempMatch);
-
-        this.tempMatch.id = 51;
-        this.roundOf16Matches.push(this.tempMatch);
-
-        this.tempMatch.id = 52;
-        this.roundOf16Matches.push(this.tempMatch);
-
-        this.tempMatch.id = 53;
-        this.roundOf16Matches.push(this.tempMatch);
-
-        this.tempMatch.id = 54;
-        this.roundOf16Matches.push(this.tempMatch);
-
-        this.tempMatch.id = 55;
-        this.roundOf16Matches.push(this.tempMatch);
-
-        this.tempMatch.id = 56;
-        this.roundOf16Matches.push(this.tempMatch);
-    */
     this.getData();
   }
 
@@ -165,6 +122,25 @@ export class PredictComponent implements OnInit {
 
   }
 
+  receiveSelectedWinner({teamId, teamName, matchId}: any) {
+    let matchIsAvailable = false;
+    this.selectedWinnerRoundOf16.forEach(match => {
+      if (match.matchId == matchId) {
+        match.teamId = teamId;
+        match.teamName = teamName;
+        matchIsAvailable = true;
+      }
+    });
+
+    if (!matchIsAvailable) {
+      this.selectedWinnerRoundOf16.push({teamId, teamName, matchId});
+    }
+
+    this.selectedWinnerRoundOf16.shift();
+    console.log(this.selectedWinnerRoundOf16);
+    this.fillQuarterFinals();
+  }
+
   receiveGroup(group: String) {
     this.groupOfSelectedTeams = group;
     console.log(group);
@@ -172,27 +148,69 @@ export class PredictComponent implements OnInit {
 
   fillRoundOf16() {
     this.roundOf16Matches = [];
-    this.tempMatch.stage = "Round of 16";
+    this.stage = "Round of 16";
 
     if (this.selectedTeamsGroups[0].length > 0 && this.selectedTeamsGroups[1].length > 0) {
-      this.roundOf16Matches.push({
-        aId: this.selectedTeamsGroups[0][0].id,
-        aName: this.selectedTeamsGroups[0][0].name,
-        bId: this.selectedTeamsGroups[1][1].id,
-        bName: this.selectedTeamsGroups[1][1].name,
-        id: 49,
-        stage: this.tempMatch.stage
-      });
+      this.fillMatches(0, 1, 49);
+      this.fillMatches(1, 0, 51);
+    }
 
-      this.roundOf16Matches.push({
-        aId: this.selectedTeamsGroups[1][0].id,
-        aName: this.selectedTeamsGroups[1][0].name,
-        bId: this.selectedTeamsGroups[0][1].id,
-        bName: this.selectedTeamsGroups[0][1].name,
-        id: 51,
-        stage: this.tempMatch.stage
-      });
+    if (this.selectedTeamsGroups[2].length > 0 && this.selectedTeamsGroups[3].length > 0) {
+      this.fillMatches(2, 3, 50);
+      this.fillMatches(3, 2, 52);
+    }
 
+    if (this.selectedTeamsGroups[4].length > 0 && this.selectedTeamsGroups[5].length > 0) {
+      this.fillMatches(4, 5, 53);
+      this.fillMatches(5, 4, 55);
+    }
+
+    if (this.selectedTeamsGroups[6].length > 0 && this.selectedTeamsGroups[7].length > 0) {
+      this.fillMatches(6, 7, 54);
+      this.fillMatches(7, 6, 56);
+    }
+
+  }
+
+  fillQuarterFinals() {
+    this.stage = "Quarter-finals"
+    let j = 57; // Erste Spiel-ID in Viertelfinale
+    // schleift durch die Spiele von Achtelfinale
+    for (let i = 0; i < 8; i += 2) {
+      if (this.selectedWinnerRoundOf16.length > 1) {
+        if (this.selectedWinnerRoundOf16[i] != null
+          && this.selectedWinnerRoundOf16[i + 1] != null) {
+          this.fillMatches(i, i + 1, j);
+          j += 2; // zurück zu Verein 2 und 4
+          if (j >= 61) {
+            j = 58;
+          }
+        }
+      }
+    }
+
+  }
+
+  fillMatches(valueA: number, valueB: number, matchNumber: number) {
+    if (matchNumber < 57) {
+      this.roundOf16Matches.push({
+        aId: this.selectedTeamsGroups[valueA][0].id,
+        aName: this.selectedTeamsGroups[valueA][0].name,
+        bId: this.selectedTeamsGroups[valueB][1].id,
+        bName: this.selectedTeamsGroups[valueB][1].name,
+        id: matchNumber,
+        stage: this.stage
+      });
+    } else if (matchNumber > 56 && matchNumber < 60) {
+      this.quarterFinalsMatches.push({
+        aId: this.selectedWinnerRoundOf16[0].teamId,
+        aName: this.selectedWinnerRoundOf16[0].teamName,
+        bId: this.selectedWinnerRoundOf16[1].teamId,
+        bName: this.selectedWinnerRoundOf16[1].teamName,
+        id: matchNumber,
+        stage: this.stage
+      });
     }
   }
+
 }
