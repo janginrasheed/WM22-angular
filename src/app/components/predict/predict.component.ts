@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {TeamTable} from "../../types/team-table";
 import {forkJoin} from "rxjs";
 import {DataService} from "../../services/data.service";
-import {Stage} from "../../types/stage";
 import {GroupDetails} from "../../types/group-details";
 import {MatchPredict} from "../../types/match-predict";
 
@@ -12,25 +11,43 @@ import {MatchPredict} from "../../types/match-predict";
   styleUrls: ['./predict.component.scss']
 })
 export class PredictComponent implements OnInit {
+  groupsDetails: GroupDetails[];
+  groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+  isLoading = true;
+
   teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
   selectedTeamsGroups: TeamTable[][] = [[], [], [], [], [], [], [], []];
   selectedTeamsSingleGroup: TeamTable[] = [];
+  groupOfSelectedTeams: String;
   selectedWinnerRoundOf16: { teamId: number, teamName: string, matchId: number }[] = [{
     teamId: 0,
     teamName: "",
     matchId: 0
   }];
-  groupOfSelectedTeams: String;
-  groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-  isLoading = true;
-  stages: Stage[];
-  stage: string;
-  groupsDetails: GroupDetails[];
+  selectedWinnerQuarterFinals: { teamId: number, teamName: string, matchId: number }[] = [{
+    teamId: 0,
+    teamName: "",
+    matchId: 0
+  }];
   roundOf16Matches: MatchPredict[] = [];
   quarterFinalsMatches: MatchPredict[] = [];
   semiFinalMatches: MatchPredict[] = [];
-  thirdPlaceMatch: MatchPredict[] = [];
-  finalMatch: MatchPredict[] = [];
+  thirdPlaceMatch: MatchPredict = {
+    id: 63,
+    aId: 0,
+    bId: 0,
+    aName: "",
+    bName: "",
+    stage: "Third place"
+  };
+  finalMatch: MatchPredict = {
+    id: 64,
+    aId: 0,
+    bId: 0,
+    aName: "",
+    bName: "",
+    stage: "Final"
+  };
 
   constructor(private dataService: DataService) {
   }
@@ -40,19 +57,17 @@ export class PredictComponent implements OnInit {
   }
 
   getData() {
-    const stages = this.dataService.getStages();
     const groupsDetails = this.dataService.getGroupsDetails();
-    forkJoin([stages, groupsDetails]).subscribe(result => {
-        this.stages = result[0];
-        this.groupsDetails = result[1];
+    forkJoin([groupsDetails]).subscribe(result => {
+        this.groupsDetails = result[0];
         this.isLoading = false;
-        this.initTeamsGroupsData();
+        this.initArrays();
         this.fillTeamsData();
       }
     );
   }
 
-  initTeamsGroupsData() {
+  initArrays() {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 4; j++) {
         this.teamsGroupsData[i][j] = {
@@ -69,11 +84,40 @@ export class PredictComponent implements OnInit {
           points: 0
         };
       }
+      this.roundOf16Matches[i] = {
+        id: i + 49,
+        aId: 0,
+        bId: 0,
+        aName: "",
+        bName: "",
+        stage: "Round of 16"
+      }
+      if (i < 4) {
+        this.quarterFinalsMatches[i] = {
+          id: i + 57,
+          aId: 0,
+          bId: 0,
+          aName: "",
+          bName: "",
+          stage: "Quarter-Finals"
+        }
+      }
+
+      if (i < 2) {
+        this.semiFinalMatches[i] = {
+          id: i + 61,
+          aId: 0,
+          bId: 0,
+          aName: "",
+          bName: "",
+          stage: "Semi-Finals"
+        }
+      }
+
     }
   }
 
   fillTeamsData(): void {
-
     //Schleift durch jede Gruppe
     this.groupsDetails.forEach((group, i) => {
 
@@ -84,6 +128,10 @@ export class PredictComponent implements OnInit {
         this.teamsGroupsData[i][j].name = team.name;
       });
     });
+  }
+
+  receiveGroup(group: String) {
+    this.groupOfSelectedTeams = group;
   }
 
   receiveSelectedTeamsGroups(teamsTable: Set<TeamTable>) {
@@ -115,79 +163,91 @@ export class PredictComponent implements OnInit {
         break;
     }
 
-    // this.selectedTeamsGroups.push(this.selectedTeamsSingleGroup);
-    console.log(this.selectedTeamsGroups);
+    console.log("Selected Teams in Group ", this.groupOfSelectedTeams, ": ", this.selectedTeamsGroups);
 
     this.fillRoundOf16();
 
   }
 
   receiveSelectedWinner({teamId, teamName, matchId}: any) {
+    //TODO selectedWinnerRoundOf16 initialisieren und IFs einbauen
     let matchIsAvailable = false;
-    this.selectedWinnerRoundOf16.forEach(match => {
-      if (match.matchId == matchId) {
-        match.teamId = teamId;
-        match.teamName = teamName;
-        matchIsAvailable = true;
-      }
-    });
+    if (matchId < 57) {
+      this.selectedWinnerRoundOf16.forEach(match => {
+        if (match.matchId == matchId) {
+          match.teamId = teamId;
+          match.teamName = teamName;
+          matchIsAvailable = true;
+        }
+      });
 
-    if (!matchIsAvailable) {
-      if (this.selectedWinnerRoundOf16[0].teamId == 0) {
-        this.selectedWinnerRoundOf16[0].teamId = teamId;
-        this.selectedWinnerRoundOf16[0].teamName = teamName;
-        this.selectedWinnerRoundOf16[0].matchId = matchId;
-      } else {
-        this.selectedWinnerRoundOf16.push({teamId, teamName, matchId});
+      if (!matchIsAvailable) {
+        if (this.selectedWinnerRoundOf16[0].teamId == 0) {
+          this.selectedWinnerRoundOf16[0].teamId = teamId;
+          this.selectedWinnerRoundOf16[0].teamName = teamName;
+          this.selectedWinnerRoundOf16[0].matchId = matchId;
+        } else {
+          this.selectedWinnerRoundOf16.push({teamId, teamName, matchId});
+        }
+        this.fillQuarterFinals();
       }
-      this.fillQuarterFinals();
+      console.log("Selected Winner in Round of 16: ", this.selectedWinnerRoundOf16);
+
+    } else if (matchId > 56 && matchId < 61) {
+      this.selectedWinnerQuarterFinals.forEach(match => {
+        if (match.matchId == matchId) {
+          match.teamId = teamId;
+          match.teamName = teamName;
+          matchIsAvailable = true;
+        }
+      });
+
+      if (!matchIsAvailable) {
+        if (this.selectedWinnerQuarterFinals[0].teamId == 0) {
+          this.selectedWinnerQuarterFinals[0].teamId = teamId;
+          this.selectedWinnerQuarterFinals[0].teamName = teamName;
+          this.selectedWinnerQuarterFinals[0].matchId = matchId;
+        } else {
+          this.selectedWinnerQuarterFinals.push({teamId, teamName, matchId});
+        }
+        this.fillSemiFinal();
+      }
+      console.log("Selected Winner in Quarter-Finals: ", this.selectedWinnerQuarterFinals);
     }
 
-    console.log(this.selectedWinnerRoundOf16);
 
-  }
-
-  receiveGroup(group: String) {
-    this.groupOfSelectedTeams = group;
-    console.log(group);
   }
 
   fillRoundOf16() {
-    this.roundOf16Matches = [];
-    this.stage = "Round of 16";
-
     if (this.selectedTeamsGroups[0].length > 0 && this.selectedTeamsGroups[1].length > 0) {
-      this.fillMatches(0, 1, 49);
-      this.fillMatches(1, 0, 51);
+      this.fillMatches(0, 1, 49, 0);
+      this.fillMatches(1, 0, 51, 2);
     }
 
     if (this.selectedTeamsGroups[2].length > 0 && this.selectedTeamsGroups[3].length > 0) {
-      this.fillMatches(2, 3, 50);
-      this.fillMatches(3, 2, 52);
+      this.fillMatches(2, 3, 50, 1);
+      this.fillMatches(3, 2, 52, 3);
     }
 
     if (this.selectedTeamsGroups[4].length > 0 && this.selectedTeamsGroups[5].length > 0) {
-      this.fillMatches(4, 5, 53);
-      this.fillMatches(5, 4, 55);
+      this.fillMatches(4, 5, 53, 4);
+      this.fillMatches(5, 4, 55, 6);
     }
 
     if (this.selectedTeamsGroups[6].length > 0 && this.selectedTeamsGroups[7].length > 0) {
-      this.fillMatches(6, 7, 54);
-      this.fillMatches(7, 6, 56);
+      this.fillMatches(6, 7, 54, 5);
+      this.fillMatches(7, 6, 56, 7);
     }
-
   }
 
   fillQuarterFinals() {
-    this.quarterFinalsMatches = [];
-    this.stage = "Quarter-finals"
-    let j = 57; // Erste Spiel-ID in Viertelfinale TODO MatchNumber soll nach MatchId von TeamA ausgewählt werden
+    let j = 57; // Erste Spiel-ID in Viertelfinale
     // schleift durch die Spiele von Achtelfinale
     for (let i = 0; i < 7; i += 2) {
-      if (this.selectedWinnerRoundOf16.length > 1) {
+      if (this.selectedWinnerRoundOf16.length > 0) {
         if (this.selectedWinnerRoundOf16[i] != null
           && this.selectedWinnerRoundOf16[i + 1] != null) {
-          this.fillMatches(i, i + 1, j);
+          this.fillMatches(i, i + 1, j, j - 57);
           j += 2; // zurück zu Verein 2 und 4
           if (j >= 61) {
             j = 58;
@@ -195,27 +255,57 @@ export class PredictComponent implements OnInit {
         }
       }
     }
-
   }
 
-  fillMatches(valueA: number, valueB: number, matchNumber: number) {
+  fillSemiFinal() {
+    if (this.selectedWinnerQuarterFinals.length > 1) {
+      if (this.selectedWinnerQuarterFinals[0] != null
+        && this.selectedWinnerQuarterFinals[1] != null) {
+        this.semiFinalMatches[0].aId = this.selectedWinnerQuarterFinals[0].teamId;
+        this.semiFinalMatches[0].aName = this.selectedWinnerQuarterFinals[0].teamName;
+        this.semiFinalMatches[0].bId = this.selectedWinnerQuarterFinals[1].teamId;
+        this.semiFinalMatches[0].bName = this.selectedWinnerQuarterFinals[1].teamName;
+      }
+      if (this.selectedWinnerQuarterFinals[2] != null
+        && this.selectedWinnerQuarterFinals[3] != null) {
+        this.semiFinalMatches[1].aId = this.selectedWinnerQuarterFinals[2].teamId;
+        this.semiFinalMatches[1].aName = this.selectedWinnerQuarterFinals[2].teamName;
+        this.semiFinalMatches[1].bId = this.selectedWinnerQuarterFinals[3].teamId;
+        this.semiFinalMatches[1].bName = this.selectedWinnerQuarterFinals[3].teamName;
+      }
+    }
+  }
+
+  fillMatches(valueA: number, valueB: number, matchNumber: number, index: number) {
     if (matchNumber < 57) {
-      this.roundOf16Matches.push({
-        aId: this.selectedTeamsGroups[valueA][0].id,
-        aName: this.selectedTeamsGroups[valueA][0].name,
-        bId: this.selectedTeamsGroups[valueB][1].id,
-        bName: this.selectedTeamsGroups[valueB][1].name,
-        id: matchNumber,
-        stage: this.stage
+      this.roundOf16Matches[index].aId = this.selectedTeamsGroups[valueA][0].id;
+      this.roundOf16Matches[index].aName = this.selectedTeamsGroups[valueA][0].name;
+      this.roundOf16Matches[index].bId = this.selectedTeamsGroups[valueB][1].id;
+      this.roundOf16Matches[index].bName = this.selectedTeamsGroups[valueB][1].name;
+      this.roundOf16Matches.sort(function (a, b) {
+        let keyA = a.id, keyB = b.id;
+        if (keyA > keyB) {
+          return 1;
+        }
+        if (keyA < keyB) {
+          return -1;
+        }
+        return 0;
       });
     } else if (matchNumber > 56 && matchNumber <= 60) {
-      this.quarterFinalsMatches.push({
-        aId: this.selectedWinnerRoundOf16[valueA].teamId,
-        aName: this.selectedWinnerRoundOf16[valueA].teamName,
-        bId: this.selectedWinnerRoundOf16[valueB].teamId,
-        bName: this.selectedWinnerRoundOf16[valueB].teamName,
-        id: matchNumber,
-        stage: this.stage
+      this.quarterFinalsMatches[index].aId = this.selectedWinnerRoundOf16[valueA].teamId;
+      this.quarterFinalsMatches[index].aName = this.selectedWinnerRoundOf16[valueA].teamName;
+      this.quarterFinalsMatches[index].bId = this.selectedWinnerRoundOf16[valueB].teamId;
+      this.quarterFinalsMatches[index].bName = this.selectedWinnerRoundOf16[valueB].teamName;
+      this.quarterFinalsMatches.sort(function (a, b) {
+        let keyA = a.id, keyB = b.id;
+        if (keyA > keyB) {
+          return 1;
+        }
+        if (keyA < keyB) {
+          return -1;
+        }
+        return 0;
       });
     }
   }

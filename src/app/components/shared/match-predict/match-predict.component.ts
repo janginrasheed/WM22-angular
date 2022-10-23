@@ -28,17 +28,19 @@ export class MatchPredictComponent implements OnInit {
   }
 
   teamClicked(teamId: number, teamName: string, aOrB: string): void {
-    if (!this.selected1 && !this.selected2) {
-      this.selectedWinnerEmitter.emit({teamId: teamId, teamName: teamName, matchId: this.match.id});
-    }
+    if (this.match.aId != 0 && this.match.bId != 0) {
+      if (!this.selected1 && !this.selected2) {
+        this.selectedWinnerEmitter.emit({teamId: teamId, teamName: teamName, matchId: this.match.id});
+      }
 
-    if (!this.selected1 && !this.selected2) {
-      if (aOrB == "A") {
-        this.selected1 = true;
-        this.selected2 = false;
-      } else {
-        this.selected1 = false;
-        this.selected2 = true;
+      if (!this.selected1 && !this.selected2) {
+        if (aOrB == "A") {
+          this.selected1 = true;
+          this.selected2 = false;
+        } else {
+          this.selected1 = false;
+          this.selected2 = true;
+        }
       }
     }
 
