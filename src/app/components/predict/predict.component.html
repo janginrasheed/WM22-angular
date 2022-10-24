@@ -1,12 +1,6 @@
-<div class="groups__predict__info-groups">
-  <!--
-    <div class="predict__groups__info">
-      How it works: <br>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda beatae commodi culpa doloremque ex explicabo
-      facilis id, in ipsum minima nihil optio perspiciatis qui quod sed sequi unde voluptates voluptatum!
-    </div>
-    -->
-  <div class="groups__container">
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<div *ngIf="!isLoading">
+  <div class="predict__groups__container">
     <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
       <app-group-table-predict [teamsGroupData]="teamsGroupData" [group]="groups[i]"
                                (sendGroupName)="receiveGroup($event)"
@@ -14,33 +8,29 @@
       </app-group-table-predict>
     </div>
   </div>
-</div>
-<div class="knock-out-stages__container">
-  <!--  <div class="k-o-stage" *ngIf="roundOf16Matches != null">-->
-  <div class="k-o-stage">
-    <div class="k-o-stage__match" *ngFor="let match of roundOf16Matches">
-      <app-match-predict [match]="match" (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
-    </div>
-  </div>
-
-  <div class="k-o-stage">
-    <div *ngFor="let match of quarterFinalsMatches">
-      <app-match-predict [match]="match" (selectedWinnerEmitter)="receiveSelectedWinner($event)"> </app-match-predict>
-    </div>
-  </div>
-  <div class="k-o-stage">
-    <div *ngFor="let match of semiFinalMatches">
-      <app-match-predict [match]="match"></app-match-predict>
-    </div>
-  </div>
-  <div class="k-o-stage">
-    <app-match-predict [match]="thirdPlaceMatch"></app-match-predict>
-  </div>
-  <div class="k-o-stage">
-    <div>
+  <div class="predict__matches__container">
+    <div class="k-o-stage">
+      <div *ngFor="let match of roundOf16Matches">
+        <app-match-predict [match]="match" (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
+      </div>
     </div>
     <div class="k-o-stage">
-      <app-match-predict [match]="finalMatch"></app-match-predict>
+      <div *ngFor="let match of quarterFinalsMatches">
+        <app-match-predict [match]="match" (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
+      </div>
+    </div>
+    <div class="k-o-stage">
+      <div *ngFor="let match of semiFinalsMatches">
+        <app-match-predict [match]="match" (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
+      </div>
+    </div>
+    <div class="k-o-stage">
+      <app-match-predict [match]="thirdPlaceMatch"
+                         (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
+    </div>
+    <div class="k-o-stage">
+      <app-match-predict [match]="finalMatch"
+                         (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
     </div>
   </div>
 </div>

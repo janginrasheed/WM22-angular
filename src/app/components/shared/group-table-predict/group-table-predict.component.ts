@@ -9,7 +9,6 @@ import {Match} from "../../../types/match";
   styleUrls: ['./group-table-predict.component.scss']
 })
 export class GroupTablePredictComponent implements OnInit {
-
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = ['flag', 'name', 'rank'];
   selectedTeams = new Set<TeamTable>();
@@ -63,12 +62,13 @@ export class GroupTablePredictComponent implements OnInit {
     }
   }
 
-  clearSelection() {
-    this.selectedTeams.clear();
-    this.teamRanks.forEach((teamRank: { rank: number; name: string; }) => {
-      teamRank.rank = 0;
-      teamRank.name = "";
-    });
-  }
-
+  /*
+    clearSelection() {
+      this.selectedTeams.clear();
+      this.teamRanks.forEach((teamRank: { rank: number; name: string; }) => {
+        teamRank.rank = 0;
+        teamRank.name = "";
+      });
+    }
+  */
 }

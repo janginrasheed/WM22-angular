@@ -1,7 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatchPredict} from "../../../types/match-predict";
-import {Team} from "../../../types/team";
-import {coerceNumberProperty} from "@angular/cdk/coercion";
 
 @Component({
   selector: 'app-match-predict',
@@ -43,11 +41,6 @@ export class MatchPredictComponent implements OnInit {
         }
       }
     }
-
-  }
-
-  clearSelection() {
-    //this.selectedTeam = // clear
   }
 
 }
