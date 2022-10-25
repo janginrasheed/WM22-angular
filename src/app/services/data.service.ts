@@ -133,7 +133,7 @@ export class DataService {
   }
 
   public predictionsByEmail(email: string): Observable<Prediction[]> {
-    return this.http.get<Prediction[]>(this.dataApiUrl + "predictiosByEmail" + email).pipe(
+    return this.http.get<Prediction[]>(this.dataApiUrl + "predictions/" + email).pipe(
       first(),
       retry(1),
       catchError(error => {

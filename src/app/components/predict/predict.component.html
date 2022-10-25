@@ -1,8 +1,31 @@
 <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
 <div *ngIf="!isLoading">
+  <div>
+    <div>Old Prediction</div>
+    <div class="old__predicted__group__container">
+      <div *ngFor="let oldGroupPrediction of oldGroupsPredictionsNames">
+        <div class="old__predicted__group">
+
+          <div>
+            {{oldGroupPrediction.group}}
+          </div>
+          <div class="old__predicted__group__row">
+            <div>{{oldGroupPrediction.name1}}</div>
+            <div class="team__rank">1</div>
+          </div>
+          <div class="old__predicted__group__row">
+            <div>{{oldGroupPrediction.name2}}</div>
+            <div class="team__rank">2</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="predict__groups__container">
     <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
-      <app-group-table-predict [teamsGroupData]="teamsGroupData" [group]="groups[i]"
+      <app-group-table-predict [teamsGroupData]="teamsGroupData"
+                               [group]="groups[i]"
                                (sendGroupName)="receiveGroup($event)"
                                (sendSelectedTeams)="receiveSelectedTeamsGroups($event)">
       </app-group-table-predict>

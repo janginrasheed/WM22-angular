@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {TeamTable} from "../../types/team-table";
-import {forkJoin} from "rxjs";
+import {forkJoin, of} from "rxjs";
 import {DataService} from "../../services/data.service";
 import {GroupDetails} from "../../types/group-details";
 import {MatchPredict} from "../../types/match-predict";
 import {Prediction} from "../../types/prediction";
+import {group} from "@angular/animations";
 
 @Component({
   selector: 'app-predict',
@@ -17,8 +18,12 @@ export class PredictComponent implements OnInit {
   isLoading = true;
   saveDisabled = true;
   alreadyPredicted = false;
-  oldPredictions: Prediction[] = [];
   userEmail = "";
+  oldPredictions: Prediction[] = [];
+  // @ts-ignore
+  oldGroupsPredictionsNames: [{ id1: number, id2: number, name1: string, name2: string, group: string }] = [];
+  // @ts-ignore
+  oldRoundOf16Predictions: [{ id1: number, id2: number, name1: string, name2: string, group: string }] = [];
 
   teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
   selectedTeamsGroups: TeamTable[][] = [[], [], [], [], [], [], [], []];
@@ -63,14 +68,27 @@ export class PredictComponent implements OnInit {
   checkAlreadyPredicted() {
     if (this.oldPredictions.length > 0) {
       this.alreadyPredicted = true;
-      this.fillOldPredictions();
+      this.oldPredictions.forEach(prediction => {
+        if (prediction.matchNumber == 1) {
+          this.oldGroupsPredictionsNames.push({
+            id1: prediction.firstTeamId,
+            id2: prediction.secondTeamId,
+            name1: "",
+            name2: "",
+            group: ""
+          });
+        }
+        if (prediction.matchNumber > 1 && prediction.matchNumber < 55) {
+          this.oldRoundOf16Predictions.push({
+            id1: prediction.firstTeamId,
+            id2: prediction.secondTeamId, // TODO Es gibt noch kein Wert drinnen
+            name1: "",
+            name2: "",
+            group: ""
+          });
+        }
+      });
     }
-  }
-
-  fillOldPredictions() {
-    this.oldPredictions.forEach(prediction => {
-      console.log(prediction);
-    });
   }
 
   initArrays() {
@@ -146,8 +164,20 @@ export class PredictComponent implements OnInit {
         this.teamsGroupsData[i][j].id = team.id;
         this.teamsGroupsData[i][j].flag = team.flag;
         this.teamsGroupsData[i][j].name = team.name;
+        if (this.alreadyPredicted) {
+          this.oldGroupsPredictionsNames.forEach(team2 => {
+            if (team.id == team2.id1) {
+              team2.name1 = team.name;
+              team2.group = team.groupName;
+            } else if (team.id == team2.id2) {
+              team2.name2 = team.name;
+              team2.group = team.groupName;
+            }
+          });
+        }
       });
     });
+    console.log(this.oldGroupsPredictionsNames);
   }
 
   receiveGroup(group: String) {
