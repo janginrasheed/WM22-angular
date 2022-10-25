@@ -14,3 +14,15 @@
   flex-wrap: wrap;
   //flex-direction: column;
 }
+
+.submit__prediction {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.submit__prediction button {
+  width: 10rem;
+  margin: 2rem 0;
+}

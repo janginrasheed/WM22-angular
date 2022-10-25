@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {catchError, first, Observable, retry, throwError} from "rxjs";
-import {Team} from "../types/team";
 import {Match} from "../types/match";
 import {User} from "../types/user";
 import {Stage} from "../types/stage";
 import {News} from "../types/news";
 import {GroupDetails} from "../types/group-details";
+import {Prediction} from "../types/prediction";
 
 @Injectable({
   providedIn: 'root'
@@ -21,19 +21,6 @@ export class DataService {
   newsTest = 'assets/newsApiTest.json';
 
   constructor(private http: HttpClient) {
-  }
-
-  public getAllTeams(): Observable<[]> {
-    return this.http.get<Team[]>(this.dataApiUrl + "teams").pipe(
-      first(),
-      // @ts-ignore
-      retry(1),
-      catchError(error => {
-        // this.handleError(error);
-        console.error("Fehler beim Laden der Mannschaften");
-        return throwError(error);
-      })
-    );
   }
 
   public getAllMatches(): Observable<[]> {
@@ -145,6 +132,27 @@ export class DataService {
     );
   }
 
+  public predictionsByEmail(email: string): Observable<Prediction[]> {
+    return this.http.get<Prediction[]>(this.dataApiUrl + "predictiosByEmail" + email).pipe(
+      first(),
+      retry(1),
+      catchError(error => {
+        console.error("Fehler beim Laden den User-Vorhersagen");
+        return throwError(error);
+      })
+    );
+  }
+
+  public submitPredictions(predictions: Prediction[]) {
+    return this.http.post<Prediction[]>(this.dataApiUrl + "submitPredictions", predictions).pipe(
+      first(),
+      retry(1),
+      catchError(error => {
+        console.error("Fehler beim Speichern der Vorhersage");
+        return throwError(error);
+      })
+    );
+  }
 
   getTestNews(): Observable<any> {
     return this.http.get(this.newsTest);

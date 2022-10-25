@@ -4,6 +4,7 @@ import {forkJoin} from "rxjs";
 import {DataService} from "../../services/data.service";
 import {GroupDetails} from "../../types/group-details";
 import {MatchPredict} from "../../types/match-predict";
+import {Prediction} from "../../types/prediction";
 
 @Component({
   selector: 'app-predict',
@@ -14,6 +15,11 @@ export class PredictComponent implements OnInit {
   groupsDetails: GroupDetails[];
   groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   isLoading = true;
+  saveDisabled = true;
+  alreadyPredicted = false;
+  oldPredictions: Prediction[] = [];
+  userEmail = "";
+
   teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
   selectedTeamsGroups: TeamTable[][] = [[], [], [], [], [], [], [], []];
   selectedTeamsSingleGroup: TeamTable[] = [];
@@ -28,23 +34,43 @@ export class PredictComponent implements OnInit {
   semiFinalsMatches: MatchPredict[] = [];
   thirdPlaceMatch: MatchPredict = {id: 63, aId: 0, bId: 0, aName: "", bName: "", stage: "Third place"};
   finalMatch: MatchPredict = {id: 64, aId: 0, bId: 0, aName: "", bName: "", stage: "Final"};
+  predictions: Prediction[] = [];
+  prediction: Prediction = {id: 0, groupName: "", secondTeamId: 0, firstTeamId: 0, matchNumber: 1, email: ""};
 
   constructor(private dataService: DataService) {
   }
 
   ngOnInit(): void {
+    // @ts-ignore
+    this.userEmail = localStorage.getItem("token");
     this.getData();
   }
 
   getData() {
     const groupsDetails = this.dataService.getGroupsDetails();
-    forkJoin([groupsDetails]).subscribe(result => {
+    const oldPredictions = this.dataService.predictionsByEmail(this.userEmail);
+    forkJoin([groupsDetails, oldPredictions]).subscribe(result => {
         this.groupsDetails = result[0];
+        this.oldPredictions = result[1];
         this.isLoading = false;
+        this.checkAlreadyPredicted();
         this.initArrays();
         this.fillTeamsData();
       }
     );
+  }
+
+  checkAlreadyPredicted() {
+    if (this.oldPredictions.length > 0) {
+      this.alreadyPredicted = true;
+      this.fillOldPredictions();
+    }
+  }
+
+  fillOldPredictions() {
+    this.oldPredictions.forEach(prediction => {
+      console.log(prediction);
+    });
   }
 
   initArrays() {
@@ -301,6 +327,10 @@ export class PredictComponent implements OnInit {
       this.selectedWinnerFinal.teamName = teamName;
       console.log("Selected Winner in Final: ", this.selectedWinnerFinal);
     }
+
+    if (this.selectedWinnerFinal.teamId != 0 && this.selectedWinnerThirdPlace.teamId != 0) {
+      this.saveDisabled = false;
+    }
   }
 
   fillRoundOf16() {
@@ -393,6 +423,76 @@ export class PredictComponent implements OnInit {
         return 0;
       });
     }
+  }
+
+  savePrediction() {
+    this.predictions = [];
+    console.log("Save clicked");
+    this.selectedTeamsGroups.forEach((teamsInGroup, i) => {
+      this.predictions.push({
+        id: 0,
+        email: this.userEmail,
+        firstTeamId: teamsInGroup[0].id,
+        matchNumber: 1,
+        secondTeamId: teamsInGroup[1].id,
+        groupName: this.groups[i]
+      });
+    });
+
+    this.selectedWinnerRoundOf16.forEach(winner => {
+      this.predictions.push({
+        id: 0,
+        email: this.userEmail,
+        firstTeamId: winner.teamId,
+        matchNumber: winner.matchId,
+        secondTeamId: 0,
+        groupName: ""
+      });
+    });
+
+    this.selectedWinnerQuarterFinals.forEach(winner => {
+      this.predictions.push({
+        id: 0,
+        email: this.userEmail,
+        firstTeamId: winner.teamId,
+        matchNumber: winner.matchId,
+        secondTeamId: 0,
+        groupName: ""
+      });
+    });
+
+    this.selectedWinnerSemiFinals.forEach(winner => {
+      this.predictions.push({
+        id: 0,
+        email: this.userEmail,
+        firstTeamId: winner.teamId,
+        matchNumber: winner.matchId,
+        secondTeamId: 0,
+        groupName: ""
+      });
+    });
+
+    this.predictions.push({
+      id: 0,
+      email: this.userEmail,
+      firstTeamId: this.selectedWinnerThirdPlace.teamId,
+      matchNumber: this.selectedWinnerThirdPlace.matchId,
+      secondTeamId: 0,
+      groupName: ""
+    });
+
+    this.predictions.push({
+      id: 0,
+      email: this.userEmail,
+      firstTeamId: this.selectedWinnerFinal.teamId,
+      matchNumber: this.selectedWinnerFinal.matchId,
+      secondTeamId: 0,
+      groupName: ""
+    });
+
+    console.log(this.predictions);
+
+    this.dataService.submitPredictions(this.predictions).subscribe();
   }
 
 }

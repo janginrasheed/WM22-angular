@@ -33,4 +33,8 @@
                          (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
     </div>
   </div>
+  <div class="submit__prediction">
+    <button mat-raised-button color="primary" (click)="savePrediction()" [disabled]="saveDisabled">Save</button>
+    <button mat-raised-button>Clear Selection</button>
+  </div>
 </div>
