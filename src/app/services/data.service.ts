@@ -154,6 +154,17 @@ export class DataService {
     );
   }
 
+  public deletePredictions(email: string) {
+    return this.http.delete(this.dataApiUrl + "deletePredictions/" + email).pipe(
+      first(),
+      retry(1),
+      catchError(error => {
+        console.error("Fehler beim Löschen der Vorhersagen");
+        return throwError(error);
+      })
+    );
+  }
+
   getTestNews(): Observable<any> {
     return this.http.get(this.newsTest);
   }

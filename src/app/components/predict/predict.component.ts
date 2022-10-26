@@ -17,6 +17,7 @@ export class PredictComponent implements OnInit {
   isLoading = true;
   saveDisabled = true;
   alreadyPredicted = false;
+  showNewPrediction = true;
   userEmail = "";
   oldPredictions: Prediction[] = [];
   oldGroupsPrediction: TeamTable[][] = [[], [], [], [], [], [], [], []];
@@ -68,6 +69,7 @@ export class PredictComponent implements OnInit {
   checkAlreadyPredicted() {
     if (this.oldPredictions.length > 0) {
       this.alreadyPredicted = true;
+      this.showNewPrediction = false;
       this.oldPredictions.forEach((prediction, i) => {
         if (prediction.matchNumber == 1) {
           this.oldGroupsPrediction[i][0].id = prediction.firstTeamId;
@@ -568,7 +570,14 @@ export class PredictComponent implements OnInit {
 
     console.log(this.predictions);
 
-    this.dataService.submitPredictions(this.predictions).subscribe();
+    if (this.alreadyPredicted) {
+      this.dataService.deletePredictions(this.userEmail).subscribe();
+    }
+
+    this.dataService.submitPredictions(this.predictions).subscribe(predicted => window.location.reload());
   }
 
+  setNewPrediction() {
+    this.showNewPrediction = true;
+  }
 }
