@@ -7,12 +7,17 @@
   margin: auto;
 }
 
+.predictions__title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 1rem;
+}
+
 .k-o-stage {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  //flex-direction: column;
 }
 
 .submit__prediction {

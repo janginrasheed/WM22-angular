@@ -21,6 +21,10 @@ export class PredictComponent implements OnInit {
   oldPredictions: Prediction[] = [];
   oldGroupsPrediction: TeamTable[][] = [[], [], [], [], [], [], [], []];
   oldRoundOf16Predictions: MatchPredict[] = [];
+  oldQuarterFinalsPredictions: MatchPredict[] = [];
+  oldSemiFinalsPredictions: MatchPredict[] = [];
+  oldThirdPlacePrediction: MatchPredict = {aId: 0, aName: "", bId: 0, bName: "", matchNumber: 63, stage: "Third place"};
+  oldFinalPrediction: MatchPredict = {aId: 0, aName: "", bId: 0, bName: "", matchNumber: 64, stage: "Final"};
 
   teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
   selectedTeamsGroups: TeamTable[][] = [[], [], [], [], [], [], [], []];
@@ -68,47 +72,39 @@ export class PredictComponent implements OnInit {
         if (prediction.matchNumber == 1) {
           this.oldGroupsPrediction[i][0].id = prediction.firstTeamId;
           this.oldGroupsPrediction[i][1].id = prediction.secondTeamId;
-          /*
-          this.oldGroupsPrediction.forEach(group => {
-            group[0].id = prediction.firstTeamId
-            group.push({
-              id: prediction.firstTeamId,
-              name: "",
-              goalsFor: 0,
-              won: 0,
-              goalsAgainst: 0,
-              points: 0,
-              drawn: 0,
-              flag: "",
-              lost: 0,
-              played: 0,
-              goalDifference: 0
-            }, {
-              id: prediction.secondTeamId,
-              name: "",
-              goalsFor: 0,
-              won: 0,
-              goalsAgainst: 0,
-              points: 0,
-              drawn: 0,
-              flag: "",
-              lost: 0,
-              played: 0,
-              goalDifference: 0
-            });
-          });
-          */
-        }
-
-        if (prediction.matchNumber > 1 && prediction.matchNumber < 55) {
+        } else if (prediction.matchNumber > 1 && prediction.matchNumber < 57) {
           this.oldRoundOf16Predictions.push({
             aId: prediction.firstTeamId,
             bId: prediction.secondTeamId,
             aName: "",
             bName: "",
-            matchNumber: 0,
+            matchNumber: prediction.matchNumber,
             stage: "Round of 16"
           });
+        } else if (prediction.matchNumber > 56 && prediction.matchNumber < 61) {
+          this.oldQuarterFinalsPredictions.push({
+            aId: prediction.firstTeamId,
+            bId: prediction.secondTeamId,
+            aName: "",
+            bName: "",
+            matchNumber: prediction.matchNumber,
+            stage: "Quarter-Finals"
+          });
+        } else if (prediction.matchNumber == 61 || prediction.matchNumber == 62) {
+          this.oldSemiFinalsPredictions.push({
+            aId: prediction.firstTeamId,
+            bId: prediction.secondTeamId,
+            aName: "",
+            bName: "",
+            matchNumber: prediction.matchNumber,
+            stage: "Semi-Finals"
+          });
+        } else if (prediction.matchNumber == 63) {
+          this.oldThirdPlacePrediction.aId = prediction.firstTeamId;
+          this.oldThirdPlacePrediction.bId = prediction.secondTeamId;
+        } else if (prediction.matchNumber == 64) {
+          this.oldFinalPrediction.aId = prediction.firstTeamId;
+          this.oldFinalPrediction.bId = prediction.secondTeamId;
         }
       });
     }
@@ -218,13 +214,42 @@ export class PredictComponent implements OnInit {
             group.forEach(team2 => {
               if (team.id == team2.id) {
                 team2.name = team.name;
-                // TODO ?? team2.group = team.groupName;
               } else if (team.id == team2.id) {
                 team2.name = team.name;
-                // team2.group = team.groupName;
               }
             });
           });
+          this.oldRoundOf16Predictions.forEach(match => {
+            if (team.id == match.aId) {
+              match.aName = team.name;
+            } else if (team.id == match.bId) {
+              match.bName = team.name;
+            }
+          });
+          this.oldQuarterFinalsPredictions.forEach(match => {
+            if (team.id == match.aId) {
+              match.aName = team.name;
+            } else if (team.id == match.bId) {
+              match.bName = team.name;
+            }
+          });
+          this.oldSemiFinalsPredictions.forEach(match => {
+            if (team.id == match.aId) {
+              match.aName = team.name;
+            } else if (team.id == match.bId) {
+              match.bName = team.name;
+            }
+          });
+          if (team.id == this.oldThirdPlacePrediction.aId) {
+            this.oldThirdPlacePrediction.aName = team.name;
+          } else if (team.id == this.oldThirdPlacePrediction.bId) {
+            this.oldThirdPlacePrediction.bName = team.name;
+          }
+          if (team.id == this.oldFinalPrediction.aId) {
+            this.oldFinalPrediction.aName = team.name;
+          } else if (team.id == this.oldFinalPrediction.bId) {
+            this.oldFinalPrediction.bName = team.name;
+          }
         }
       });
     });

@@ -13,6 +13,9 @@ export class MatchPredictComponent implements OnInit {
   @Input()
   match: MatchPredict;
 
+  @Input()
+  disableClick = false;
+
   @Output()
   public selectedWinnerEmitter:
     EventEmitter<MatchPredict> = new EventEmitter<MatchPredict>();
@@ -21,10 +24,13 @@ export class MatchPredictComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    if (this.disableClick)
+      this.selected1 = true;
   }
 
   teamClicked(winner: string): void {
+    if (this.disableClick) return;
+
     if (this.match.aId != 0 && this.match.bId != 0) {
       if (!this.selected1 && !this.selected2) {
         if (winner == "A") {

@@ -1,7 +1,7 @@
 <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
 <div *ngIf="!isLoading">
-  <div>
-    <div>Old Prediction</div>
+  <div class="old__predictions">
+    <div class="predictions__title">Old Predictions</div>
     <div class="old__predicted__group__container">
       <div *ngFor="let oldGroupPrediction of oldGroupsPrediction; let i = index">
         <app-group-table-predict
@@ -10,7 +10,34 @@
           [group]="groups[i]"></app-group-table-predict>
       </div>
     </div>
+    <div class="predict__matches__container">
+      <div class="k-o-stage">
+        <div *ngFor="let match of oldRoundOf16Predictions">
+          <app-match-predict [match]="match" [disableClick]="true"></app-match-predict>
+        </div>
+      </div>
+      <div class="k-o-stage">
+        <div *ngFor="let match of oldQuarterFinalsPredictions">
+          <app-match-predict [match]="match" [disableClick]="true"></app-match-predict>
+        </div>
+      </div>
+      <div class="k-o-stage">
+        <div *ngFor="let match of oldSemiFinalsPredictions">
+          <app-match-predict [match]="match"
+                             [disableClick]="true"></app-match-predict>
+        </div>
+      </div>
+      <div class="k-o-stage">
+        <app-match-predict [match]="oldThirdPlacePrediction"
+                           [disableClick]="true"></app-match-predict>
+      </div>
+      <div class="k-o-stage">
+        <app-match-predict [match]="oldFinalPrediction"
+                           [disableClick]="true"></app-match-predict>
+      </div>
+    </div>
   </div>
+  <div class="predictions__title">Set new Prediction</div>
   <div class="predict__groups__container">
     <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
       <app-group-table-predict [teamsGroupData]="teamsGroupData"
