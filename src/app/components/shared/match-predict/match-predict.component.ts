@@ -15,8 +15,7 @@ export class MatchPredictComponent implements OnInit {
 
   @Output()
   public selectedWinnerEmitter:
-    EventEmitter<{ teamId: number, teamName: string, matchId: number }> =
-    new EventEmitter<{ teamId: number, teamName: string, matchId: number }>();
+    EventEmitter<MatchPredict> = new EventEmitter<MatchPredict>();
 
   constructor() {
   }
@@ -25,17 +24,22 @@ export class MatchPredictComponent implements OnInit {
 
   }
 
-  teamClicked(teamId: number, teamName: string, aOrB: string): void {
+  teamClicked(winner: string): void {
     if (this.match.aId != 0 && this.match.bId != 0) {
       if (!this.selected1 && !this.selected2) {
-        this.selectedWinnerEmitter.emit({teamId: teamId, teamName: teamName, matchId: this.match.id});
-      }
-
-      if (!this.selected1 && !this.selected2) {
-        if (aOrB == "A") {
+        if (winner == "A") {
+          this.selectedWinnerEmitter.emit(this.match);
           this.selected1 = true;
           this.selected2 = false;
-        } else {
+        } else if (winner == "B") {
+          this.selectedWinnerEmitter.emit({
+            aId: this.match.bId,
+            aName: this.match.bName,
+            bId: this.match.aId,
+            bName: this.match.aName,
+            matchNumber: this.match.matchNumber,
+            stage: this.match.stage
+          });
           this.selected1 = false;
           this.selected2 = true;
         }

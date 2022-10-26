@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {TeamTable} from "../../types/team-table";
-import {forkJoin, of} from "rxjs";
+import {forkJoin} from "rxjs";
 import {DataService} from "../../services/data.service";
 import {GroupDetails} from "../../types/group-details";
 import {MatchPredict} from "../../types/match-predict";
 import {Prediction} from "../../types/prediction";
-import {group} from "@angular/animations";
 
 @Component({
   selector: 'app-predict',
@@ -29,18 +28,18 @@ export class PredictComponent implements OnInit {
   selectedTeamsGroups: TeamTable[][] = [[], [], [], [], [], [], [], []];
   selectedTeamsSingleGroup: TeamTable[] = [];
   groupNameOfSelectedTeams: String;
-  selectedWinnerRoundOf16: { teamId: number, teamName: string, matchId: number }[] = [];
-  selectedWinnerQuarterFinals: { teamId: number, teamName: string, matchId: number }[] = [];
-  selectedWinnerSemiFinals: { teamId: number, teamName: string, matchId: number }[] = [];
-  selectedWinnerThirdPlace = {teamId: 0, teamName: "", matchId: 63};
-  selectedWinnerFinal = {teamId: 0, teamName: "", matchId: 64};
+  selectedWinnerRoundOf16: MatchPredict[] = [];
+  selectedWinnerQuarterFinals: MatchPredict[] = [];
+  selectedWinnerSemiFinals: MatchPredict[] = [];
+  selectedWinnerThirdPlace: MatchPredict = {aId: 0, aName: "", bId: 0, bName: "", matchNumber: 63, stage: ""};
+  selectedWinnerFinal: MatchPredict = {aId: 0, aName: "", bId: 0, bName: "", matchNumber: 64, stage: ""};
   roundOf16Matches: MatchPredict[] = [];
   quarterFinalsMatches: MatchPredict[] = [];
   semiFinalsMatches: MatchPredict[] = [];
-  thirdPlaceMatch: MatchPredict = {id: 63, aId: 0, bId: 0, aName: "", bName: "", stage: "Third place"};
-  finalMatch: MatchPredict = {id: 64, aId: 0, bId: 0, aName: "", bName: "", stage: "Final"};
+  thirdPlaceMatch: MatchPredict = {matchNumber: 63, aId: 0, bId: 0, aName: "", bName: "", stage: "Third place"};
+  finalMatch: MatchPredict = {matchNumber: 64, aId: 0, bId: 0, aName: "", bName: "", stage: "Final"};
   predictions: Prediction[] = [];
-  prediction: Prediction = {id: 0, groupName: "", secondTeamId: 0, firstTeamId: 0, matchNumber: 1, email: ""};
+  //prediction: Prediction = {id: 0, groupName: "", secondTeamId: 0, firstTeamId: 0, matchNumber: 1, email: ""};
 
   constructor(private dataService: DataService) {
   }
@@ -109,7 +108,7 @@ export class PredictComponent implements OnInit {
         };
       }
       this.roundOf16Matches[i] = {
-        id: i + 49,
+        matchNumber: i + 49,
         aId: 0,
         bId: 0,
         aName: "",
@@ -117,14 +116,17 @@ export class PredictComponent implements OnInit {
         stage: "Round of 16"
       }
       this.selectedWinnerRoundOf16[i] = {
-        teamId: 0,
-        teamName: "",
-        matchId: i + 49
+        aId: 0,
+        aName: "",
+        bId: 0,
+        bName: "",
+        matchNumber: i + 49,
+        stage: ""
       }
 
       if (i < 4) {
         this.quarterFinalsMatches[i] = {
-          id: i + 57,
+          matchNumber: i + 57,
           aId: 0,
           bId: 0,
           aName: "",
@@ -132,15 +134,18 @@ export class PredictComponent implements OnInit {
           stage: "Quarter-Finals"
         }
         this.selectedWinnerQuarterFinals[i] = {
-          teamId: 0,
-          teamName: "",
-          matchId: 57 + i
+          aId: 0,
+          aName: "",
+          bId: 0,
+          bName: "",
+          matchNumber: i + 57,
+          stage: ""
         }
       }
 
       if (i < 2) {
         this.semiFinalsMatches[i] = {
-          id: i + 61,
+          matchNumber: i + 61,
           aId: 0,
           bId: 0,
           aName: "",
@@ -148,9 +153,12 @@ export class PredictComponent implements OnInit {
           stage: "Semi-Finals"
         }
         this.selectedWinnerSemiFinals[i] = {
-          teamId: 0,
-          teamName: "",
-          matchId: 61 + i
+          aId: 0,
+          aName: "",
+          bId: 0,
+          bName: "",
+          matchNumber: i + 61,
+          stage: ""
         }
       }
     }
@@ -218,86 +226,62 @@ export class PredictComponent implements OnInit {
     this.fillRoundOf16();
   }
 
-  receiveSelectedWinner({teamId, teamName, matchId}: any) {
-    if (matchId < 57) {
-      switch (matchId) {
+  receiveSelectedWinner(predictedWinner: MatchPredict) {
+    if (predictedWinner.matchNumber < 57) {
+      switch (predictedWinner.matchNumber) {
         case 49: {
-          this.selectedWinnerRoundOf16[0].teamId = teamId;
-          this.selectedWinnerRoundOf16[0].teamName = teamName;
-          this.selectedWinnerRoundOf16[0].matchId = matchId;
+          this.selectedWinnerRoundOf16[0] = predictedWinner;
           break;
         }
         case 50: {
-          this.selectedWinnerRoundOf16[1].teamId = teamId;
-          this.selectedWinnerRoundOf16[1].teamName = teamName;
-          this.selectedWinnerRoundOf16[1].matchId = matchId;
+          this.selectedWinnerRoundOf16[1] = predictedWinner;
           break;
         }
         case 51: {
-          this.selectedWinnerRoundOf16[2].teamId = teamId;
-          this.selectedWinnerRoundOf16[2].teamName = teamName;
-          this.selectedWinnerRoundOf16[2].matchId = matchId;
+          this.selectedWinnerRoundOf16[2] = predictedWinner;
           break;
         }
         case 52: {
-          this.selectedWinnerRoundOf16[3].teamId = teamId;
-          this.selectedWinnerRoundOf16[3].teamName = teamName;
-          this.selectedWinnerRoundOf16[3].matchId = matchId;
+          this.selectedWinnerRoundOf16[3] = predictedWinner;
           break;
         }
         case 53: {
-          this.selectedWinnerRoundOf16[4].teamId = teamId;
-          this.selectedWinnerRoundOf16[4].teamName = teamName;
-          this.selectedWinnerRoundOf16[4].matchId = matchId;
+          this.selectedWinnerRoundOf16[4] = predictedWinner;
           break;
         }
         case 54: {
-          this.selectedWinnerRoundOf16[5].teamId = teamId;
-          this.selectedWinnerRoundOf16[5].teamName = teamName;
-          this.selectedWinnerRoundOf16[5].matchId = matchId;
+          this.selectedWinnerRoundOf16[5] = predictedWinner;
           break;
         }
         case 55: {
-          this.selectedWinnerRoundOf16[6].teamId = teamId;
-          this.selectedWinnerRoundOf16[6].teamName = teamName;
-          this.selectedWinnerRoundOf16[6].matchId = matchId;
+          this.selectedWinnerRoundOf16[6] = predictedWinner;
           break;
         }
         case 56: {
-          this.selectedWinnerRoundOf16[7].teamId = teamId;
-          this.selectedWinnerRoundOf16[7].teamName = teamName;
-          this.selectedWinnerRoundOf16[7].matchId = matchId;
+          this.selectedWinnerRoundOf16[7] = predictedWinner;
           break;
         }
       }
       this.fillQuarterFinals();
       console.log("Selected Winner in Round of 16: ", this.selectedWinnerRoundOf16);
 
-    } else if (matchId > 56 && matchId < 61) {
+    } else if (predictedWinner.matchNumber > 56 && predictedWinner.matchNumber < 61) {
       //Gewinner in Viertelfinale speichern
-      switch (matchId) {
+      switch (predictedWinner.matchNumber) {
         case 57: {
-          this.selectedWinnerQuarterFinals[0].teamId = teamId;
-          this.selectedWinnerQuarterFinals[0].teamName = teamName;
-          this.selectedWinnerQuarterFinals[0].matchId = matchId;
+          this.selectedWinnerQuarterFinals[0] = predictedWinner;
           break;
         }
         case 58: {
-          this.selectedWinnerQuarterFinals[1].teamId = teamId;
-          this.selectedWinnerQuarterFinals[1].teamName = teamName;
-          this.selectedWinnerQuarterFinals[1].matchId = matchId;
+          this.selectedWinnerQuarterFinals[1] = predictedWinner;
           break;
         }
         case 59: {
-          this.selectedWinnerQuarterFinals[2].teamId = teamId;
-          this.selectedWinnerQuarterFinals[2].teamName = teamName;
-          this.selectedWinnerQuarterFinals[2].matchId = matchId;
+          this.selectedWinnerQuarterFinals[2] = predictedWinner;
           break;
         }
         case 60: {
-          this.selectedWinnerQuarterFinals[3].teamId = teamId;
-          this.selectedWinnerQuarterFinals[3].teamName = teamName;
-          this.selectedWinnerQuarterFinals[3].matchId = matchId;
+          this.selectedWinnerQuarterFinals[3] = predictedWinner;
           break;
         }
 
@@ -305,60 +289,54 @@ export class PredictComponent implements OnInit {
       this.fillSemiFinal();
       console.log("Selected Winner in Quarter-Finals: ", this.selectedWinnerQuarterFinals);
 
-    } else if (matchId == 61 || matchId == 62) {
+    } else if (predictedWinner.matchNumber == 61 || predictedWinner.matchNumber == 62) {
       //Gewinner in Viertelfinale speichern
-      switch (matchId) {
+      switch (predictedWinner.matchNumber) {
         case 61: {
-          this.selectedWinnerSemiFinals[0].teamId = teamId;
-          this.selectedWinnerSemiFinals[0].teamName = teamName;
-          this.selectedWinnerSemiFinals[0].matchId = matchId;
+          this.selectedWinnerSemiFinals[0] = predictedWinner;
           break;
         }
         case 62: {
-          this.selectedWinnerSemiFinals[1].teamId = teamId;
-          this.selectedWinnerSemiFinals[1].teamName = teamName;
-          this.selectedWinnerSemiFinals[1].matchId = matchId;
+          this.selectedWinnerSemiFinals[1] = predictedWinner;
           break;
         }
       }
       // Final match
-      this.finalMatch.aId = this.selectedWinnerSemiFinals[0].teamId;
-      this.finalMatch.aName = this.selectedWinnerSemiFinals[0].teamName;
-      this.finalMatch.bId = this.selectedWinnerSemiFinals[1].teamId;
-      this.finalMatch.bName = this.selectedWinnerSemiFinals[1].teamName;
+      this.finalMatch.aId = this.selectedWinnerSemiFinals[0].aId;
+      this.finalMatch.aName = this.selectedWinnerSemiFinals[0].aName;
+      this.finalMatch.bId = this.selectedWinnerSemiFinals[1].aId;
+      this.finalMatch.bName = this.selectedWinnerSemiFinals[1].aName;
 
       // Third place match
       // First Team in the match
-      if (this.semiFinalsMatches[0].aId == this.selectedWinnerSemiFinals[0].teamId) {
+      if (this.semiFinalsMatches[0].aId == this.selectedWinnerSemiFinals[0].aId) {
         this.thirdPlaceMatch.aId = this.semiFinalsMatches[0].bId
         this.thirdPlaceMatch.aName = this.semiFinalsMatches[0].bName;
       }
-      if (this.semiFinalsMatches[0].bId == this.selectedWinnerSemiFinals[0].teamId) {
+      if (this.semiFinalsMatches[0].bId == this.selectedWinnerSemiFinals[0].aId) {
         this.thirdPlaceMatch.aId = this.semiFinalsMatches[0].aId
         this.thirdPlaceMatch.aName = this.semiFinalsMatches[0].aName;
       }
 
       // Second team in the match
-      if (this.semiFinalsMatches[1].aId == this.selectedWinnerSemiFinals[1].teamId) {
+      if (this.semiFinalsMatches[1].aId == this.selectedWinnerSemiFinals[1].aId) {
         this.thirdPlaceMatch.bId = this.semiFinalsMatches[1].bId
         this.thirdPlaceMatch.bName = this.semiFinalsMatches[1].bName;
       }
-      if (this.semiFinalsMatches[1].bId == this.selectedWinnerSemiFinals[1].teamId) {
+      if (this.semiFinalsMatches[1].bId == this.selectedWinnerSemiFinals[1].aId) {
         this.thirdPlaceMatch.bId = this.semiFinalsMatches[1].aId
         this.thirdPlaceMatch.bName = this.semiFinalsMatches[1].aName;
       }
       console.log("Selected Winner in Semi-Finals: ", this.selectedWinnerSemiFinals);
-    } else if (matchId == 63) {
-      this.selectedWinnerThirdPlace.teamId = teamId;
-      this.selectedWinnerThirdPlace.teamName = teamName;
+    } else if (predictedWinner.matchNumber == 63) {
+      this.selectedWinnerThirdPlace = predictedWinner;
       console.log("Selected Winner in Third place: ", this.selectedWinnerThirdPlace);
-    } else if (matchId == 64) {
-      this.selectedWinnerFinal.teamId = teamId;
-      this.selectedWinnerFinal.teamName = teamName;
+    } else if (predictedWinner.matchNumber == 64) {
+      this.selectedWinnerFinal = predictedWinner;
       console.log("Selected Winner in Final: ", this.selectedWinnerFinal);
     }
 
-    if (this.selectedWinnerFinal.teamId != 0 && this.selectedWinnerThirdPlace.teamId != 0) {
+    if (this.selectedWinnerFinal.aId != 0 && this.selectedWinnerThirdPlace.aId != 0) {
       this.saveDisabled = false;
     }
   }
@@ -406,17 +384,17 @@ export class PredictComponent implements OnInit {
     if (this.selectedWinnerQuarterFinals.length > 1) {
       if (this.selectedWinnerQuarterFinals[0] != null
         && this.selectedWinnerQuarterFinals[1] != null) {
-        this.semiFinalsMatches[0].aId = this.selectedWinnerQuarterFinals[0].teamId;
-        this.semiFinalsMatches[0].aName = this.selectedWinnerQuarterFinals[0].teamName;
-        this.semiFinalsMatches[0].bId = this.selectedWinnerQuarterFinals[1].teamId;
-        this.semiFinalsMatches[0].bName = this.selectedWinnerQuarterFinals[1].teamName;
+        this.semiFinalsMatches[0].aId = this.selectedWinnerQuarterFinals[0].aId;
+        this.semiFinalsMatches[0].aName = this.selectedWinnerQuarterFinals[0].aName;
+        this.semiFinalsMatches[0].bId = this.selectedWinnerQuarterFinals[1].aId;
+        this.semiFinalsMatches[0].bName = this.selectedWinnerQuarterFinals[1].aName;
       }
       if (this.selectedWinnerQuarterFinals[2] != null
         && this.selectedWinnerQuarterFinals[3] != null) {
-        this.semiFinalsMatches[1].aId = this.selectedWinnerQuarterFinals[2].teamId;
-        this.semiFinalsMatches[1].aName = this.selectedWinnerQuarterFinals[2].teamName;
-        this.semiFinalsMatches[1].bId = this.selectedWinnerQuarterFinals[3].teamId;
-        this.semiFinalsMatches[1].bName = this.selectedWinnerQuarterFinals[3].teamName;
+        this.semiFinalsMatches[1].aId = this.selectedWinnerQuarterFinals[2].aId;
+        this.semiFinalsMatches[1].aName = this.selectedWinnerQuarterFinals[2].aName;
+        this.semiFinalsMatches[1].bId = this.selectedWinnerQuarterFinals[3].aId;
+        this.semiFinalsMatches[1].bName = this.selectedWinnerQuarterFinals[3].aName;
       }
     }
   }
@@ -428,7 +406,7 @@ export class PredictComponent implements OnInit {
       this.roundOf16Matches[index].bId = this.selectedTeamsGroups[valueB][1].id;
       this.roundOf16Matches[index].bName = this.selectedTeamsGroups[valueB][1].name;
       this.roundOf16Matches.sort(function (a, b) {
-        let keyA = a.id, keyB = b.id;
+        let keyA = a.matchNumber, keyB = b.matchNumber;
         if (keyA > keyB) {
           return 1;
         }
@@ -438,12 +416,12 @@ export class PredictComponent implements OnInit {
         return 0;
       });
     } else if (matchNumber > 56 && matchNumber <= 60) {
-      this.quarterFinalsMatches[index].aId = this.selectedWinnerRoundOf16[valueA].teamId;
-      this.quarterFinalsMatches[index].aName = this.selectedWinnerRoundOf16[valueA].teamName;
-      this.quarterFinalsMatches[index].bId = this.selectedWinnerRoundOf16[valueB].teamId;
-      this.quarterFinalsMatches[index].bName = this.selectedWinnerRoundOf16[valueB].teamName;
+      this.quarterFinalsMatches[index].aId = this.selectedWinnerRoundOf16[valueA].aId;
+      this.quarterFinalsMatches[index].aName = this.selectedWinnerRoundOf16[valueA].aName;
+      this.quarterFinalsMatches[index].bId = this.selectedWinnerRoundOf16[valueB].aId;
+      this.quarterFinalsMatches[index].bName = this.selectedWinnerRoundOf16[valueB].aName;
       this.quarterFinalsMatches.sort(function (a, b) {
-        let keyA = a.id, keyB = b.id;
+        let keyA = a.matchNumber, keyB = b.matchNumber;
         if (keyA > keyB) {
           return 1;
         }
@@ -473,9 +451,9 @@ export class PredictComponent implements OnInit {
       this.predictions.push({
         id: 0,
         email: this.userEmail,
-        firstTeamId: winner.teamId,
-        matchNumber: winner.matchId,
-        secondTeamId: 0,
+        firstTeamId: winner.aId,
+        matchNumber: winner.matchNumber,
+        secondTeamId: winner.bId,
         groupName: ""
       });
     });
@@ -484,9 +462,9 @@ export class PredictComponent implements OnInit {
       this.predictions.push({
         id: 0,
         email: this.userEmail,
-        firstTeamId: winner.teamId,
-        matchNumber: winner.matchId,
-        secondTeamId: 0,
+        firstTeamId: winner.aId,
+        matchNumber: winner.matchNumber,
+        secondTeamId: winner.bId,
         groupName: ""
       });
     });
@@ -495,9 +473,9 @@ export class PredictComponent implements OnInit {
       this.predictions.push({
         id: 0,
         email: this.userEmail,
-        firstTeamId: winner.teamId,
-        matchNumber: winner.matchId,
-        secondTeamId: 0,
+        firstTeamId: winner.aId,
+        matchNumber: winner.matchNumber,
+        secondTeamId: winner.bId,
         groupName: ""
       });
     });
@@ -505,18 +483,18 @@ export class PredictComponent implements OnInit {
     this.predictions.push({
       id: 0,
       email: this.userEmail,
-      firstTeamId: this.selectedWinnerThirdPlace.teamId,
-      matchNumber: this.selectedWinnerThirdPlace.matchId,
-      secondTeamId: 0,
+      firstTeamId: this.selectedWinnerThirdPlace.aId,
+      matchNumber: this.selectedWinnerThirdPlace.matchNumber,
+      secondTeamId: this.selectedWinnerThirdPlace.bId,
       groupName: ""
     });
 
     this.predictions.push({
       id: 0,
       email: this.userEmail,
-      firstTeamId: this.selectedWinnerFinal.teamId,
-      matchNumber: this.selectedWinnerFinal.matchId,
-      secondTeamId: 0,
+      firstTeamId: this.selectedWinnerFinal.aId,
+      matchNumber: this.selectedWinnerFinal.matchNumber,
+      secondTeamId: this.selectedWinnerFinal.bId,
       groupName: ""
     });
 

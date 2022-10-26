@@ -1,5 +1,5 @@
 export interface MatchPredict {
-  id: number,
+  matchNumber: number,
   aId: number,
   aName: string,
   bId: number,
