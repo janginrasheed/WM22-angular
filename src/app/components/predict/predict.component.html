@@ -3,22 +3,11 @@
   <div>
     <div>Old Prediction</div>
     <div class="old__predicted__group__container">
-      <div *ngFor="let oldGroupPrediction of oldGroupsPredictionsNames">
-        <div class="old__predicted__group">
-
-          <div>
-            {{oldGroupPrediction.group}}
-          </div>
-          <div class="old__predicted__group__row">
-            <div>{{oldGroupPrediction.name1}}</div>
-            <div class="team__rank">1</div>
-          </div>
-          <div class="old__predicted__group__row">
-            <div>{{oldGroupPrediction.name2}}</div>
-            <div class="team__rank">2</div>
-          </div>
-
-        </div>
+      <div *ngFor="let oldGroupPrediction of oldGroupsPrediction; let i = index">
+        <app-group-table-predict
+          [teamsGroupData]="oldGroupPrediction"
+          [disableClick]="true"
+          [group]="groups[i]"></app-group-table-predict>
       </div>
     </div>
   </div>

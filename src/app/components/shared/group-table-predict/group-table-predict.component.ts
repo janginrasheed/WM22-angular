@@ -25,6 +25,9 @@ export class GroupTablePredictComponent implements OnInit {
   @Input()
   teamsGroupData: TeamTable[];
 
+  @Input()
+  disableClick = false;
+
   @Output()
   public sendSelectedTeams: EventEmitter<Set<TeamTable>> = new EventEmitter<Set<TeamTable>>();
 
@@ -36,6 +39,10 @@ export class GroupTablePredictComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource(this.teamsGroupData);
+    if (this.disableClick) {
+      this.teamClicked(this.teamsGroupData[0]);
+      this.teamClicked(this.teamsGroupData[1]);
+    }
   }
 
   ngOnChanges() {
@@ -56,8 +63,10 @@ export class GroupTablePredictComponent implements OnInit {
       this.teamRanks[i].rank = i + 1;
       this.teamRanks[i].name = row.name;
       if (this.selectedTeams.size == 2) {
-        this.sendGroupName.emit(this.group);
-        this.sendSelectedTeams.emit(this.selectedTeams);
+        if (!this.disableClick) {
+          this.sendGroupName.emit(this.group);
+          this.sendSelectedTeams.emit(this.selectedTeams);
+        }
       }
     }
   }

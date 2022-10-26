@@ -19,10 +19,8 @@ export class PredictComponent implements OnInit {
   alreadyPredicted = false;
   userEmail = "";
   oldPredictions: Prediction[] = [];
-  // @ts-ignore
-  oldGroupsPredictionsNames: [{ id1: number, id2: number, name1: string, name2: string, group: string }] = [];
-  // @ts-ignore
-  oldRoundOf16Predictions: [{ id1: number, id2: number, name1: string, name2: string, group: string }] = [];
+  oldGroupsPrediction: TeamTable[][] = [[], [], [], [], [], [], [], []];
+  oldRoundOf16Predictions: MatchPredict[] = [];
 
   teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
   selectedTeamsGroups: TeamTable[][] = [[], [], [], [], [], [], [], []];
@@ -39,7 +37,6 @@ export class PredictComponent implements OnInit {
   thirdPlaceMatch: MatchPredict = {matchNumber: 63, aId: 0, bId: 0, aName: "", bName: "", stage: "Third place"};
   finalMatch: MatchPredict = {matchNumber: 64, aId: 0, bId: 0, aName: "", bName: "", stage: "Final"};
   predictions: Prediction[] = [];
-  //prediction: Prediction = {id: 0, groupName: "", secondTeamId: 0, firstTeamId: 0, matchNumber: 1, email: ""};
 
   constructor(private dataService: DataService) {
   }
@@ -57,8 +54,8 @@ export class PredictComponent implements OnInit {
         this.groupsDetails = result[0];
         this.oldPredictions = result[1];
         this.isLoading = false;
-        this.checkAlreadyPredicted();
         this.initArrays();
+        this.checkAlreadyPredicted();
         this.fillTeamsData();
       }
     );
@@ -67,23 +64,50 @@ export class PredictComponent implements OnInit {
   checkAlreadyPredicted() {
     if (this.oldPredictions.length > 0) {
       this.alreadyPredicted = true;
-      this.oldPredictions.forEach(prediction => {
+      this.oldPredictions.forEach((prediction, i) => {
         if (prediction.matchNumber == 1) {
-          this.oldGroupsPredictionsNames.push({
-            id1: prediction.firstTeamId,
-            id2: prediction.secondTeamId,
-            name1: "",
-            name2: "",
-            group: ""
+          this.oldGroupsPrediction[i][0].id = prediction.firstTeamId;
+          this.oldGroupsPrediction[i][1].id = prediction.secondTeamId;
+          /*
+          this.oldGroupsPrediction.forEach(group => {
+            group[0].id = prediction.firstTeamId
+            group.push({
+              id: prediction.firstTeamId,
+              name: "",
+              goalsFor: 0,
+              won: 0,
+              goalsAgainst: 0,
+              points: 0,
+              drawn: 0,
+              flag: "",
+              lost: 0,
+              played: 0,
+              goalDifference: 0
+            }, {
+              id: prediction.secondTeamId,
+              name: "",
+              goalsFor: 0,
+              won: 0,
+              goalsAgainst: 0,
+              points: 0,
+              drawn: 0,
+              flag: "",
+              lost: 0,
+              played: 0,
+              goalDifference: 0
+            });
           });
+          */
         }
+
         if (prediction.matchNumber > 1 && prediction.matchNumber < 55) {
           this.oldRoundOf16Predictions.push({
-            id1: prediction.firstTeamId,
-            id2: prediction.secondTeamId, // TODO Es gibt noch kein Wert drinnen
-            name1: "",
-            name2: "",
-            group: ""
+            aId: prediction.firstTeamId,
+            bId: prediction.secondTeamId,
+            aName: "",
+            bName: "",
+            matchNumber: 0,
+            stage: "Round of 16"
           });
         }
       });
@@ -106,7 +130,23 @@ export class PredictComponent implements OnInit {
           goalDifference: 0,
           points: 0
         };
+        if (j < 2) {
+          this.oldGroupsPrediction[i][j] = {
+            id: 0,
+            flag: '',
+            name: '',
+            played: 0,
+            won: 0,
+            drawn: 0,
+            lost: 0,
+            goalsFor: 0,
+            goalsAgainst: 0,
+            goalDifference: 0,
+            points: 0
+          };
+        }
       }
+
       this.roundOf16Matches[i] = {
         matchNumber: i + 49,
         aId: 0,
@@ -160,6 +200,7 @@ export class PredictComponent implements OnInit {
           matchNumber: i + 61,
           stage: ""
         }
+
       }
     }
   }
@@ -173,19 +214,21 @@ export class PredictComponent implements OnInit {
         this.teamsGroupsData[i][j].flag = team.flag;
         this.teamsGroupsData[i][j].name = team.name;
         if (this.alreadyPredicted) {
-          this.oldGroupsPredictionsNames.forEach(team2 => {
-            if (team.id == team2.id1) {
-              team2.name1 = team.name;
-              team2.group = team.groupName;
-            } else if (team.id == team2.id2) {
-              team2.name2 = team.name;
-              team2.group = team.groupName;
-            }
+          this.oldGroupsPrediction.forEach(group => {
+            group.forEach(team2 => {
+              if (team.id == team2.id) {
+                team2.name = team.name;
+                // TODO ?? team2.group = team.groupName;
+              } else if (team.id == team2.id) {
+                team2.name = team.name;
+                // team2.group = team.groupName;
+              }
+            });
           });
         }
       });
     });
-    console.log(this.oldGroupsPredictionsNames);
+    console.log(this.oldGroupsPrediction);
   }
 
   receiveGroup(group: String) {
@@ -402,9 +445,9 @@ export class PredictComponent implements OnInit {
   fillMatches(valueA: number, valueB: number, matchNumber: number, index: number) {
     if (matchNumber < 57) {
       this.roundOf16Matches[index].aId = this.selectedTeamsGroups[valueA][0].id;
-      this.roundOf16Matches[index].aName = this.selectedTeamsGroups[valueA][0].name;
+      this.roundOf16Matches[index].aName = this.selectedTeamsGroups[valueA][0].name!;
       this.roundOf16Matches[index].bId = this.selectedTeamsGroups[valueB][1].id;
-      this.roundOf16Matches[index].bName = this.selectedTeamsGroups[valueB][1].name;
+      this.roundOf16Matches[index].bName = this.selectedTeamsGroups[valueB][1].name!;
       this.roundOf16Matches.sort(function (a, b) {
         let keyA = a.matchNumber, keyB = b.matchNumber;
         if (keyA > keyB) {

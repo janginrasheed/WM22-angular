@@ -1,4 +1,4 @@
-.predict__groups__container {
+.predict__groups__container, .old__predicted__group__container {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -25,40 +25,4 @@
 .submit__prediction button {
   width: 10rem;
   margin: 2rem 0;
-}
-
-.old__predicted__group {
-  display: flex;
-  flex-direction: column;
-}
-
-.old__predicted__group__container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.old__predicted__group {
-  display: flex;
-  flex-direction: column;
-  border: solid black 1px;
-  gap: 1rem;
-}
-
-.old__predicted__group__row {
-  display: flex;
-  width: 10rem;
-  justify-content: space-between;
-}
-
-.team__rank {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 1rem;
-  height: 1rem;
-  background: #810843;
-  border-radius: 50%;
-  padding: 0.2rem;
-  color: white;
 }
