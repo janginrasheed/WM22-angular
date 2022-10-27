@@ -33,13 +33,12 @@
   margin: auto;
 }
 
-.matches__container {
-}
-
 .news__container {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: center;
 
 }
 
@@ -56,4 +55,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+.matches__news__container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 2rem 0;
 }

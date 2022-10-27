@@ -62,7 +62,7 @@ export class PredictComponent implements OnInit {
         this.initArrays();
         this.checkAlreadyPredicted();
         this.fillTeamsData();
-      }
+      }, error => this.isLoading = false
     );
   }
 

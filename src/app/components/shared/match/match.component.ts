@@ -58,6 +58,22 @@ export class MatchComponent implements OnInit {
       this.isAdmin = true;
     }
 
+    this.putDataInMatchDetails();
+
+  }
+
+  public saveClicked(): void {
+    this.match.firstTeamGoals = this.matchDetails.fistTeam.goals;
+    this.match.secondTeamGoals = this.matchDetails.secondTeam.goals;
+    this.updatedMatchEmitter.emit(this.match);
+    this.isDisabled = true;
+  }
+
+  public editClicked(): void {
+    this.isDisabled = false;
+  }
+
+  putDataInMatchDetails(): boolean {
     this.groupsDetails.forEach(value => {
       value.groupTeams.forEach(value1 => {
         if (value1.id == this.match.firstTeamId) {
@@ -92,23 +108,7 @@ export class MatchComponent implements OnInit {
       }
     });
 
-  }
-
-  public saveClicked(): void {
-    this.match.firstTeamGoals = this.matchDetails.fistTeam.goals;
-    this.match.secondTeamGoals = this.matchDetails.secondTeam.goals;
-    this.updatedMatchEmitter.emit(this.match);
-    this.isDisabled = true;
-  }
-
-  public editClicked(): void {
-    this.isDisabled = false;
-  }
-
-  public deleteResult(): void {
-    this.match.firstTeamGoals = "";
-    this.match.secondTeamGoals = "";
-    this.updatedMatchEmitter.emit(this.match);
+    return true;
   }
 
 }

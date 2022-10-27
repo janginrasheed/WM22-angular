@@ -2,19 +2,11 @@
   <mat-icon class="bot__dialog__icon">chat</mat-icon>
 </button>
 <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-<div class="home__container" *ngIf="!isLoading">
-  <!--
-    <div class="sections__nav">
-      <a href="#news_section">News</a>
-      <a href="#k-o-stages_section">Knock out Stages</a>
-      <a href="#groups_section">Groups</a>
-      <a href="#matches_section">Matches</a>
-    </div>
-  -->
+<div *ngIf="!isLoading && !matches" class="error__message">Daten können nicht geladen werden</div>
+<div class="home__container" *ngIf="!isLoading && matches">
   <div class="groups__container" id="groups_section">
     <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
-      <app-group-table [teamsGroupData]="teamsGroupData" [group]="groups[i]">
-      </app-group-table>
+      <app-group-table [teamsGroupData]="teamsGroupData" [group]="groups[i]"></app-group-table>
     </div>
   </div>
   <div class="predict__matches__container" id="k-o-stages_section">
@@ -46,28 +38,30 @@
       </div>
     </div>
   </div>
-  <div class="matches__container" id="matches_section">
-    <div class="select-rounds__container">
-      <mat-form-field appearance="fill">
-        <mat-label>{{'selectStage' | translate}}</mat-label>
-        <mat-select [(value)]="selectedStageId">
-          <mat-option *ngFor="let stage of stages" [value]="stage.id">
-            {{stage.stage | titlecase}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div *ngFor="let match of selectedStageMatches">
-      <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="false"
-                 (updatedMatchEmitter)="updateMatchResult($event)">
-      </app-match>
-    </div>
-  </div>
-  <div class="news__container" id="news_section">
-    <ng-container *ngIf="newsList && !newsErrorText">
-      <div *ngFor="let newsItem of newsList.results">
-        <app-news [newsItem]="newsItem"></app-news>
+  <div class="matches__news__container">
+    <div class="matches__container" id="matches_section">
+      <div class="select-rounds__container">
+        <mat-form-field appearance="fill">
+          <mat-label>{{'selectStage' | translate}}</mat-label>
+          <mat-select [(value)]="selectedStageId">
+            <mat-option *ngFor="let stage of stages" [value]="stage.id">
+              {{stage.stage | titlecase}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
-    </ng-container>
+      <div *ngFor="let match of selectedStageMatches">
+        <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="false"
+                   (updatedMatchEmitter)="updateMatchResult($event)">
+        </app-match>
+      </div>
+    </div>
+    <div class="news__container" id="news_section">
+    <ng-container *ngIf="newsList">
+        <div *ngFor="let newsItem of newsList.results">
+          <app-news [newsItem]="newsItem"></app-news>
+        </div>
+      </ng-container>
+    </div>
   </div>
 </div>

@@ -13,13 +13,6 @@
           (click)="editClicked()">
     <span class="material-icons">edit</span>
   </button>
-  <button mat-stroked-button color="primary"
-          class="match-details__buttons"
-          *ngIf="isAdmin"
-          (click)="deleteResult()">
-    <span class="material-icons">delete</span>
-  </button>
-
   <div class="match__container">
     <div>
       <div *ngIf="!matchDetails.stage.includes('Group stage')">
@@ -56,8 +49,8 @@
   </div>
 </div>
 <!-- Small -->
-<div class="match__container__small" *ngIf="small">
-  <div class="cell match__container__small__header">
+<div class="match__container__small" *ngIf="small" >
+  <div class="cell match__container__small__header" *ngIf="putDataInMatchDetails()">
     <div *ngIf="!matchDetails.stage.includes('Group stage')">
       {{match.id}} / {{matchDetails.stage}}
     </div>

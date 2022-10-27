@@ -1,5 +1,6 @@
 <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-<div *ngIf="!isLoading">
+<div *ngIf="!isLoading && !groupsDetails" class="error__message">Daten können nicht geladen werden</div>
+<div *ngIf="!isLoading && groupsDetails">
   <div class="old__predictions" *ngIf="!showNewPrediction">
     <div class="predictions__title">Ihre Vorhersagen</div>
     <div class="old__predictions__date">{{oldPredictions[0].date | date:'medium'}}</div>

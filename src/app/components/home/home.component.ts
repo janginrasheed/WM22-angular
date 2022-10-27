@@ -44,8 +44,7 @@ export class HomeComponent implements OnInit {
   newsList: News;
   teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
   groupsDetails: GroupDetails[];
-  newsErrorText: string;
-  errorText: string;
+  // errorText: string;
   isLoading = true;
   groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   private _selectedStageId: number;
@@ -131,8 +130,6 @@ export class HomeComponent implements OnInit {
         this.groupsDetails = result[2];
         this.newsList = result[3];
         this.isLoading = false;
-        this.newsErrorText = "";
-        this.errorText = "";
         this.trimNewsDescription();
         this.initTeamsGroupsData();
         this.fillTeamsData();
@@ -142,12 +139,6 @@ export class HomeComponent implements OnInit {
         console.log(this.groupsDetails);
       }, error => {
         this.isLoading = false;
-        if (this.newsList == null) {
-          this.newsErrorText = "Nachrichten können nicht geladen werden";
-        }
-        if (this.matches == null) {
-          this.errorText = "Daten können nicht geladen werden";
-        }
       }
     );
 
