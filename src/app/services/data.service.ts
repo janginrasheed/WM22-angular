@@ -7,6 +7,7 @@ import {Stage} from "../types/stage";
 import {News} from "../types/news";
 import {GroupDetails} from "../types/group-details";
 import {Prediction} from "../types/prediction";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class DataService {
 
   // dataApiUrl = 'https://wm22.herokuapp.com/';
   // dataApiUrl = 'https://wm22.azurewebsites.net/';
-  dataApiUrl = 'http://localhost:8081/';
-
+  // dataApiUrl = 'http://localhost:8081/';
+  dataApiUrl = environment.apiUrl;
   newsApiUrl = 'https://newsdata.io/api/1/news?apikey=pub_107858411e9fea4c6d3e422f5cfd83713a8a7&q=fifa%20world%20cup&language=en';
   newsTest = 'assets/newsApiTest.json';
 
