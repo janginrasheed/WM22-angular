@@ -65,7 +65,7 @@
 }
 
 @media screen and (max-width: 530px) {
-  .k-o__matches__container {
+  .k-o-stage__section {
     display: none;
   }
 }
@@ -120,27 +120,48 @@
   color: white;
 }
 
-.section__divider {
-  margin: 1rem auto;
-  width: 80%;
-  position: relative;
+.cover__navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
 }
 
-.section__divider .shadow {
-  overflow: hidden;
-  height: 20px;
+.cover__navigation__top, .cover__navigation__bottom {
+  margin-top: 25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.section__divider .shadow:after {
-  content: '';
-  display: block;
-  margin: -25px auto 0;
-  width: 100%;
-  height: 25px;
-  border-radius: 125px/12px;
-  box-shadow: 0 0 6px crimson;
+@media screen and (max-width: 750px) {
+  .cover__navigation {
+    flex-direction: column;
+  }
+
+  .cover__navigation__bottom {
+    margin: 0;
+  }
+
+  .cover__navigation__bottom div {
+    width: 10rem; //todo
+  }
+
 }
 
-.groups__section, .home__cover {
-  //display: none;
+.cover__navigation__top div, .cover__navigation__bottom div {
+  background: black;
+  color: white;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.cover__navigation__top div:hover {
+  background: #02095e; //TODO in Variable
+}
+
+.cover__navigation__bottom div:hover {
+  background: #02095e;
 }

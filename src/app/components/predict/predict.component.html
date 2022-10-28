@@ -2,11 +2,10 @@
 <div *ngIf="!isLoading && !groupsDetails" class="error__message">Daten können nicht geladen werden</div>
 <div *ngIf="!isLoading && groupsDetails">
   <div class="old__predictions" *ngIf="!showNewPrediction">
-    <div class="predictions__title">Ihre Vorhersagen</div>
+    <div class="old__predictions__title">Ihre Vorhersagen</div>
     <div class="old__predictions__date">{{oldPredictions[0].predict_date | date:'dd.MM.yyyy HH:mm:ss':'UTC+4'}}</div>
-    <div class="old__predictions__buttons">
+    <div class="old__predictions__button">
       <button mat-raised-button color="primary" (click)="setNewPrediction()">Neue Vorhersage setzen
-        <!--        <span class="button__hint">(Die alte wird gelöscht)</span>-->
       </button>
     </div>
 
@@ -19,15 +18,24 @@
       </div>
     </div>
     <div class="predict__matches__container">
+      <div class="section__divider">
+        <div class="shadow"></div>
+      </div>
       <div class="k-o-stage">
         <div *ngFor="let match of oldRoundOf16Predictions">
           <app-match-predict [match]="match" [disableClick]="true"></app-match-predict>
         </div>
       </div>
+      <div class="section__divider">
+        <div class="shadow"></div>
+      </div>
       <div class="k-o-stage">
         <div *ngFor="let match of oldQuarterFinalsPredictions">
           <app-match-predict [match]="match" [disableClick]="true"></app-match-predict>
         </div>
+      </div>
+      <div class="section__divider">
+        <div class="shadow"></div>
       </div>
       <div class="k-o-stage">
         <div *ngFor="let match of oldSemiFinalsPredictions">
@@ -35,9 +43,15 @@
                              [disableClick]="true"></app-match-predict>
         </div>
       </div>
+      <div class="section__divider">
+        <div class="shadow"></div>
+      </div>
       <div class="k-o-stage">
         <app-match-predict [match]="oldThirdPlacePrediction"
                            [disableClick]="true"></app-match-predict>
+      </div>
+      <div class="section__divider">
+        <div class="shadow"></div>
       </div>
       <div class="k-o-stage">
         <app-match-predict [match]="oldFinalPrediction"
@@ -46,7 +60,7 @@
     </div>
   </div>
   <div class="new__prediction" *ngIf="showNewPrediction">
-    <div class="predictions__title">Set new Prediction</div>
+    <div class="old__predictions__title">Set new Prediction</div>
     <div class="predict__groups__container">
       <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
         <app-group-table-predict [teamsGroupData]="teamsGroupData"
@@ -57,28 +71,48 @@
       </div>
     </div>
     <div class="predict__matches__container">
+      <div class="section__divider">
+        <div class="shadow"></div>
+      </div>
+      <!--      <div class="k-o-stage__title">Round of 16</div>-->
       <div class="k-o-stage">
         <div *ngFor="let match of roundOf16Matches">
           <app-match-predict [match]="match"
                              (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
         </div>
       </div>
+      <div class="section__divider">
+        <div class="shadow"></div>
+      </div>
       <div class="k-o-stage">
+        <!--        <div class="k-o-stage__title">Quarter finals</div>-->
         <div *ngFor="let match of quarterFinalsMatches">
           <app-match-predict [match]="match"
                              (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
         </div>
       </div>
+      <div class="section__divider">
+        <div class="shadow"></div>
+      </div>
+      <!--      <div class="k-o-stage__title">Semi finals</div>-->
       <div class="k-o-stage">
         <div *ngFor="let match of semiFinalsMatches">
           <app-match-predict [match]="match"
                              (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
         </div>
       </div>
+      <div class="section__divider">
+        <div class="shadow"></div>
+      </div>
+      <!--      <div class="k-o-stage__title">Third place</div>-->
       <div class="k-o-stage">
         <app-match-predict [match]="thirdPlaceMatch"
                            (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
       </div>
+      <div class="section__divider">
+        <div class="shadow"></div>
+      </div>
+      <!--      <div class="k-o-stage__title">Finals</div>-->
       <div class="k-o-stage">
         <app-match-predict [match]="finalMatch"
                            (selectedWinnerEmitter)="receiveSelectedWinner($event)"></app-match-predict>
@@ -88,7 +122,6 @@
       <button mat-raised-button color="primary" (click)="savePrediction()" [disabled]="saveDisabled">Vorhersagen
         setzen
       </button>
-      <!--      TODO -->
       <button mat-raised-button>Vorhersagen zurücksetzen</button>
       <button mat-raised-button (click)="showNewPrediction = false" *ngIf="alreadyPredicted">Abbrechen</button>
     </div>

@@ -1,35 +1,7 @@
-.predict__groups__container, .old__predicted__group__container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
-  max-width: 61rem;
-  margin: auto;
-}
-
-.predictions__title {
+.old__predictions__title {
   text-align: center;
   font-size: 1.5rem;
   margin: 1rem;
-}
-
-.k-o-stage {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.submit__prediction {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-
-.submit__prediction button {
-  width: fit-content;
-  margin: 2rem 0;
 }
 
 .old__predictions__date {
@@ -42,13 +14,73 @@
   color: white;
 }
 
-.old__predictions__buttons {
+.old__predictions__button {
   display: flex;
   justify-content: center;
   gap: 1rem;
   margin: 1rem 0;
 }
 
-.button__hint {
-  font-size: 0.7rem;
+.predict__groups__container, .old__predicted__group__container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  max-width: 61rem;
+  margin: auto;
+}
+
+.predict__matches__container {
+  //display: flex;
+  //flex-wrap: wrap;
+}
+
+.k-o-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.k-o-stage__title {
+  width: 100%;
+  text-align: center;
+}
+
+.submit__prediction {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.submit__prediction > button {
+  margin: 2rem 0;
+}
+
+.section__divider {
+  display: none;
+}
+
+@media screen and (max-width: 1680px) {
+  .section__divider {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .submit__prediction > button {
+    width: 90%;
+    margin: 0;
+  }
+
+  .submit__prediction > button:first-child {
+    margin: 2rem 0 0 0;
+  }
+
+  .submit__prediction > button:last-child {
+    margin: 0 0 2rem 0;
+  }
+
 }
