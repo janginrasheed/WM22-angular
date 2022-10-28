@@ -574,6 +574,7 @@ export class PredictComponent implements OnInit {
       this.dataService.deletePredictions(this.userEmail).subscribe();
     }
 
+    this.predictions.forEach(prediction => prediction.predict_date = new Date());
     this.dataService.submitPredictions(this.predictions).subscribe(predicted => window.location.reload());
   }
 

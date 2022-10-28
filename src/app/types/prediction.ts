@@ -5,5 +5,5 @@ export interface Prediction {
   secondTeamId: number;
   groupName: string;
   matchNumber: number;
-  date?: Date
+  predict_date?: Date
 }

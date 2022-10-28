@@ -3,7 +3,7 @@
 <div *ngIf="!isLoading && groupsDetails">
   <div class="old__predictions" *ngIf="!showNewPrediction">
     <div class="predictions__title">Ihre Vorhersagen</div>
-    <div class="old__predictions__date">{{oldPredictions[0].date | date:'medium'}}</div>
+    <div class="old__predictions__date">{{oldPredictions[0].predict_date | date:'dd.MM.yyyy HH:mm:ss':'UTC+4'}}</div>
     <div class="old__predictions__buttons">
       <button mat-raised-button color="primary" (click)="setNewPrediction()">Neue Vorhersage setzen
         <!--        <span class="button__hint">(Die alte wird gelöscht)</span>-->
@@ -90,7 +90,7 @@
       </button>
       <!--      TODO -->
       <button mat-raised-button>Vorhersagen zurücksetzen</button>
-      <button mat-raised-button (click)="showNewPrediction = false">Abbrechen</button>
+      <button mat-raised-button (click)="showNewPrediction = false" *ngIf="alreadyPredicted">Abbrechen</button>
     </div>
   </div>
 </div>
