@@ -102,19 +102,13 @@
 <!-- Small -->
 <div class="match__mini" *ngIf="small">
   <div class="match__mobile__header">
-    <div *ngIf="!matchDetails.stage.includes('Group stage')">
-      {{matchDetails.stage}}
-    </div>
-    <div *ngIf="matchDetails.stage.includes('Group stage')">
-      {{"group" | translate}}: {{matchDetails.group}}
-    </div>
     <div class="match-date">{{matchDetails.date | date: "dd.MM.yyyy"}}</div>
   </div>
   <div class="match__mobile__main">
     <div class="match__mobile__team">
       <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small"
            *ngIf="matchDetails.fistTeam.name.length > 0">
-      <div class="">{{matchDetails.fistTeam.name}}</div>
+      <div class="match__mobile__name">{{matchDetails.fistTeam.name}}</div>
     </div>
     <div class="cell">
       {{matchDetails.fistTeam.goals}}
@@ -126,7 +120,7 @@
     <div class="match__mobile__team">
       <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small"
            *ngIf="matchDetails.fistTeam.name.length > 0">
-      <div class="">{{matchDetails.secondTeam.name}}</div>
+      <div class="match__mobile__name">{{matchDetails.secondTeam.name}}</div>
     </div>
   </div>
 </div>

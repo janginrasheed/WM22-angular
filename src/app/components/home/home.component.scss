@@ -64,7 +64,7 @@
   flex-direction: column;
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 530px) {
   .k-o__matches__container {
     display: none;
   }
@@ -141,3 +141,6 @@
   box-shadow: 0 0 6px crimson;
 }
 
+.groups__section, .home__cover {
+  //display: none;
+}
