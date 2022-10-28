@@ -2,62 +2,98 @@
   <mat-icon class="bot__dialog__icon">chat</mat-icon>
 </button>
 <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<div class="home__cover" *ngIf="matches">
+  <img src="assets/header.jpg" alt="" class="home__cover__img">
+  <div>button</div>
+</div>
 <div *ngIf="!isLoading && !matches" class="error__message">Daten können nicht geladen werden</div>
 <div class="home__container" *ngIf="!isLoading && matches">
-  <div class="groups__container" id="groups_section">
-    <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
-      <app-group-table [teamsGroupData]="teamsGroupData" [group]="groups[i]"></app-group-table>
+  <div class="groups__section">
+    <div class="section__title">Gruppen</div>
+    <div class="groups__container" id="groups_section">
+      <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
+        <app-group-table [teamsGroupData]="teamsGroupData" [group]="groups[i]"></app-group-table>
+      </div>
     </div>
   </div>
-  <div class="predict__matches__container" id="k-o-stages_section">
+  <div class="section__divider">
+    <div class="shadow"></div>
+  </div>
+  <div class="section__title">K.o.-Phasen</div>
+  <div class="k-o__matches__container" id="k-o-stages_section">
     <div class="k-o-stage">
+      Round of 16
       <div class="k-o-stage__match" *ngFor="let match of roundOf16Matches">
         <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true"></app-match>
       </div>
     </div>
     <div class="k-o-stage">
+      Quarter finals
       <div *ngFor="let match of quarterFinalsMatches">
         <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true"></app-match>
       </div>
     </div>
     <div class="k-o-stage">
+      Semi finals
       <div *ngFor="let match of semiFinalsMatches">
         <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true"></app-match>
       </div>
     </div>
     <div class="k-o-stage">
+      Third place
       <div>
         <app-match [match]="thirdPlaceMatch" [stages]="stages" [groupsDetails]="groupsDetails"
                    [small]="true"></app-match>
       </div>
     </div>
     <div class="k-o-stage">
+      Final
       <div>
         <app-match [match]="finalMatch" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true">
         </app-match>
       </div>
     </div>
   </div>
+  <div class="section__divider">
+    <div class="shadow"></div>
+  </div>
   <div class="matches__news__container">
-    <div class="matches__container" id="matches_section">
-      <div class="select-rounds__container">
-        <mat-form-field appearance="fill">
-          <mat-label>{{'selectStage' | translate}}</mat-label>
-          <mat-select [(value)]="selectedStageId">
-            <mat-option *ngFor="let stage of stages" [value]="stage.id">
-              {{stage.stage | titlecase}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+    <div class="matches__section" id="matches_section">
+      <div class="section__title">Spiele</div>
+      <div class="matches__filter">
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>{{'selectStage' | translate}}</mat-label>
+            <mat-select [(value)]="selectedStageId">
+              <mat-option *ngFor="let stage of stages" [value]="stage.id">
+                {{stage.stage | titlecase}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div *ngIf="selectedStageId == 1">
+          <mat-form-field appearance="fill">
+            <mat-label>{{'Select group' | translate}}</mat-label>
+            <mat-select [(value)]="selectedGroup">
+              <mat-option [value]="'all'">Alle</mat-option>
+              <mat-option *ngFor="let group of groups" [value]="group">
+                {{group}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
-      <div *ngFor="let match of selectedStageMatches">
-        <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="false"
-                   (updatedMatchEmitter)="updateMatchResult($event)">
-        </app-match>
+      <div class="matches__container">
+        <div *ngFor="let match of selectedStageMatches">
+          <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="false"
+                     (updatedMatchEmitter)="updateMatchResult($event)">
+          </app-match>
+        </div>
       </div>
     </div>
     <div class="news__container" id="news_section">
-    <ng-container *ngIf="newsList">
+      <div class="section__title">Nachrichten</div>
+      <ng-container *ngIf="newsList">
         <div *ngFor="let newsItem of newsList.results">
           <app-news [newsItem]="newsItem"></app-news>
         </div>

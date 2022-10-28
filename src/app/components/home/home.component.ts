@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit {
   matches: Match[];
   selectedStageMatches: Match[] = [];
   groupsMatches: Match[] = [];
+  selectedGroupMatches: Match[] = [];
   roundOf16Matches: Match[] = [];
   quarterFinalsMatches: Match[] = [];
   semiFinalsMatches: Match[] = [];
@@ -48,6 +49,7 @@ export class HomeComponent implements OnInit {
   isLoading = true;
   groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   private _selectedStageId: number;
+  private _selectedGroup: string = "all";
   dummyTeamData: TeamTable;
   // Da werden die Daten von den Vereinen gespeichert, die die gleichen Punkte, Tore, Tordifferenz haben
   breakEqualPoints: any = {
@@ -67,6 +69,7 @@ export class HomeComponent implements OnInit {
 
   set selectedStageId(value: number) {
     this.selectedStageMatches = [];
+    this.selectedGroup = "";
 
     // selectedStageMatches zuweisen anhand von der selektierten Phase
     switch (value) {
@@ -99,6 +102,31 @@ export class HomeComponent implements OnInit {
     // Spiele nach Datum sortieren
     this.selectedStageMatches.sort((a, b) => this.sortByDate(a.date) - this.sortByDate(b.date));
     this._selectedStageId = value;
+  }
+
+
+  get selectedGroup(): string {
+    return this._selectedGroup;
+  }
+
+  set selectedGroup(value: string) {
+    this.selectedGroupMatches = [];
+    this._selectedGroup = value;
+    if (value == "all") {
+      this.selectedStageMatches = this.groupsMatches;
+      return;
+    }
+    this.groupsDetails.forEach(group => {
+      group.groupTeams.forEach(team => {
+        if (team.groupName != value) return;
+        this.groupsMatches.forEach(match => {
+          if (match.firstTeamId == team.id || match.secondTeamId == team.id) {
+            this.selectedGroupMatches.push(match);
+          }
+        })
+      })
+    });
+    this.selectedStageMatches = this.selectedGroupMatches;
   }
 
   constructor(private dataService: DataService,

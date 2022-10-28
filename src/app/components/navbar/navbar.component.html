@@ -4,21 +4,24 @@
     <span class="navbar__left__title text--white"></span>
   </div>
   <div class="navbar__right">
-    <button mat-button class="navbar__button" (click)="navigateTo('home')">
+    <button mat-button class="navbar__button" [ngClass]="{'active_button' : currentPath('home')}"
+            (click)="navigateTo('home')">
       <span class="material-icons">home</span>
-      <span>Startseite</span>
+      <span class="navbar__button__title">Startseite</span>
     </button>
-    <button mat-button class="navbar__button" (click)="navigateTo('predict')">
+    <button mat-button class="navbar__button" [ngClass]="{'active_button' : currentPath('predict')}"
+            (click)="navigateTo('predict')">
       <span class="material-icons">checklist</span>
-      <span>Vorhersagen</span>
+      <span class="navbar__button__title">Vorhersagen</span>
     </button>
-    <button mat-button class="navbar__button" (click)="navigateTo('login')" *ngIf="!checkIsLoggedIn()">
+    <button mat-button class="navbar__button" [ngClass]="{'active_button' : currentPath('login')}"
+            (click)="navigateTo('login')" *ngIf="!checkIsLoggedIn()">
       <span class="material-icons">login</span>
-      <span>Login</span>
+      <span class="navbar__button__title">Login</span>
     </button>
     <button mat-button [matMenuTriggerFor]="menu" class="navbar__button" *ngIf="checkIsLoggedIn()">
       <span class="material-icons">account_circle</span>
-      {{user.firstName}} {{user.lastName}}
+      <span class="navbar__button__title username">{{user.firstName}} {{user.lastName}}</span>
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="logout()">Abmelden</button>

@@ -25,6 +25,43 @@
   padding: .5rem 1rem;
 }
 
+.navbar__button:hover {
+  background: #810843;
+}
+
+.active_button {
+  background: #810843;
+}
+
 .material-icons {
   margin-right: .3rem;
+}
+
+.navbar__button__title {
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/**
+Responsive Navbar
+Seitentiteln werden nicht angezeigt
+  *Username erst bei 560px
+*/
+@media screen and (max-width: 700px) {
+  .navbar__button__title {
+    display: none;
+  }
+
+  .username {
+    display: inline-block;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .username {
+    display: none;
+  }
 }

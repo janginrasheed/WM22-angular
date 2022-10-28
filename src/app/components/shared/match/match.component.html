@@ -1,69 +1,121 @@
 <div *ngIf="!small">
-  <button mat-stroked-button color="primary"
-          class="match-details__buttons"
-          *ngIf="isAdmin"
-          [disabled]="isDisabled"
-          (click)="saveClicked()">
-    <span class="material-icons">save</span>
-  </button>
-  <button mat-stroked-button color="primary"
-          class="match-details__buttons"
-          *ngIf="isAdmin"
-          [disabled]="!isDisabled"
-          (click)="editClicked()">
-    <span class="material-icons">edit</span>
-  </button>
-  <div class="match__container">
-    <div>
+  <div class="match__large">
+    <button mat-stroked-button color="primary"
+            class="match-details__buttons"
+            *ngIf="isAdmin"
+            [disabled]="isDisabled"
+            (click)="saveClicked()">
+      <span class="material-icons">save</span>
+    </button>
+    <button mat-stroked-button color="primary"
+            class="match-details__buttons"
+            *ngIf="isAdmin"
+            [disabled]="!isDisabled"
+            (click)="editClicked()">
+      <span class="material-icons">edit</span>
+    </button>
+    <div class="match__container">
+      <div>
+        <div *ngIf="!matchDetails.stage.includes('Group stage')">
+          {{matchDetails.stage}}
+        </div>
+        <div>
+          <!--        <span *ngIf="match.id > 48">Match no. {{match.id}}</span>-->
+          <span *ngIf="matchDetails.stage == 'Group stage'">{{'group' | translate}}: {{matchDetails.group}}</span>
+        </div>
+      </div>
+      <div class="team__name">{{matchDetails.fistTeam.name}}</div>
+      <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small"
+           *ngIf="matchDetails.fistTeam.name.length > 0">
+      <form>
+        <mat-form-field class="match-score__input">
+          <input matInput [(ngModel)]="matchDetails.fistTeam.goals"
+                 [ngModelOptions]="{standalone: true}"
+                 [disabled]="isDisabled"
+                 class="match-score__input__text">
+        </mat-form-field>
+      </form>
+      :
+      <form>
+        <mat-form-field class="match-score__input">
+          <input matInput [(ngModel)]="matchDetails.secondTeam.goals"
+                 [ngModelOptions]="{standalone: true}"
+                 [disabled]="isDisabled"
+                 class="match-score__input__text">
+        </mat-form-field>
+      </form>
+      <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small"
+           *ngIf="matchDetails.fistTeam.name.length > 0">
+      <div class="team__name">{{matchDetails.secondTeam.name}}</div>
+      <div class="match__container__small__date">
+        {{matchDetails.date | date: "dd.MM.yyyy"}}
+      </div>
+    </div>
+  </div>
+  <div class="match__mobile__buttons">
+    <button mat-stroked-button color="primary"
+            class="match-details__buttons"
+            *ngIf="isAdmin"
+            [disabled]="isDisabled"
+            (click)="saveClicked()">
+      <span class="material-icons">save</span>
+    </button>
+    <button mat-stroked-button color="primary"
+            class="match-details__buttons"
+            *ngIf="isAdmin"
+            [disabled]="!isDisabled"
+            (click)="editClicked()">
+      <span class="material-icons">edit</span>
+    </button>
+  </div>
+  <div class="match__mobile">
+    <div class="match__mobile__header">
       <div *ngIf="!matchDetails.stage.includes('Group stage')">
         {{matchDetails.stage}}
       </div>
       <div *ngIf="matchDetails.stage.includes('Group stage')">
-        {{match.id}} {{'group' | translate}}: {{matchDetails.group}}
+        {{"group" | translate}}: {{matchDetails.group}}
       </div>
+      <div class="match-date">{{matchDetails.date | date: "dd.MM.yyyy"}}</div>
     </div>
-    <div class="team__name">{{matchDetails.fistTeam.name}}</div>
-    <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small" *ngIf="matchDetails.fistTeam.name.length > 0">
-    <form>
-      <mat-form-field class="match-score__input">
-        <input matInput [(ngModel)]="matchDetails.fistTeam.goals"
-               [ngModelOptions]="{standalone: true}"
-               [disabled]="isDisabled"
-               class="match-score__input__text">
-      </mat-form-field>
-    </form>
-    :
-    <form>
-      <mat-form-field class="match-score__input">
-        <input matInput [(ngModel)]="matchDetails.secondTeam.goals"
-               [ngModelOptions]="{standalone: true}"
-               [disabled]="isDisabled"
-               class="match-score__input__text">
-      </mat-form-field>
-    </form>
-    <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small" *ngIf="matchDetails.fistTeam.name.length > 0">
-    <div class="team__name">{{matchDetails.secondTeam.name}}</div>
-    <div class="match__container__small__date">
-      {{matchDetails.date | date: "dd.MM.yyyy"}}
+    <div class="match__mobile__main">
+      <div class="match__mobile__team">
+        <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small"
+             *ngIf="matchDetails.fistTeam.name.length > 0">
+        <div class="">{{matchDetails.fistTeam.name}}</div>
+      </div>
+      <div class="cell">
+        {{matchDetails.fistTeam.goals}}
+      </div>
+      <div class="cell">:</div>
+      <div class="cell">
+        {{matchDetails.secondTeam.goals}}
+      </div>
+      <div class="match__mobile__team">
+        <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small"
+             *ngIf="matchDetails.fistTeam.name.length > 0">
+        <div class="">{{matchDetails.secondTeam.name}}</div>
+      </div>
     </div>
   </div>
 </div>
 <!-- Small -->
-<div class="match__container__small" *ngIf="small" >
-  <div class="cell match__container__small__header" *ngIf="putDataInMatchDetails()">
+<div class="match__mini" *ngIf="small">
+  <div class="match__mobile__header">
     <div *ngIf="!matchDetails.stage.includes('Group stage')">
-      {{match.id}} / {{matchDetails.stage}}
+      {{matchDetails.stage}}
     </div>
     <div *ngIf="matchDetails.stage.includes('Group stage')">
       {{"group" | translate}}: {{matchDetails.group}}
     </div>
     <div class="match-date">{{matchDetails.date | date: "dd.MM.yyyy"}}</div>
   </div>
-  <div class="match__container__small__main">
-    <!--    <div class="match__container__small_flag__name">-->
-    <!--      <div class="team__name">{{matchDetails.fistTeam.name}}</div>-->
-    <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small" *ngIf="matchDetails.fistTeam.name.length > 0">
-    <!--    </div>-->
+  <div class="match__mobile__main">
+    <div class="match__mobile__team">
+      <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small"
+           *ngIf="matchDetails.fistTeam.name.length > 0">
+      <div class="">{{matchDetails.fistTeam.name}}</div>
+    </div>
     <div class="cell">
       {{matchDetails.fistTeam.goals}}
     </div>
@@ -71,9 +123,10 @@
     <div class="cell">
       {{matchDetails.secondTeam.goals}}
     </div>
-    <!--    <div class="match__container__small_flag__name">-->
-    <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small" *ngIf="matchDetails.fistTeam.name.length > 0">
-    <!--      <div class="team__name">{{matchDetails.secondTeam.name}}</div>-->
-    <!--    </div>-->
+    <div class="match__mobile__team">
+      <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small"
+           *ngIf="matchDetails.fistTeam.name.length > 0">
+      <div class="">{{matchDetails.secondTeam.name}}</div>
+    </div>
   </div>
 </div>

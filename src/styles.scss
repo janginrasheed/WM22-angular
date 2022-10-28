@@ -2,9 +2,9 @@
 
 :root {
   --color-1: #56042C;
-  --color-2: #1077C3;
-  --color-3: #49BCE3;
-  --color-4: #FEC310;
+  --color-2: teal;
+  --color-3: antiquewhite;
+  --color-4: slategrey;
   --border-color: hsla(0, 39%, 26%, 0.16);
   --font--weight--light: 'Comfortaa', cursive;
   --font--weight--bold: 'Teko', sans-serif;
@@ -34,7 +34,8 @@ body {
 }
 
 .error__message {
-  background: #ff8d8d;
+  background: var(--color-2);
   padding: 1rem;
   text-align: center;
+  color: white;
 }

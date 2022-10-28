@@ -12,6 +12,7 @@ import {TranslateService} from "@ngx-translate/core";
 export class NavbarComponent implements OnInit {
   isLoggedIn: boolean;
   user: User = {email: "", firstName: "", lastName: "", password: ""};
+  currentPage = "";
 
   constructor(private router: Router,
               private authService: AuthService,
@@ -21,7 +22,10 @@ export class NavbarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
 
+  currentPath(page: string): boolean {
+    return window.location.pathname.includes(page);
   }
 
   public navigateTo(url: string): void {
@@ -41,7 +45,6 @@ export class NavbarComponent implements OnInit {
       // @ts-ignore
       this.user.lastName = localStorage.getItem('lastName');
       return true;
-
     } else {
       return false;
     }
