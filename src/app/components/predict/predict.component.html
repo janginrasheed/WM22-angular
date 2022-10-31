@@ -122,7 +122,7 @@
       <button mat-raised-button color="primary" (click)="savePrediction()" [disabled]="saveDisabled">Vorhersagen
         setzen
       </button>
-      <button mat-raised-button>Vorhersagen zurücksetzen</button>
+      <button mat-raised-button (click)="clearSelection()">Vorhersagen zurücksetzen</button>
       <button mat-raised-button (click)="showNewPrediction = false" *ngIf="alreadyPredicted">Abbrechen</button>
     </div>
   </div>

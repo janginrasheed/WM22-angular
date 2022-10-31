@@ -130,8 +130,10 @@
 }
 
 .cover__navigation__top, .cover__navigation__bottom {
-  margin-top: 25rem;
+  margin-top: 22rem;
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -139,14 +141,15 @@
 @media screen and (max-width: 750px) {
   .cover__navigation {
     flex-direction: column;
+    text-align: center;
   }
 
   .cover__navigation__bottom {
     margin: 0;
   }
 
-  .cover__navigation__bottom div {
-    width: 10rem; //todo
+  .cover__navigation__bottom div, .cover__navigation__top div {
+    width: 15rem; //todo
   }
 
 }

@@ -581,4 +581,9 @@ export class PredictComponent implements OnInit {
   setNewPrediction() {
     this.showNewPrediction = true;
   }
+
+  clearSelection() {
+    window.location.reload();
+  }
+
 }

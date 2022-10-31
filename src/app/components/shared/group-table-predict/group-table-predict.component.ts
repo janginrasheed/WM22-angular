@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {TeamTable} from "../../../types/team-table";
-import {Match} from "../../../types/match";
 
 @Component({
   selector: 'app-group-table-predict',
@@ -71,13 +70,4 @@ export class GroupTablePredictComponent implements OnInit {
     }
   }
 
-  /*
-    clearSelection() {
-      this.selectedTeams.clear();
-      this.teamRanks.forEach((teamRank: { rank: number; name: string; }) => {
-        teamRank.rank = 0;
-        teamRank.name = "";
-      });
-    }
-  */
 }
