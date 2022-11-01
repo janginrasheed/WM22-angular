@@ -3,6 +3,7 @@ import {Match} from "../../../types/match";
 import {GroupDetails} from "../../../types/group-details";
 import {Stage} from "../../../types/stage";
 import {MatchDetails} from "../../../types/match-details";
+import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
   selector: 'app-match',
@@ -80,7 +81,6 @@ export class MatchComponent implements OnInit {
           this.matchDetails.fistTeam.name = value1.name;
           this.matchDetails.fistTeam.id = value1.id;
           this.matchDetails.fistTeam.flag = value1.flag;
-
         } else if (value1.id == this.match.secondTeamId) {
           this.matchDetails.secondTeam.name = value1.name;
           this.matchDetails.secondTeam.id = value1.id;

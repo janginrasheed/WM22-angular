@@ -133,6 +133,19 @@ export class DataService {
     );
   }
 
+  public clearKOStagesTeams(dummy: number): Observable<Match> {
+    return this.http.put<Match>(this.dataApiUrl + `matches/clearKOStagesTeams/${dummy}`, dummy).pipe(
+      first(),
+      retry(1),
+      catchError(error => {
+        // this.handleError(error);
+        console.error("Fehler beim Speichern des Spielergebnisses");
+        return throwError(error);
+      })
+    );
+  }
+
+
   public predictionsByEmail(email: string): Observable<Prediction[]> {
     return this.http.get<Prediction[]>(this.dataApiUrl + "predictions/" + email).pipe(
       first(),

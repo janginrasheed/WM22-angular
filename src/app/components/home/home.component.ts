@@ -139,8 +139,17 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.router.url == "/") {
+      this.router.navigate(["home"]);
+    }
+
+    this.clearStageMatchesInDB();
+    this.dataService.clearKOStagesTeams(0).subscribe(dummy => {
+      this.getData();
+    });
+
     // Daten von Service holen
-    this.getData();
+    // this.getData();
 
     // Die Variable zum Speichern von Gruppen-Daten initialisieren
     this.initTeamsGroupsData();
@@ -160,9 +169,15 @@ export class HomeComponent implements OnInit {
         this.isLoading = false;
         this.trimNewsDescription();
         this.initTeamsGroupsData();
+        this.clearStagesMatches();
         this.fillTeamsData();
         this.sortTable();
         this.fillStagesMatches();
+        this.fillRoundOf16();
+        this.fillQuarterFinals();
+        this.fillSemiFinals();
+        this.fillThirdPlace();
+        this.fillFinal();
         this.selectedStageId = 1;
         console.log(this.groupsDetails);
       }, error => {
@@ -318,13 +333,6 @@ export class HomeComponent implements OnInit {
 
   updateMatchResult(updatedMatch: Match): void {
     this.dataService.updateMatchResult(updatedMatch).subscribe();
-    this.fillTeamsData();
-    this.sortTable();
-    this.fillRoundOf16();
-    this.fillQuarterFinals();
-    this.fillSemiFinals();
-    this.fillThirdPlace();
-    this.fillFinal();
   }
 
   /**
@@ -585,4 +593,34 @@ export class HomeComponent implements OnInit {
     return new Date(dateToConvert).getTime();
   }
 
+  clearStagesMatches() {
+    this.quarterFinalsMatches = [];
+    this.semiFinalsMatches = [];
+    this.thirdPlaceMatch = {
+      date: new Date(),
+      firstTeamGoals: "",
+      firstTeamId: 0,
+      firstTeamPenaltiesGoals: "",
+      id: 0,
+      secondTeamGoals: "",
+      secondTeamId: 0,
+      secondTeamPenaltiesGoals: "",
+      stageId: 0
+    }
+    this.finalMatch = {
+      date: new Date(),
+      firstTeamGoals: "",
+      firstTeamId: 0,
+      firstTeamPenaltiesGoals: "",
+      id: 0,
+      secondTeamGoals: "",
+      secondTeamId: 0,
+      secondTeamPenaltiesGoals: "",
+      stageId: 0
+    }
+  }
+
+  clearStageMatchesInDB() {
+    this.dataService.clearKOStagesTeams(0).subscribe();
+  }
 }

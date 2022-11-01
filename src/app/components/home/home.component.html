@@ -6,20 +6,28 @@
   <img src="assets/header_logo.png" alt="" class="home__cover__img">
   <div class="cover__navigation">
     <div class="cover__navigation__top">
-      <div>Gruppenstände</div>
-      <div>K.o.-Phasen</div>
+      <a href="#groups">
+        <div>Gruppenstände</div>
+      </a>
+      <a href="#kostage">
+        <div>K.o.-Phasen</div>
+      </a>
     </div>
     <div class="cover__navigation__bottom">
-      <div>Alle Spiele</div>
-      <div>Nachrichten</div>
+      <a href="#matches">
+        <div>Alle Spiele</div>
+      </a>
+      <a href="#news">
+        <div>Nachrichten</div>
+      </a>
     </div>
   </div>
 </div>
 <div *ngIf="!isLoading && !matches" class="error__message">Daten können nicht geladen werden</div>
 <div class="home__container" *ngIf="!isLoading && matches">
-  <div class="groups__section">
+  <div class="groups__section" id="groups">
     <div class="section__title">Gruppen</div>
-    <div class="groups__container" id="groups_section">
+    <div class="groups__container">
       <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
         <app-group-table [teamsGroupData]="teamsGroupData" [group]="groups[i]"></app-group-table>
       </div>
@@ -29,7 +37,7 @@
     <div class="shadow"></div>
   </div>
   <div class="k-o-stage__section">
-    <div class="section__title">K.o.-Phasen</div>
+    <div class="section__title" id="kostage">K.o.-Phasen</div>
     <div class="k-o__matches__container">
       <div class="k-o-stage">
         Round of 16
@@ -69,8 +77,8 @@
     </div>
   </div>
   <div class="matches__news__container">
-    <div class="matches__section" id="matches_section">
-      <div class="section__title">Spiele</div>
+    <div class="matches__section">
+      <div class="section__title" id="matches">Spiele</div>
       <div class="matches__filter">
         <div>
           <mat-form-field appearance="fill">
@@ -103,7 +111,7 @@
       </div>
     </div>
     <div class="news__container" id="news_section">
-      <div class="section__title">Nachrichten</div>
+      <div class="section__title" id="news">Nachrichten</div>
       <ng-container *ngIf="newsList">
         <div *ngFor="let newsItem of newsList.results">
           <app-news [newsItem]="newsItem"></app-news>

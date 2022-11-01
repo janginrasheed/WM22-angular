@@ -168,3 +168,8 @@
 .cover__navigation__bottom div:hover {
   background: #02095e;
 }
+
+a {
+  color: unset;
+  text-decoration: none; /* no underline */
+}
