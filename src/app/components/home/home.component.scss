@@ -127,10 +127,11 @@
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
+  height: 100%;
 }
 
 .cover__navigation__top, .cover__navigation__bottom {
-  margin-top: 22rem;
+  //margin-top: 22rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -152,6 +153,12 @@
     width: 15rem; //todo
   }
 
+}
+
+@media screen and (max-height: 800px) {
+  .cover__navigation__top {
+    margin-top: 7rem;
+  }
 }
 
 .cover__navigation__top div, .cover__navigation__bottom div {
