@@ -120,7 +120,7 @@ export class HomeComponent implements OnInit {
       group.groupTeams.forEach(team => {
         if (team.groupName != value) return;
         this.groupsMatches.forEach(match => {
-          if (match.firstTeamId == team.id || match.secondTeamId == team.id) {
+          if (match.firstTeamId == team.id) {
             this.selectedGroupMatches.push(match);
           }
         })
@@ -147,9 +147,6 @@ export class HomeComponent implements OnInit {
     this.dataService.clearKOStagesTeams(0).subscribe(dummy => {
       this.getData();
     });
-
-    // Daten von Service holen
-    // this.getData();
 
     // Die Variable zum Speichern von Gruppen-Daten initialisieren
     this.initTeamsGroupsData();
@@ -333,6 +330,13 @@ export class HomeComponent implements OnInit {
 
   updateMatchResult(updatedMatch: Match): void {
     this.dataService.updateMatchResult(updatedMatch).subscribe();
+    this.fillTeamsData();
+    this.sortTable();
+    this.fillRoundOf16();
+    this.fillQuarterFinals();
+    this.fillSemiFinals();
+    this.fillThirdPlace();
+    this.fillFinal();
   }
 
   /**
@@ -429,21 +433,18 @@ export class HomeComponent implements OnInit {
 
   fillRoundOf16(): void {
     // Prüfen, ob alle Spiele in der Gruppenphase gespielt wurden.
-    // und ob Achtelfinale-Spiele schon vorher eingetragen sind
-    if ((this.matches[44].firstTeamGoals == null
-        || this.matches[45].firstTeamGoals == null
-        || this.matches[46].firstTeamGoals == null
-        || this.matches[47].firstTeamGoals == null)
-      || (this.matches[55].firstTeamId != 0
-        && this.matches[55].firstTeamId != 0)) {
-      // return;
-    }
-
-    // Prüfen, ob alle Spiele in der Gruppenphase gespielt wurden.
     if (this.matches[44].firstTeamGoals == null
       || this.matches[45].firstTeamGoals == null
       || this.matches[46].firstTeamGoals == null
       || this.matches[47].firstTeamGoals == null) {
+      return;
+    }
+
+    // Prüfen, ob alle Spiele in der Gruppenphase gespielt wurden.
+    if (this.matches[44].firstTeamGoals.length < 1
+      || this.matches[45].firstTeamGoals.length < 1
+      || this.matches[46].firstTeamGoals.length < 1
+      || this.matches[47].firstTeamGoals.length < 1) {
       return;
     }
 
@@ -520,6 +521,11 @@ export class HomeComponent implements OnInit {
       return;
     }
 
+    if (this.matches[56].firstTeamGoals.length < 1
+      && this.matches[57].firstTeamGoals.length < 1) {
+      return;
+    }
+
     let j = 60;
     for (let i = 56; i <= 59; i++) {
       this.matchToUpdate = this.matches[j];
@@ -535,6 +541,11 @@ export class HomeComponent implements OnInit {
     // Prüfe, ob Halbfinale-Spiele gespielt wurden
     if ((this.matches[60].firstTeamGoals == null
       && this.matches[60].secondTeamGoals == null)) {
+      return;
+    }
+
+    if ((this.matches[60].firstTeamGoals.length < 1
+      && this.matches[60].secondTeamGoals.length < 1)) {
       return;
     }
 

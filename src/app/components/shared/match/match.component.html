@@ -100,7 +100,7 @@
   </div>
 </div>
 <!-- Small -->
-<div class="match__mini" *ngIf="small">
+<div class="match__mini" *ngIf="small && putDataInMatchDetails()">
   <div class="match__mobile__header">
     <div class="match-date">{{matchDetails.date | date: "dd.MM.yyyy"}}</div>
   </div>

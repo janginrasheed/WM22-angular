@@ -7,6 +7,7 @@ import {AuthGuard} from "./guards/auth.guard";
 import {PredictComponent} from "./components/predict/predict.component";
 import {AdminComponent} from "./components/admin/admin.component";
 import {AdminGuard} from "./guards/admin.guard";
+import {AboutComponent} from "./components/about/about.component";
 
 const routes: Routes = [
   {
@@ -23,13 +24,8 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'test',
-    component: TestsComponent
-  },
-  {
-    path: 'admin',
-    component: AdminComponent,
-    canActivate: [AdminGuard]
+    path: 'about',
+    component: AboutComponent
   },
   {
     path: '**',
