@@ -1,3 +1,4 @@
+// ** Wird nicht verwendet **
 export enum Stage {
   GROUP_STAGE = "Groups",
   LAST_16 = "Round of 16",

@@ -9,6 +9,9 @@ import {TranslateService} from "@ngx-translate/core";
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
+/**
+ * Dieses Komponente ist das Navigationsleiste für die Applikation
+ */
 export class NavbarComponent implements OnInit {
   isLoggedIn: boolean;
   user: User = {email: "", firstName: "", lastName: "", password: ""};
@@ -24,20 +27,33 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * Prüft ob die gegebene Parameter gleich ist wie die aktuelle Seite
+   * @param page
+   */
   currentPath(page: string): boolean {
     return window.location.pathname.includes(page);
   }
 
+  /**
+   * Navigiert zu der Seite die im Parameter gegeben
+   * @param url
+   */
   public navigateTo(url: string): void {
     this.router.navigate([url]);
   }
 
+  /**
+   * Meldet der User ab und navigiert zur Startseite
+   */
   logout() {
-    console.log('logout');
     this.authService.logout();
     this.router.navigate(['/home']);
   }
 
+  /**
+   * Prüft ob ein User angemeldet ist, und setzt der Username für die Anzeige in Navbar
+   */
   checkIsLoggedIn(): boolean {
     if (localStorage.getItem('isLoggedIn') == "true") {
       // @ts-ignore
@@ -50,6 +66,10 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  /**
+   * Wechselt die Sprache
+   * @param lang: Die Sprache die gesetzt wird
+   */
   switchLang(lang: string) {
     this.translate.use(lang);
   }

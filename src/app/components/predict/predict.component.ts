@@ -11,6 +11,9 @@ import {Prediction} from "../../types/prediction";
   templateUrl: './predict.component.html',
   styleUrls: ['./predict.component.scss']
 })
+/**
+ * Dieses Komponente hat alle Elemente der Vorhersagen Seite
+ */
 export class PredictComponent implements OnInit {
   groupsDetails: GroupDetails[];
   groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
@@ -46,12 +49,19 @@ export class PredictComponent implements OnInit {
   constructor(private dataService: DataService) {
   }
 
+  /**
+   * die Email aus lokale Speicher holen
+   * Die Vorhersagen von User holen
+   */
   ngOnInit(): void {
     // @ts-ignore
     this.userEmail = localStorage.getItem("token");
     this.getData();
   }
 
+  /**
+   * Holt die Vorhersagen und die WM-Daten aus der Datenbank
+   */
   getData() {
     const groupsDetails = this.dataService.getGroupsDetails();
     const oldPredictions = this.dataService.predictionsByEmail(this.userEmail);
@@ -66,6 +76,10 @@ export class PredictComponent implements OnInit {
     );
   }
 
+  /**
+   * Prüfen ob der User schon Vorhersagen in DB hat
+   * Die alten Vorhersagen in der App speichern und in der Seite anzeigen
+   */
   checkAlreadyPredicted() {
     if (this.oldPredictions.length > 0) {
       this.alreadyPredicted = true;
@@ -112,6 +126,9 @@ export class PredictComponent implements OnInit {
     }
   }
 
+  /**
+   * Die Arrays zum Speichern der Daten initialisieren
+   */
   initArrays() {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 4; j++) {
@@ -203,6 +220,9 @@ export class PredictComponent implements OnInit {
     }
   }
 
+  /**
+   * Die Vereine Namen aus die IDs bekommen
+   */
   fillTeamsData(): void {
     this.groupsDetails.forEach((group, i) => {
 
@@ -255,13 +275,21 @@ export class PredictComponent implements OnInit {
         }
       });
     });
-    console.log(this.oldGroupsPrediction);
   }
 
+  /**
+   * Die Gruppenname der Vorhersage aus Group-Table-Component bekommen
+   * @param group
+   */
   receiveGroup(group: String) {
     this.groupNameOfSelectedTeams = group;
   }
 
+  /**
+   * Die ausgewählte Vereine als Gruppenerster und Zweiter von Group-table-Predict-component bekommen
+   * Die nächte Phase ausfüllen
+   * @param teamsTable
+   */
   receiveSelectedTeamsGroups(teamsTable: Set<TeamTable>) {
     this.selectedTeamsSingleGroup = Array.from(teamsTable);
     switch (this.groupNameOfSelectedTeams) {
@@ -296,6 +324,11 @@ export class PredictComponent implements OnInit {
     this.fillRoundOf16();
   }
 
+  /**
+   * Die ausgewählte Vereine als Gewinner aus alle Phasen Match-Predict-component bekommen
+   * Die nächte Phase ausfüllen
+   * @param predictedWinner
+   */
   receiveSelectedWinner(predictedWinner: MatchPredict) {
     if (predictedWinner.matchNumber < 57) {
       switch (predictedWinner.matchNumber) {
@@ -411,6 +444,9 @@ export class PredictComponent implements OnInit {
     }
   }
 
+  /**
+   * Spiele der Achtelfinale mittelt selektierten Gewinner ausfüllen
+   */
   fillRoundOf16() {
     if (this.selectedTeamsGroups[0].length > 0 && this.selectedTeamsGroups[1].length > 0) {
       this.fillMatches(0, 1, 49, 0);
@@ -433,6 +469,9 @@ export class PredictComponent implements OnInit {
     }
   }
 
+  /**
+   * Spiele der Viertelfinale mittelt selektierten Gewinner ausfüllen
+   */
   fillQuarterFinals() {
     let j = 57; // Erste Spiel-ID in Viertelfinale
     // schleift durch die Spiele von Achtelfinale
@@ -450,6 +489,9 @@ export class PredictComponent implements OnInit {
     }
   }
 
+  /**
+   * Spiele der Halbefinale mittelt selektierten Gewinner ausfüllen
+   */
   fillSemiFinal() {
     if (this.selectedWinnerQuarterFinals.length > 1) {
       if (this.selectedWinnerQuarterFinals[0] != null
@@ -469,6 +511,9 @@ export class PredictComponent implements OnInit {
     }
   }
 
+  /**
+   * Die Spiele in nächsten Phasen hinzufügen (Fortsetzung der vorherigen Methoden zum Codezeilen zu verringern)
+   */
   fillMatches(valueA: number, valueB: number, matchNumber: number, index: number) {
     if (matchNumber < 57) {
       this.roundOf16Matches[index].aId = this.selectedTeamsGroups[valueA][0].id;
@@ -503,6 +548,9 @@ export class PredictComponent implements OnInit {
     }
   }
 
+  /**
+   * Die Vorhersagen in DB hinzufügen
+   */
   savePrediction() {
     this.predictions = [];
     console.log("Save clicked");
@@ -568,8 +616,6 @@ export class PredictComponent implements OnInit {
       groupName: ""
     });
 
-    console.log(this.predictions);
-
     if (this.alreadyPredicted) {
       this.dataService.deletePredictions(this.userEmail).subscribe();
     }
@@ -578,10 +624,16 @@ export class PredictComponent implements OnInit {
     this.dataService.submitPredictions(this.predictions).subscribe(predicted => window.location.reload());
   }
 
+  /**
+   * Teil der neuen Vorhersagen setzen einblenden
+   */
   setNewPrediction() {
     this.showNewPrediction = true;
   }
 
+  /**
+   * Die Auswahle reset indem die Seite neugeladen wird
+   */
   clearSelection() {
     window.location.reload();
   }

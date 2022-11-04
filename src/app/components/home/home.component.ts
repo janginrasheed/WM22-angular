@@ -1,6 +1,5 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {BotDialogComponent} from "../shared/bot-dialog/bot-dialog.component";
 import {User} from "../../types/user";
 import {ViewportScroller} from "@angular/common";
 import {TranslateService} from "@ngx-translate/core";
@@ -18,6 +17,10 @@ import {Router} from "@angular/router";
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
+/**
+ * Dieses Komponente hat alle Elemente für die Startseite
+ * Holt die Daten vom Backend und übergibt diese an die Childs wie: Matches-Component und Group-Table-Component
+ */
 export class HomeComponent implements OnInit {
 
   matchToUpdate: Match = {
@@ -46,7 +49,7 @@ export class HomeComponent implements OnInit {
   teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
   groupsDetails: GroupDetails[];
   isLoading = true;
-  pageYoffset = 0;
+  pageYOffset = 0;
   groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   private _selectedStageId: number;
   private _selectedGroup: string = "all";
@@ -67,6 +70,12 @@ export class HomeComponent implements OnInit {
     return this._selectedStageId;
   }
 
+  /**
+   * Setzt die ausgewählte Phase
+   * Die Phasenspiele zuweisen anhand von der ausgewählten Phase
+   * Die Spiele nach Datum sortieren
+   * @param value
+   */
   set selectedStageId(value: number) {
     this.selectedStageMatches = [];
     this.selectedGroup = "";
@@ -104,11 +113,15 @@ export class HomeComponent implements OnInit {
     this._selectedStageId = value;
   }
 
-
   get selectedGroup(): string {
     return this._selectedGroup;
   }
 
+  /**
+   * setzt die ausgewählte Gruppe
+   * Die Gruppenspiele zuweisen anhand von der ausgewählten Gruppe
+   * @param value
+   */
   set selectedGroup(value: string) {
     this.selectedGroupMatches = [];
     this._selectedGroup = value;
@@ -129,9 +142,13 @@ export class HomeComponent implements OnInit {
     this.selectedStageMatches = this.selectedGroupMatches;
   }
 
+  /**
+   * Die methode schaut, wo die Y-Achse auf den Bildschirm ist
+   * @param event
+   */
   // @ts-ignore
   @HostListener('window:scroll', ['$event']) onScroll(event) {
-    this.pageYoffset = window.pageYOffset;
+    this.pageYOffset = window.pageYOffset;
   }
 
   constructor(private dataService: DataService,
@@ -143,6 +160,13 @@ export class HomeComponent implements OnInit {
     translate.setDefaultLang('de');
   }
 
+  /**
+   * Die Methode wird beim Aufruf der Startseite durchgeführt
+   * Setzt "Home" zu der URL hinzu
+   * Die KO-Phase Spiele zurücksetzen
+   * Die Variablen zum Speichern von Gruppen-Daten initialisieren
+   * Dann WM Daten vom Backend holen
+   */
   ngOnInit() {
     if (this.router.url == "/") {
       this.router.navigate(["home"]);
@@ -159,6 +183,10 @@ export class HomeComponent implements OnInit {
     this.initTeamsGroupsData();
   }
 
+  /**
+   * WM-Daten und Nachrichten durch Service aus Backend holen
+   * Nachdem die Daten erfolgreich geholt sind, führe die nächsten Methoden zum Ausfüllen von Spiele und die KO-Phasen
+   */
   getData() {
     const stages = this.dataService.getStages();
     const matches = this.dataService.getAllMatches();
@@ -191,10 +219,16 @@ export class HomeComponent implements OnInit {
 
   }
 
+  /**
+   * Zum Anfang der Seite scrollen
+   */
   scrollToTop() {
     this.scroll.scrollToPosition([0, 0]);
   }
 
+  /**
+   * Die Nachrichten Artikel Beschreibung trimmen (Nur die ersten 100 Zeichen zeigen)
+   */
   trimNewsDescription(): void {
     this.newsList.results?.forEach(newsItem => {
       if (newsItem.description) {
@@ -205,14 +239,9 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  openDialog() {
-    this.dialog.open(BotDialogComponent);
-  }
-
-  switchLang(lang: string) {
-    this.translate.use(lang);
-  }
-
+  /**
+   * Das Array zum Speichern der Gruppendaten initialisieren
+   */
   initTeamsGroupsData() {
     for (let i = 0; i < 8; i++) {
       for (let j = 0; j < 4; j++) {
@@ -233,6 +262,10 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  /**
+   * Die Punkte, Tore, Spiel usw. berechnen und in der Tabellen ausfüllen
+   * Rechnet die Daten nur, wenn Spielergebnisse eingetragen sind und das Spiel in Gruppenphase ist.
+   */
   fillTeamsData(): void {
     if (!this.isLoading) {
 
@@ -308,6 +341,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  /**
+   * Spiele in jeweiligen Phase speichern
+   */
   fillStagesMatches(): void {
     this.matches.forEach(match => {
       switch (match.stageId) {
@@ -339,6 +375,10 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  /**
+   * Neues Spielergebnis in der Datenbank speichern
+   * @param updatedMatch
+   */
   updateMatchResult(updatedMatch: Match): void {
     this.dataService.updateMatchResult(updatedMatch).subscribe();
     this.fillTeamsData();
@@ -351,6 +391,8 @@ export class HomeComponent implements OnInit {
   }
 
   /**
+   * Die Tabellen nach FIFA Richtlinien sortieren
+   * Die Kriterien sind:
    * a) greatest number of points obtained in all group matches;
    * b) goal difference in all group matches;
    * c) greatest number of goals scored in all group matches
@@ -442,6 +484,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  /**
+   * Achtelfinale Spiele ausfüllen, wenn die Gruppenspiele schon gespielt ist
+   */
   fillRoundOf16(): void {
     // Prüfen, ob alle Spiele in der Gruppenphase gespielt wurden.
     if (this.matches[44].firstTeamGoals == null
@@ -501,6 +546,9 @@ export class HomeComponent implements OnInit {
 
   }
 
+  /**
+   * Viertelfinale Spiele ausfüllen, wenn zumindest ein Spiel in Achtelfinale gespielt ist
+   */
   fillQuarterFinals() {
     // Prüfen, ob Achtelfinale gespielt wurde
     if (this.matches[48].firstTeamGoals == null
@@ -525,6 +573,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  /**
+   * Halbfinale Spiele ausfüllen, wenn zumindest ein Spiel in Viertelfinale gespielt ist
+   */
   fillSemiFinals() {
     // Prüfen, ob Viertelfinale gespielt wurde
     if (this.matches[56].firstTeamGoals == null
@@ -548,6 +599,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  /**
+   * Dritter Platz Spiel ausfüllen, wenn zumindest ein Spiel in Halbfinale gespielt ist
+   */
   fillThirdPlace() {
     // Prüfe, ob Halbfinale-Spiele gespielt wurden
     if ((this.matches[60].firstTeamGoals == null
@@ -568,6 +622,9 @@ export class HomeComponent implements OnInit {
     // }
   }
 
+  /**
+   * Final Spiel ausfüllen, wenn zumindest ein Spiel in Halbfinale gespielt ist
+   */
   fillFinal() {
     // Prüfe, ob Halbfinale-Spiele gespielt wurden
     if ((this.matches[60].firstTeamGoals == null
@@ -581,6 +638,10 @@ export class HomeComponent implements OnInit {
     // }
   }
 
+  /**
+   * KO Phase Spiele in DB speichern
+   * @param i
+   */
   fillMatches(i: number) {
     if (this.matches[i].firstTeamGoals > this.matches[i].secondTeamGoals) {
       this.matchToUpdate.firstTeamId = this.matches[i].firstTeamId;
@@ -611,10 +672,17 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  /**
+   * Datum konvertieren
+   * @param dateToConvert
+   */
   sortByDate(dateToConvert: Date): number {
     return new Date(dateToConvert).getTime();
   }
 
+  /**
+   * Die KO-Phase Spiele in der Applikation zurücksetzen
+   */
   clearStagesMatches() {
     this.quarterFinalsMatches = [];
     this.semiFinalsMatches = [];
@@ -642,6 +710,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  /**
+   * Die KO-Phase Spiele in der Datenbank zurücksetzen
+   */
   clearStageMatchesInDB() {
     this.dataService.clearKOStagesTeams(0).subscribe();
   }

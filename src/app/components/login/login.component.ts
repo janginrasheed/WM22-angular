@@ -12,6 +12,9 @@ import {AuthService} from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
+/**
+ * Dieses Komponente hat alle Elemente der Login/Registrieren Seite
+ */
 export class LoginComponent implements OnInit {
   message: string;
   public user: User = {email: "", password: "", roleId: 3};
@@ -32,9 +35,12 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.authService.logout();
   }
 
+  /**
+   * Mitteilung in Snackbar anzeigen
+   * @param message
+   */
   openSnackBar(message: string) {
     this.snackBar.open(message, "X", {
       horizontalPosition: "center",
@@ -44,19 +50,28 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Passwort einblenden
+   */
   showPassword() {
     this.hidePassword = !this.hidePassword;
   }
 
+  /**
+   * Passwort einblenden
+   */
   showPassword2() {
     this.hidePassword2 = !this.hidePassword2;
   }
 
+  /**
+   * Prüfen ob der User schon registriert ist
+   * in lokale Speicher in Browser Userdaten speichern
+   * Zur Startseite navigieren
+   */
   loginClicked(): void {
     this.dataService.getUser(this.user).subscribe(user => {
       if (user != null) {
-        console.log("Login successful " + user.firstName + " " + user.lastName);
-        console.log("RoleId " + user.roleId);
         localStorage.setItem('isLoggedIn', "true");
         if (typeof this.emailFormControl.value === "string") {
           localStorage.setItem('token', this.emailFormControl.value);
@@ -67,12 +82,15 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('roleId', user.roleId);
         this.navigateTo("home");
       } else {
-        console.log("Email oder Passwort falsch");
         this.openSnackBar("Email oder Passwort falsch");
       }
     })
   }
 
+  /**
+   * Prüfen ob der Email schon registriert ist
+   * Der neue User in DB hinzufügen
+   */
   registerClicked(): void {
     if (this.user.password != this.passwordV) {
       this.openSnackBar("Passwörter müssen übereinstimmen");
@@ -87,15 +105,14 @@ export class LoginComponent implements OnInit {
         this.dataService.registerUser(this.user).subscribe(response => {
           console.log(response);
         });
-        // this.user.firstName = "";
-        // this.user.lastName = "";
-        // this.user.email = "";
-        // this.user.password = "";
-        // this.passwordV = "";
       }
     });
   }
 
+  /**
+   * Navigieren zum übergebene URL
+   * @param url
+   */
   navigateTo(url: string): void {
     this.router.navigate([url]);
   }
