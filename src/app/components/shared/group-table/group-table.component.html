@@ -3,7 +3,7 @@
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
     <ng-container *ngFor="let displayedColumn of displayedColumns; let i = index">
       <ng-container matColumnDef="{{displayedColumn}}">
-        <th mat-header-cell *matHeaderCellDef>{{displayedColumnsText[i]}}</th>
+        <th mat-header-cell *matHeaderCellDef>{{displayedColumnsText[i] | translate}}</th>
         <td mat-cell *matCellDef="let team">
           <div class="group-table__flag" *ngIf="displayedColumn == 'flag'">
             <img src="/assets/flags/{{team.name}}.png" alt="" class="team__flag--small">

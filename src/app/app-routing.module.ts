@@ -2,12 +2,8 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from "./components/login/login.component";
 import {HomeComponent} from "./components/home/home.component";
-import {TestsComponent} from "./components/tests/tests.component";
 import {AuthGuard} from "./guards/auth.guard";
 import {PredictComponent} from "./components/predict/predict.component";
-import {AdminComponent} from "./components/admin/admin.component";
-import {AdminGuard} from "./guards/admin.guard";
-import {AboutComponent} from "./components/about/about.component";
 
 const routes: Routes = [
   {
@@ -22,10 +18,6 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
-  },
-  {
-    path: 'about',
-    component: AboutComponent
   },
   {
     path: '**',

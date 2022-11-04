@@ -1,11 +1,11 @@
 <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
-<div *ngIf="!isLoading && !groupsDetails" class="error__message">Daten können nicht geladen werden</div>
+<div *ngIf="!isLoading && !groupsDetails" class="error__message">{{ 'noData' | translate }}</div>
 <div *ngIf="!isLoading && groupsDetails">
   <div class="old__predictions" *ngIf="!showNewPrediction">
-    <div class="old__predictions__title">Ihre Vorhersagen</div>
+    <div class="old__predictions__title">{{ 'yourPredictions' | translate }}</div>
     <div class="old__predictions__date">{{oldPredictions[0].predict_date | date:'dd.MM.yyyy HH:mm:ss':'UTC+2'}}</div>
     <div class="old__predictions__button">
-      <button mat-raised-button color="primary" (click)="setNewPrediction()">Neue Vorhersage setzen
+      <button mat-raised-button color="primary" (click)="setNewPrediction()">{{ 'setNewPredictions' | translate }}
       </button>
     </div>
 
@@ -60,7 +60,7 @@
     </div>
   </div>
   <div class="new__prediction" *ngIf="showNewPrediction">
-    <div class="old__predictions__title">Set new Prediction</div>
+    <div class="old__predictions__title">{{ 'setNewPredictions' | translate }}</div>
     <div class="predict__groups__container">
       <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
         <app-group-table-predict [teamsGroupData]="teamsGroupData"
@@ -119,11 +119,10 @@
       </div>
     </div>
     <div class="submit__prediction">
-      <button mat-raised-button color="primary" (click)="savePrediction()" [disabled]="saveDisabled">Vorhersagen
-        setzen
+      <button mat-raised-button color="primary" (click)="savePrediction()" [disabled]="saveDisabled">{{ 'setPredictions' | translate }}
       </button>
-      <button mat-raised-button (click)="clearSelection()">Vorhersagen zurücksetzen</button>
-      <button mat-raised-button (click)="showNewPrediction = false" *ngIf="alreadyPredicted">Abbrechen</button>
+      <button mat-raised-button (click)="clearSelection()">{{ 'reset' | translate }}</button>
+      <button mat-raised-button (click)="showNewPrediction = false" *ngIf="alreadyPredicted">{{ 'cancel' | translate }}</button>
     </div>
   </div>
 </div>

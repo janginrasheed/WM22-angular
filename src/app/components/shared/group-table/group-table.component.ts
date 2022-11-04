@@ -11,7 +11,7 @@ export class GroupTableComponent implements OnInit {
 
   dataSource: MatTableDataSource<any>;
   displayedColumns: string[] = ['flag', 'name', 'played', 'won', 'drawn', 'lost', 'goalsFor', 'goalsAgainst', 'goalDifference', 'points'];
-  displayedColumnsText: string[] = ['', 'Team', 'Sp.', 'S', 'U', 'N', 'T', 'GT', 'TD', 'P'];
+  displayedColumnsText: string[] = ['', 'team', 'played', 'won', 'draw', 'lost', 'goalsFor', 'goalsAgainst', 'goalsDiff', 'points'];
 
   @Input()
   group: string;

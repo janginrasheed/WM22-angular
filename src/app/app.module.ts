@@ -29,10 +29,8 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatTableModule} from "@angular/material/table";
-import { AdminComponent } from './components/admin/admin.component';
 import { GroupTablePredictComponent } from './components/shared/group-table-predict/group-table-predict.component';
 import { MatchPredictComponent } from './components/shared/match-predict/match-predict.component';
-import { AboutComponent } from './components/about/about.component';
 
 @NgModule({
   declarations: [
@@ -46,10 +44,8 @@ import { AboutComponent } from './components/about/about.component';
     BotDialogComponent,
     TestsComponent,
     PredictComponent,
-    AdminComponent,
     GroupTablePredictComponent,
-    MatchPredictComponent,
-    AboutComponent
+    MatchPredictComponent
   ],
     imports: [
         BrowserModule,

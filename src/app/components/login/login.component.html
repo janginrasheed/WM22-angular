@@ -1,20 +1,20 @@
 <div class="register__login">
   <mat-tab-group dynamicHeight mat-align-tabs="center" animationDuration="0ms">
-    <mat-tab label="Anmelden">
+    <mat-tab label="{{ 'login' | translate}}">
       <div class="login">
         <form class="register__form">
           <div class="register__form--email">
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Email</mat-label>
+              <mat-label>{{ 'email' | translate }}</mat-label>
               <input matInput [formControl]="emailFormControl" type="email" [(ngModel)]="user.email" name="email">
               <mat-error *ngIf="emailFormControl.hasError('required')">
-                Pflichtfeld
+                {{ 'required' | translate }}
               </mat-error>
             </mat-form-field>
           </div>
           <div class="register__form--password">
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Passwort</mat-label>
+              <mat-label>{{ 'password' | translate }}</mat-label>
               <div class="password__input">
                 <input matInput [formControl]="passwordFormControl" [type]="hidePassword ? 'password' : 'text'"
                        [(ngModel)]="user.password" name="password">
@@ -22,60 +22,60 @@
                           (click)="showPassword()">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
               </div>
               <mat-error *ngIf="passwordFormControl.hasError('required')">
-                Pflichtfeld
+                {{ 'required' | translate }}
               </mat-error>
             </mat-form-field>
           </div>
           <div class="register__form--buttons">
-            <button mat-raised-button color="basic" type="reset">Zurücksetzen</button>
+            <button mat-raised-button color="basic" type="reset">{{ 'reset' | translate }}</button>
             <button mat-raised-button color="primary" type="submit"
                     [disabled]="!emailFormControl.valid || !passwordFormControl.valid"
-                    (click)="loginClicked()">Anmelden
+                    (click)="loginClicked()">{{ 'login' | translate }}
             </button>
           </div>
         </form>
       </div>
     </mat-tab>
-    <mat-tab label="Neues Konto erstellen">
+    <mat-tab label="{{ 'register' | translate}}">
       <div class="register">
         <form class="register__form">
           <div class="register__form--name">
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Vorname</mat-label>
+              <mat-label>{{ 'firstName' | translate }}</mat-label>
               <input matInput [formControl]="fNameFormControl" [(ngModel)]="user.firstName" name="firstName">
               <mat-error *ngIf="fNameFormControl.hasError('maxlength') && !fNameFormControl.hasError('required')">
-                Max. Länge 20 Zeichen
+                {{ 'maxLength' | translate }}
               </mat-error>
               <mat-error *ngIf="fNameFormControl.hasError('required')">
-                Pflichtfeld
+                {{ 'required' | translate }}
               </mat-error>
             </mat-form-field>
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Nachname</mat-label>
+              <mat-label>{{ 'lastName' | translate }}</mat-label>
               <input matInput [formControl]="lNameFormControl" [(ngModel)]="user.lastName" name="lastName">
               <mat-error *ngIf="lNameFormControl.hasError('maxlength') && !lNameFormControl.hasError('required')">
-                Max. Länge 20 Zeichen
+                {{ 'maxLength' | translate }}
               </mat-error>
               <mat-error *ngIf="lNameFormControl.hasError('required')">
-                Pflichtfeld
+                {{ 'required' | translate }}
               </mat-error>
             </mat-form-field>
           </div>
           <div class="register__form--email">
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Email</mat-label>
+              <mat-label>{{ 'email' | translate }}</mat-label>
               <input matInput [formControl]="emailFormControl" [(ngModel)]="user.email" name="email">
               <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-                Bitte geben Sie eine gültige E-Mail Adresse ein
+                {{ 'validEmail' | translate }}
               </mat-error>
               <mat-error *ngIf="emailFormControl.hasError('required')">
-                Pflichtfeld
+                {{ 'required' | translate }}
               </mat-error>
             </mat-form-field>
           </div>
           <div class="register__form--password">
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Passwort</mat-label>
+              <mat-label>{{ 'password' | translate }}</mat-label>
               <div class="password__input">
                 <input matInput #password minlength="6"
                        [type]="hidePassword ? 'password' : 'text'"
@@ -86,14 +86,14 @@
               </div>
               <mat-hint align="end">{{password.value.length}} / 6</mat-hint>
               <mat-error *ngIf="passwordFormControl.hasError('required')">
-                Pflichtfeld
+                {{ 'required' | translate }}
               </mat-error>
               <mat-error *ngIf="passwordFormControl.hasError('minlength')">
-                Min. 6 Zeichen
+                {{ 'minLength' | translate }}
               </mat-error>
             </mat-form-field>
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Passwort wiederholen</mat-label>
+              <mat-label>{{ 'repeatPassword' | translate }}</mat-label>
               <div class="password__input">
                 <input matInput #password2 minlength="6"
                        [type]="hidePassword2 ? 'password' : 'text'"
@@ -104,20 +104,20 @@
               </div>
               <mat-hint align="end">{{password2.value.length}} / 6</mat-hint>
               <mat-error *ngIf="password2FormControl.hasError('required')">
-                Pflichtfeld
+                {{ 'required' | translate }}
               </mat-error>
               <mat-error *ngIf="password2FormControl.hasError('minlength')">
-                Min. 6 Zeichen
+                {{ 'minLength' | translate }}
               </mat-error>
             </mat-form-field>
           </div>
           <div class="register__form--buttons">
-            <button mat-raised-button color="basic" type="reset">Zurücksetzen</button>
+            <button mat-raised-button color="basic" type="reset">{{ 'reset' | translate }}</button>
             <button mat-raised-button color="primary" type="submit" (click)="registerClicked()"
                     [disabled]="!fNameFormControl.valid
                     || !lNameFormControl.valid || !emailFormControl.valid
                     || !passwordFormControl.valid || !password2FormControl.valid">
-              Registrieren
+              {{ 'register' | translate }}
             </button>
           </div>
         </form>

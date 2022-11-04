@@ -13,11 +13,7 @@ import {environment} from "../../environments/environment";
   providedIn: 'root'
 })
 export class DataService {
-
-  // dataApiUrl = 'https://wm22.herokuapp.com/';
-  // dataApiUrl = 'https://wm22.azurewebsites.net/';
-  // dataApiUrl = 'http://localhost:8081/';
-  dataApiUrl = environment.apiUrl;
+  dataApiUrl = environment.apiUrl; //Daten anhand von der Umgebung setzen
   newsApiUrl = 'https://newsdata.io/api/1/news?apikey=pub_107858411e9fea4c6d3e422f5cfd83713a8a7&q=fifa%20world%20cup&language=en';
   newsTest = 'assets/newsApiTest.json';
 

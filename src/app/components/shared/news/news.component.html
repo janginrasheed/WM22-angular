@@ -3,9 +3,8 @@
   <div class="news-item__publish-date">{{newsItem.pubDate}}</div>
   <div class="news-item__description">
     {{newsItem.description}}
-    <a href="{{newsItem.link}}" target="_blank">weiter lesen</a>
+    <a href="{{newsItem.link}}" target="_blank">{{ 'readOn' | translate }}</a>
   </div>
   <img src="{{newsItem.image_url}}" alt="News Image" class="news-item__image" *ngIf="newsItem.image_url"/>
   <img src="assets/fifa_flag.jpg" alt="News Image" class="news-item__image" *ngIf="!newsItem.image_url"/>
 </div>
-

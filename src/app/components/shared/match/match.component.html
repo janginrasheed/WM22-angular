@@ -17,7 +17,7 @@
     <div class="match__container">
       <div>
         <div *ngIf="!matchDetails.stage.includes('Group stage')">
-          {{matchDetails.stage}}
+          {{matchDetails.stage | translate}}
         </div>
         <div>
           <!--        <span *ngIf="match.id > 48">Match no. {{match.id}}</span>-->
@@ -71,7 +71,7 @@
   <div class="match__mobile">
     <div class="match__mobile__header">
       <div *ngIf="!matchDetails.stage.includes('Group stage')">
-        {{matchDetails.stage}}
+        {{matchDetails.stage | translate}}
       </div>
       <div *ngIf="matchDetails.stage.includes('Group stage')">
         {{"group" | translate}}: {{matchDetails.group}}

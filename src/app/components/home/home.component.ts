@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {BotDialogComponent} from "../shared/bot-dialog/bot-dialog.component";
 import {User} from "../../types/user";
@@ -45,8 +45,8 @@ export class HomeComponent implements OnInit {
   newsList: News;
   teamsGroupsData: TeamTable[][] = [[], [], [], [], [], [], [], []];
   groupsDetails: GroupDetails[];
-  // errorText: string;
   isLoading = true;
+  pageYoffset = 0;
   groups = ["A", 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
   private _selectedStageId: number;
   private _selectedGroup: string = "all";
@@ -129,6 +129,11 @@ export class HomeComponent implements OnInit {
     this.selectedStageMatches = this.selectedGroupMatches;
   }
 
+  // @ts-ignore
+  @HostListener('window:scroll', ['$event']) onScroll(event) {
+    this.pageYoffset = window.pageYOffset;
+  }
+
   constructor(private dataService: DataService,
               public dialog: MatDialog,
               private scroll: ViewportScroller,
@@ -146,6 +151,8 @@ export class HomeComponent implements OnInit {
     this.clearStageMatchesInDB();
     this.dataService.clearKOStagesTeams(0).subscribe(dummy => {
       this.getData();
+    }, error => {
+      this.isLoading = false;
     });
 
     // Die Variable zum Speichern von Gruppen-Daten initialisieren
@@ -182,6 +189,10 @@ export class HomeComponent implements OnInit {
       }
     );
 
+  }
+
+  scrollToTop() {
+    this.scroll.scrollToPosition([0, 0]);
   }
 
   trimNewsDescription(): void {

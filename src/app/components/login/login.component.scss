@@ -39,3 +39,33 @@
   right: 0;
   top: -8px
 }
+
+@media screen and (max-width: 650px) {
+  .register__login {
+    width: 30rem;
+    margin: 1rem auto auto;
+  }
+
+  .register__form {
+    width: 20rem;
+    margin: 1rem auto;
+  }
+
+  .register__form--name, .register__form--password {
+    flex-direction: column;
+  }
+
+}
+
+@media screen and (max-width: 500px) {
+  .register__login {
+    width: 20rem;
+    margin: 1rem auto auto;
+  }
+
+  .register__form {
+    width: 15rem;
+    margin: 1rem auto;
+  }
+
+}

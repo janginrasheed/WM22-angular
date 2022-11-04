@@ -1,32 +1,39 @@
+<!--
 <button mat-icon-button (click)="openDialog()" class="bot__dialog">
   <mat-icon class="bot__dialog__icon">chat</mat-icon>
 </button>
+-->
 <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+<div class="home__scroll-top" *ngIf="pageYoffset > 1000">
+  <button mat-mini-fab color="primary" (click)="scrollToTop()">
+    <mat-icon>arrow_upward</mat-icon>
+  </button>
+</div>
 <div class="home__cover" *ngIf="matches">
   <img src="assets/header_logo.png" alt="" class="home__cover__img">
   <div class="cover__navigation">
     <div class="cover__navigation__top">
       <a href="#groups">
-        <div>Gruppenstände</div>
+        <div>{{ 'groupStands' | translate}}</div>
       </a>
       <a href="#kostage">
-        <div>K.o.-Phasen</div>
+        <div>{{ 'koStages' | translate}}</div>
       </a>
     </div>
     <div class="cover__navigation__bottom">
       <a href="#matches">
-        <div>Alle Spiele</div>
+        <div>{{ 'allMatches' | translate}}</div>
       </a>
       <a href="#news">
-        <div>Nachrichten</div>
+        <div>{{ 'news' | translate}}</div>
       </a>
     </div>
   </div>
 </div>
-<div *ngIf="!isLoading && !matches" class="error__message">Daten können nicht geladen werden</div>
+<div *ngIf="!isLoading && !matches" class="error__message">{{ 'noData' | translate}}</div>
 <div class="home__container" *ngIf="!isLoading && matches">
   <div class="groups__section" id="groups">
-    <div class="section__title">Gruppen</div>
+    <div class="section__title">{{ 'groups' | translate}}</div>
     <div class="groups__container">
       <div *ngFor="let teamsGroupData of teamsGroupsData; let i = index">
         <app-group-table [teamsGroupData]="teamsGroupData" [group]="groups[i]"></app-group-table>
@@ -37,35 +44,35 @@
     <div class="shadow"></div>
   </div>
   <div class="k-o-stage__section">
-    <div class="section__title" id="kostage">K.o.-Phasen</div>
+    <div class="section__title" id="kostage">{{ 'koStages' | translate}}</div>
     <div class="k-o__matches__container">
       <div class="k-o-stage">
-        Round of 16
+        {{ 'Round of 16' | translate}}
         <div class="k-o-stage__match" *ngFor="let match of roundOf16Matches">
           <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true"></app-match>
         </div>
       </div>
       <div class="k-o-stage">
-        Quarter finals
+        {{ 'Quarter-finals' | translate}}
         <div *ngFor="let match of quarterFinalsMatches">
           <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true"></app-match>
         </div>
       </div>
       <div class="k-o-stage">
-        Semi finals
+        {{ 'Semi-finals' | translate}}
         <div *ngFor="let match of semiFinalsMatches">
           <app-match [match]="match" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true"></app-match>
         </div>
       </div>
       <div class="k-o-stage">
-        Third place
+        {{ 'Third place' | translate}}
         <div>
           <app-match [match]="thirdPlaceMatch" [stages]="stages" [groupsDetails]="groupsDetails"
                      [small]="true"></app-match>
         </div>
       </div>
       <div class="k-o-stage">
-        Final
+        {{ 'Final' | translate}}
         <div>
           <app-match [match]="finalMatch" [stages]="stages" [groupsDetails]="groupsDetails" [small]="true">
           </app-match>
@@ -78,23 +85,23 @@
   </div>
   <div class="matches__news__container">
     <div class="matches__section">
-      <div class="section__title" id="matches">Spiele</div>
+      <div class="section__title" id="matches">{{ 'matches' | translate}}</div>
       <div class="matches__filter">
         <div>
           <mat-form-field appearance="fill">
             <mat-label>{{'selectStage' | translate}}</mat-label>
             <mat-select [(value)]="selectedStageId">
               <mat-option *ngFor="let stage of stages" [value]="stage.id">
-                {{stage.stage | titlecase}}
+                {{stage.stage | translate}}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
         <div *ngIf="selectedStageId == 1">
           <mat-form-field appearance="fill">
-            <mat-label>{{'Select group' | translate}}</mat-label>
+            <mat-label>{{'selectGroup' | translate}}</mat-label>
             <mat-select [(value)]="selectedGroup">
-              <mat-option [value]="'all'">Alle</mat-option>
+              <mat-option [value]="'all'">{{ 'all' | translate}}</mat-option>
               <mat-option *ngFor="let group of groups" [value]="group">
                 {{group}}
               </mat-option>
@@ -111,12 +118,18 @@
       </div>
     </div>
     <div class="news__container" id="news_section">
-      <div class="section__title" id="news">Nachrichten</div>
+      <div class="section__title" id="news">{{ 'news' | translate}}</div>
       <ng-container *ngIf="newsList">
         <div *ngFor="let newsItem of newsList.results">
           <app-news [newsItem]="newsItem"></app-news>
         </div>
       </ng-container>
     </div>
+  </div>
+</div>
+<div class="home__footer" *ngIf="!isLoading">
+  <div>{{ 'contact' | translate}}: jangin9rasheed@gmail.com</div>
+  <div class="footer__PDF">
+    <a href="/assets/Benutzerhandbuch_WM22.pdf" download>{{ 'userManual' | translate }} (DE)</a>
   </div>
 </div>

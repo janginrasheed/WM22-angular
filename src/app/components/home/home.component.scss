@@ -180,3 +180,27 @@ a {
   color: unset;
   text-decoration: none; /* no underline */
 }
+
+.home__footer {
+  background: var(--color-4);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 5rem;
+}
+
+.footer__PDF {
+  text-decoration: underline;
+}
+
+.home__scroll-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+}
+
+.mat-mini-fab.mat-primary {
+  background-color: var(--color-1);
+}
