@@ -24,7 +24,7 @@
           <span *ngIf="matchDetails.stage == 'Group stage'">{{'group' | translate}}: {{matchDetails.group}}</span>
         </div>
       </div>
-      <div class="team__name">{{matchDetails.fistTeam.name}}</div>
+      <div class="team__name">{{matchDetails.fistTeam.name | translate}}</div>
       <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small"
            *ngIf="matchDetails.fistTeam.name.length > 0">
       <form>
@@ -46,7 +46,7 @@
       </form>
       <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small"
            *ngIf="matchDetails.secondTeam.name.length > 0">
-      <div class="team__name">{{matchDetails.secondTeam.name}}</div>
+      <div class="team__name">{{matchDetails.secondTeam.name | translate}}</div>
       <div class="match__container__small__date">
         {{matchDetails.date | date: "dd.MM.yyyy"}}
       </div>
@@ -82,7 +82,7 @@
       <div class="match__mobile__team">
         <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small"
              *ngIf="matchDetails.fistTeam.name.length > 0">
-        <div class="">{{matchDetails.fistTeam.name}}</div>
+        <div class="">{{matchDetails.fistTeam.name | translate}}</div>
       </div>
       <div class="cell">
         {{matchDetails.fistTeam.goals}}
@@ -94,7 +94,7 @@
       <div class="match__mobile__team">
         <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small"
              *ngIf="matchDetails.fistTeam.name.length > 0">
-        <div class="">{{matchDetails.secondTeam.name}}</div>
+        <div class="">{{matchDetails.secondTeam.name | translate}}</div>
       </div>
     </div>
   </div>
@@ -108,7 +108,7 @@
     <div class="match__mobile__team">
       <img src="/assets/flags/{{matchDetails.fistTeam.name}}.png" alt="" class="team__flag--small"
            *ngIf="matchDetails.fistTeam.name.length > 0">
-      <div class="match__mobile__name">{{matchDetails.fistTeam.name}}</div>
+      <div class="match__mobile__name">{{matchDetails.fistTeam.name | translate}}</div>
     </div>
     <div class="cell">
       {{matchDetails.fistTeam.goals}}
@@ -120,7 +120,7 @@
     <div class="match__mobile__team">
       <img src="/assets/flags/{{matchDetails.secondTeam.name}}.png" alt="" class="team__flag--small"
            *ngIf="matchDetails.secondTeam.name.length > 0">
-      <div class="match__mobile__name">{{matchDetails.secondTeam.name}}</div>
+      <div class="match__mobile__name">{{matchDetails.secondTeam.name | translate}}</div>
     </div>
   </div>
 </div>

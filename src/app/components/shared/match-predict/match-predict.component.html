@@ -8,7 +8,7 @@
          (click)="teamClicked('A')">
       <img src="/assets/flags/{{match.aName}}.png" alt="" class="team__flag--small"
            *ngIf="match.aName.length > 0">
-      <div class="team__name">{{match.aName}}</div>
+      <div class="team__name">{{match.aName | translate}}</div>
     </div>
     <div class="cell">:</div>
     <div class="match__container__small_flag__name"
@@ -16,7 +16,7 @@
          (click)="teamClicked('B')">
       <img src="/assets/flags/{{match.bName}}.png" alt="" class="team__flag--small"
            *ngIf="match.bName.length > 0">
-      <div class="team__name">{{match.bName}}</div>
+      <div class="team__name">{{match.bName | translate}}</div>
     </div>
   </div>
 </div>

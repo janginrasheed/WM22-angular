@@ -9,7 +9,7 @@
             <img src="/assets/flags/{{team.name}}.png" alt="" class="team__flag--small">
           </div>
           <div class="group-table__team-name" *ngIf="displayedColumn == 'name'">
-            {{team.name}}
+            {{team.name | translate}}
           </div>
           <div class="group-table__team__rank" *ngIf="displayedColumn == 'rank'">
             <ng-container *ngFor="let rank of teamRanks">
