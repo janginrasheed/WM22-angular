@@ -26,7 +26,11 @@
     <mat-menu #menu="matMenu">
       <button mat-menu-item (click)="logout()">{{ 'logout' | translate}}</button>
     </mat-menu>
-    <div mat-button class="navbar__button lang__button" (click)="switchLang('en')">EN</div>
-    <div mat-button class="navbar__button lang__button" (click)="switchLang('de')">DE</div>
+    <div mat-button class="navbar__button lang__button" (click)="switchLang('en')">
+      <img src="https://img.icons8.com/color/48/000000/great-britain-circular.png" alt="EN" class="language__flag"/>
+    </div>
+    <div mat-button class="navbar__button lang__button" (click)="switchLang('de')">
+      <img src="https://cdn-icons-png.flaticon.com/512/197/197447.png" alt="DE" class="language__flag austrian__flag"/>
+    </div>
   </div>
 </div>
