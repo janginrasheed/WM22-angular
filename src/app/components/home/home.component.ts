@@ -191,8 +191,8 @@ export class HomeComponent implements OnInit {
     const stages = this.dataService.getStages();
     const matches = this.dataService.getAllMatches();
     const groupsDetails = this.dataService.getGroupsDetails();
-    // const news = this.dataService.getNews(); // Real News
-    const news = this.dataService.getTestNews(); // Old News for Test
+    const news = this.dataService.getNews(); // Real News
+    // const news = this.dataService.getTestNews(); // Old News for Test
     forkJoin([stages, matches, groupsDetails, news]).subscribe(result => {
         this.stages = result[0];
         this.matches = result[1];
